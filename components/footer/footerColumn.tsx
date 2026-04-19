@@ -2,14 +2,15 @@
 
 interface FooterColumnProps {
   title?: string
-  children: React.ReactNode
+  children: React.ReactNode,
+  classname?: string
 }
 
-export function FooterColumn({ title, children }: FooterColumnProps) {
+export function FooterColumn({ title, children,classname }: FooterColumnProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className={`flex flex-col gap-3 ${classname}`}>
       {title && (
-        <h3 className="text-sm font-semibold text-white hover:text-yellow-400 uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
           {title}
         </h3>
       )}

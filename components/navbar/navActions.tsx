@@ -1,29 +1,38 @@
 "use client";
 
-import { Search, Moon, Menu } from "lucide-react";
+import { Moon, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 import { NAV_ITEMS } from "@/lib/navData";
+import { SearchBar } from "./search-bar";
 
-export function NavbarActions() {
+interface NavbarActionsProps {
+  isMobileSearchOpen: boolean;
+  onMobileSearchChange: (isOpen: boolean) => void;
+}
+
+export function NavbarActions({
+  isMobileSearchOpen,
+  onMobileSearchChange,
+}: NavbarActionsProps) {
   return (
     <div className="flex items-center gap-2">
       {/* Desktop actions */}
       <div className="hidden md:flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="hover:bg-transparent">
-          <Search className="h-5 w-5 text-white" />
-        </Button>
+        <SearchBar isMobile={false} />
         <Button variant="ghost" size="icon" className="hover:bg-transparent">
           <Moon className="h-5 w-5 text-white" />
         </Button>
       </div>
 
       {/* Mobile menu */}
-      <div className="md:hidden ">
-        <Button variant="ghost" size="icon" className="hover:bg-transparent">
-          <Moon className="h-5 w-5 text-white" />
-        </Button>
+      <div className="md:hidden flex items-center gap-2">
+        <SearchBar
+          isMobile={true}
+          isOpen={isMobileSearchOpen}
+          onOpenChange={onMobileSearchChange}
+        />
         <Sheet>
           <SheetTrigger asChild>
             <Button
