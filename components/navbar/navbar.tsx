@@ -13,10 +13,10 @@ export function Navbar() {
 
   return (
     <>
-      <header className="w-full bg-[#1E2A44] border-b border-white/10">
+      <header className="w-full bg-foreground border-b border-white/10 dark:border-white">
         <div className="container mx-auto flex items-center justify-between md:justify-evenly h-16 px-4">
           {/* Logo */}
-          <Link href="/" className="text-white font-bold text-lg italic">
+          <Link href="/" className="text-background font-bold text-lg italic">
             Historapost
           </Link>
 

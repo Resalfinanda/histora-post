@@ -42,8 +42,8 @@ export function FeaturedArticle({
           <Badge className="w-fit mb-3 bg-blue-400 hover:bg-blue-600">
             {category}
           </Badge>
-          <h2 className="text-3xl font-bold text-white mb-2">{title}</h2>
-          <p className="text-gray-200 text-sm line-clamp-2">{excerpt}</p>
+          <h2 className="text-3xl font-bold text-foreground mb-2">{title}</h2>
+          <p className="text-foreground/50 text-sm line-clamp-2">{excerpt}</p>
         </div>
       </div>
     </Link>

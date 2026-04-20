@@ -25,8 +25,8 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-3 my-6 p-4 bg-gray-50 rounded-lg">
-      <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
+    <div className="flex flex-wrap items-center gap-3 my-6 p-4 bg-transparent rounded-lg">
+      <span className="flex items-center gap-2 text-sm font-medium text-foreground">
         <Share2 className="w-4 h-4" />
         Bagikan:
       </span>
@@ -35,7 +35,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         href={shareLinks.facebook}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+        className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-foreground transition-colors"
         title="Bagikan ke Facebook"
       >
         <Facebook className="w-5 h-5" />
@@ -45,7 +45,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         href={shareLinks.twitter}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-full bg-sky-400 hover:bg-sky-500 text-white transition-colors"
+        className="p-2 rounded-full bg-sky-400 hover:bg-sky-500 text-foreground transition-colors"
         title="Bagikan ke Twitter"
       >
         <Twitter className="w-5 h-5" />
@@ -55,7 +55,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         href={shareLinks.linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-full bg-blue-700 hover:bg-blue-800 text-white transition-colors"
+        className="p-2 rounded-full bg-blue-700 hover:bg-blue-800 text-foreground transition-colors"
         title="Bagikan ke LinkedIn"
       >
         <Linkedin className="w-5 h-5" />

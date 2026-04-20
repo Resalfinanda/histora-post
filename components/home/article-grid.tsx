@@ -21,8 +21,8 @@ export function ArticleGrid({ articles, title }: ArticleGridProps) {
   if (articles.length === 0) {
     return (
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">{title}</h2>
-        <p className="text-gray-600 text-center py-8">
+        <h2 className="text-2xl font-bold text-foreground mb-6">{title}</h2>
+        <p className="text-foreground/50 text-center py-8">
           Tidak ada artikel tersedia
         </p>
       </section>
@@ -31,7 +31,7 @@ export function ArticleGrid({ articles, title }: ArticleGridProps) {
 
   return (
     <section className="mb-12">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">{title}</h2>
+      <h2 className="text-2xl font-bold text-foreground mb-6">{title}</h2>
       <div className="grid grid-cols-1 gap-4">
         {articles.map((article) => (
           <ArticleCard

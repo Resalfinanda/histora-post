@@ -17,7 +17,9 @@ export function NewsletterSection() {
       // Add your newsletter subscription logic here
       await new Promise((resolve) => setTimeout(resolve, 500));
       setEmail("");
-      alert("Saa ini fitur belum tersedia, silakan coba lagi nanti. Terima kasih!");
+      alert(
+        "Saa ini fitur belum tersedia, silakan coba lagi nanti. Terima kasih!",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -48,7 +50,7 @@ export function NewsletterSection() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="bg-blue-900"
+              className="bg-primary"
             >
               {isLoading ? "Loading..." : "Langganan"}
             </Button>

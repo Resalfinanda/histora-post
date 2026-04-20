@@ -44,7 +44,7 @@ export function SearchBar({
               placeholder="Cari artikel..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="h-9 w-48 md:w-64 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+              className="h-9 w-48 md:w-64 bg-white/10 border-white/20 text-background placeholder:text-gray-400"
               autoFocus
             />
             <Button
@@ -57,7 +57,7 @@ export function SearchBar({
               }}
               className="hover:bg-transparent"
             >
-              <X className="h-5 w-5 text-white" />
+              <X className="h-5 w-5 text-background" />
             </Button>
           </form>
         ) : (
@@ -67,7 +67,7 @@ export function SearchBar({
             onClick={() => setIsOpen(true)}
             className="hover:bg-transparent"
           >
-            <Search className="h-5 w-5 text-white" />
+            <Search className="h-5 w-5 text-background" />
           </Button>
         )}
       </div>
@@ -82,7 +82,7 @@ export function SearchBar({
       onClick={() => setIsOpen(!isOpen)}
       className="hover:bg-transparent"
     >
-      <Search className="h-5 w-5 text-white" />
+      <Search className="h-5 w-5 text-background" />
     </Button>
   );
 }

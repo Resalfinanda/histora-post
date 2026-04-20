@@ -20,7 +20,7 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
 
   return (
     <section className="my-12 border-t border-gray-200 pt-12">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Artikel Terkait</h2>
+      <h2 className="text-2xl font-bold text-foreground mb-6">Artikel Terkait</h2>
 
       <div className="space-y-4">
         {articles.map((article) => (
@@ -49,10 +49,10 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
                 >
                   {article.category}
                 </Badge>
-                <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-amber-600 transition-colors">
+                <h3 className="font-semibold text-foreground line-clamp-2 ">
                   {article.title}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-foreground/50 mt-1">
                   {new Date(article.publishedDate).toLocaleDateString("id-ID")}
                 </p>
               </div>

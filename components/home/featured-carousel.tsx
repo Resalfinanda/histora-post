@@ -126,7 +126,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
               onClick={() => goToSlide(index)}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentIndex
-                  ? "bg-[#1E2A44] w-6"
+                  ? "bg-foreground   w-6"
                   : "bg-gray-300 hover:bg-gray-400"
               }`}
             />

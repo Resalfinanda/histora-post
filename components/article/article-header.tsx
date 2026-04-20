@@ -27,11 +27,11 @@ export function ArticleHeader({
     <div className="mb-6">
       <Badge className="mb-3 bg-blue-400 hover:bg-blue-900">{category}</Badge>
 
-      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+      <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
         {title}
       </h1>
 
-      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+      <div className="flex flex-wrap gap-4 text-sm text-foreground/50">
         <span>{author}</span>
         <span>•</span>
         <time>{formatDate(publishedDate)}</time>

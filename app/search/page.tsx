@@ -80,10 +80,10 @@ export default function SearchPage() {
       />
       {/* Search Info */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
           Hasil Pencarian
         </h1>
-        <p className="text-gray-600">
+        <p className="text-foreground/60">
           {isLoading
             ? "Mencari..."
             : `${results.length} hasil ditemukan untuk "${query}"`}
@@ -108,10 +108,10 @@ export default function SearchPage() {
             </div>
           ) : results.length === 0 ? (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-              <p className="text-gray-600 text-lg">
-                Tidak ada artikel yang ditemukan untuk &quot;{query}&quot;
+              <p className="text-foreground/60 text-lg">
+                Tidak ada artikel yang ditemukan untuk &quot;{ query }&quot;
               </p>
-              <p className="text-gray-500 text-sm mt-2">
+              <p className="text-foreground/50 text-sm mt-2">
                 Coba gunakan kata kunci yang berbeda
               </p>
             </div>
@@ -119,9 +119,9 @@ export default function SearchPage() {
             <div className="space-y-6 ">
               {results.map((result) => (
                 <Link key={result.id} href={`/articles/${result.slug}`}>
-                  <article className="group rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow flex h-32 md:h-48 mb-6 ">
+                  <article className="group rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex h-24 md:h-32 mb-6 ">
                     {/* Image */}
-                    <div className="relative w-32 md:w-48 bg-gray-200 overflow-hidden shrink-0">
+                    <div className="relative w-24 md:w-32 bg-gray-200 overflow-hidden shrink-0">
                       {result.imageUrl ? (
                         <Image
                           src={result.imageUrl}
@@ -136,23 +136,23 @@ export default function SearchPage() {
                     </div>
 
                     {/* Content */}
-                    <div className="p-2 md:p-4 flex flex-col justify-between flex-1">
+                    <div className="pl-2 md:pl-4 flex flex-col justify-between flex-1">
                       <Badge
                         variant="secondary"
-                        className="mb-1 md:mb-2 bg-blue-100 text-blue-800 w-fit text-xs"
+                        className=" bg-blue-500 text-white w-fit text-[10px]"
                       >
                         {result.category}
                       </Badge>
 
-                      <h3 className="font-bold text-gray-800 mb-1 md:mb-2 line-clamp-2 text-xs md:text-base">
+                      <h3 className="font-bold text-foreground/80 line-clamp-2 text-[10px] md:text-base">
                         {result.title}
                       </h3>
 
-                      <p className="text-xs md:text-sm text-gray-600 mb-1 md:mb-2 line-clamp-2">
+                      <p className="text-[10px] md:text-sm text-foreground/60 mb-1 md:mb-2 line-clamp-2">
                         {result.excerpt}
                       </p>
 
-                      <p className="text-xs text-gray-500">
+                      <p className="text-[10px] text-foreground/50">
                         {formatTimeAgo(result.publishedDate)}
                       </p>
                     </div>

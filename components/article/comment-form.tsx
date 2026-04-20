@@ -45,14 +45,14 @@ export function CommentForm({ articleId, onCommentAdded }: CommentFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-lg">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">Komentar Anda</h3>
+    <form onSubmit={handleSubmit} className="bg-transparent p-6 rounded-lg">
+      <h3 className="text-lg font-bold text-foreground mb-4">Komentar Anda</h3>
 
       <div className="space-y-4">
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-foreground/50 mb-1"
           >
             Nama Anda
           </label>
@@ -69,7 +69,7 @@ export function CommentForm({ articleId, onCommentAdded }: CommentFormProps) {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-foreground/50 mb-1"
           >
             Email
           </label>
@@ -88,7 +88,7 @@ export function CommentForm({ articleId, onCommentAdded }: CommentFormProps) {
         <div>
           <label
             htmlFor="content"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-foreground/50 mb-1"
           >
             Tulis Komentar...
           </label>
@@ -108,7 +108,7 @@ export function CommentForm({ articleId, onCommentAdded }: CommentFormProps) {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-900"
+          className="w-full bg-foreground text-background "
         >
           {isLoading ? "Mengirim..." : "Kirim Komentar"}
         </Button>

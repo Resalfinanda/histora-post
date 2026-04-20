@@ -10,7 +10,7 @@ interface BreadcrumbProps {
 
 export function Breadcrumb({ items, currentPage }: BreadcrumbProps) {
   return (
-    <nav className="flex items-center gap-2 text-sm text-gray-600 mb-6">
+    <nav className="flex items-center gap-2 text-sm text-foreground/50 mb-6">
       {items.map((item, index) => (
         <div key={index} className="flex items-center gap-2">
           <Link
@@ -22,7 +22,7 @@ export function Breadcrumb({ items, currentPage }: BreadcrumbProps) {
           <ChevronRight className="w-4 h-4" />
         </div>
       ))}
-      <span className="text-gray-900">{currentPage}</span>
+      <span className="text-foreground">{currentPage}</span>
     </nav>
   );
 }

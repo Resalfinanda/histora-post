@@ -153,7 +153,7 @@ export default function ArticlePage() {
           <ShareButtons title={article.title} url={articleUrl} />
 
           {/* Article Content */}
-          <div className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-gray-700">
+          <div className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-foreground">
             <p className="whitespace-pre-wrap leading-relaxed">
               {article.content}
             </p>
@@ -162,16 +162,16 @@ export default function ArticlePage() {
           <div className="border-t border-b border-gray-200 py-4 md:py-6 my-6 md:my-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <p className="text-xs md:text-sm text-gray-600">Ditulis oleh</p>
-                <p className="font-bold text-sm md:text-base text-gray-900">
+                <p className="text-xs md:text-sm text-foreground/50">Ditulis oleh</p>
+                <p className="font-bold text-sm md:text-base text-foreground">
                   {article.author}
                 </p>
               </div>
               <div className="md:text-right">
-                <p className="text-xs md:text-sm text-gray-600">
+                <p className="text-xs md:text-sm text-foreground/50">
                   Dipublikasikan pada
                 </p>
-                <p className="font-bold text-sm md:text-base text-gray-900">
+                <p className="font-bold text-sm md:text-base text-foreground">
                   {new Date(article.publishedDate).toLocaleDateString("id-ID", {
                     year: "numeric",
                     month: "long",

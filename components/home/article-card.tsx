@@ -62,15 +62,17 @@ export function ArticleCard({
             {category}
           </Badge>
 
-          <h4 className="font-bold text-gray-800 line-clamp-2 text-[10px] md:text-base">
+          <h4 className="font-bold text-foreground line-clamp-2 text-[10px] md:text-base">
             {title}
           </h4>
 
-          <p className="text-[10px] md:text-sm text-gray-600 mb-1 md:mb-3 line-clamp-2">
+          <p className="text-[10px] md:text-sm text-foreground/50 mb-1 md:mb-3 line-clamp-2">
             {excerpt}
           </p>
 
-          <p className="text-xs text-gray-500 hidden md:block">{timeAgo}</p>
+          <p className="text-xs text-foreground/50 hidden md:block">
+            {timeAgo}
+          </p>
         </div>
       </article>
     </Link>
