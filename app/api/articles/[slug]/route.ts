@@ -18,6 +18,13 @@ export async function GET(
             createdAt: "desc",
           },
         },
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
       },
     });
 

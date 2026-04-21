@@ -1,0 +1,260 @@
+// app/actions/article.ts
+"use server";
+
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+//import { redirect } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { auth } from "@/auth";
+
+// Helper untuk membuat URL slug dari judul
+function generateSlug(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
+type ActionResponse = {
+  success: boolean;
+  message: string;
+};
+
+export async function createArticle(
+  prevState: ActionResponse,
+  formData: FormData,
+): Promise<ActionResponse> {
+  try {
+    const title = formData.get("title") as string;
+    const category = formData.get("category") as string;
+    const excerpt = formData.get("excerpt") as string;
+    const content = formData.get("content") as string;
+    const isHeadline = formData.get("isHeadline") === "on";
+
+    const session = await auth();
+
+    if (!session || !session.user || !session.user.id) {
+      throw new Error("Anda harus login untuk membuat artikel.");
+    }
+
+    const loggedInUserId = session.user.id;
+
+    const imageFile = formData.get("image") as File;
+    let imageUrl = null;
+
+    // PROSES UPLOAD KE SUPABASE
+    // BATAS UKURAN: 1 MB
+    const MAX_FILE_SIZE = 1 * 1024 * 1024;
+
+    if (imageFile && imageFile.size > 0) {
+      // Penjagaan Server-Side
+      if (imageFile.size > MAX_FILE_SIZE) {
+        throw new Error("Upload gagal: Ukuran gambar melebihi batas 1 MB.");
+      }
+      // Bersihkan nama file dan buat unik
+      const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.\-]/g, "");
+      const uniqueFilename = `${Date.now()}-${cleanFileName}`;
+
+      // Ubah format file dari Request Next.js menjadi Buffer agar diterima Supabase
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      // 1. Upload ke bucket bernama 'articles' (Sesuaikan dengan nama bucket kamu)
+      const { data, error } = await supabase.storage
+        .from("article-images")
+        .upload(`${uniqueFilename}`, buffer, {
+          contentType: imageFile.type, // Misal: image/jpeg
+          upsert: false,
+        });
+
+      if (error) {
+        console.error("Supabase Upload Error:", error);
+        throw new Error(`Upload gagal: ${error.message}`);
+      }
+
+      // 2. Dapatkan URL Publik dari gambar yang baru diupload
+      const { data: publicUrlData } = supabase.storage
+        .from("article-images")
+        .getPublicUrl(`${uniqueFilename}`);
+
+      imageUrl = publicUrlData.publicUrl;
+    }
+
+    const slug = `${generateSlug(title)}-${Math.random().toString(36).substring(2, 7)}`;
+
+    // Simpan data ke PostgreSQL melalui Prisma
+    await prisma.article.create({
+      data: {
+        title,
+        slug,
+        category,
+        excerpt,
+        content,
+        isHeadline,
+        imageUrl, // Berisi URL lengkap dari Supabase (https://...)
+        authorId: loggedInUserId,
+        publishedDate: new Date(),
+      },
+    });
+
+    // revalidatePath("/dashboard/articles");
+    // redirect("/dashboard/articles");
+
+    return {
+      success: true,
+      message: "Mantap! Artikel berhasil diterbitkan.",
+    };
+  } catch (error: unknown) {
+    console.error("Create Article Error:", error);
+
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat membuat artikel.",
+    };
+  }
+  
+}
+
+export async function deleteArticle(id: string) {
+  try {
+    // 1. Cari data artikel terlebih dahulu untuk mengecek imageUrl
+    const article = await prisma.article.findUnique({
+      where: { id },
+      select: { imageUrl: true }, // Kita cuma butuh field imageUrl
+    });
+
+    // 2. Jika artikel punya gambar, hapus dari Supabase Storage
+    if (article?.imageUrl) {
+      const filePathParts = article.imageUrl.split("article-images");
+
+      if (filePathParts.length > 1) {
+        const filePath = filePathParts[1]; // Hasilnya: "covers/namafile.jpg"
+
+        // Perintah hapus file ke Supabase
+        const { error: storageError } = await supabase.storage
+          .from("article-images")
+          .remove([filePath]);
+
+        if (storageError) {
+          // Kita console.error saja agar jika gambar gagal dihapus (misal karena sudah tidak ada),
+          // artikel di database tetap bisa terhapus.
+          console.error("Gagal menghapus gambar dari Supabase:", storageError);
+        }
+      }
+    }
+
+    // 3. Setelah gambar di Storage aman (terhapus), baru hapus data di PostgreSQL
+    await prisma.article.delete({
+      where: { id },
+    });
+
+    revalidatePath("/dashboard/articles");
+    return { success: true, message: "Artikel dan gambar berhasil dihapus." };
+  } catch (error) {
+    console.error("Gagal menghapus artikel:", error);
+    return {
+      success: false,
+      message: "Terjadi kesalahan saat menghapus artikel.",
+    };
+  }
+}
+
+export async function updateArticle(
+  prevState: ActionResponse,
+  formData: FormData): Promise<ActionResponse> {
+  try {
+    const id = formData.get("id") as string; // Kita butuh ID untuk tahu artikel mana yang diupdate
+    const title = formData.get("title") as string;
+    const category = formData.get("category") as string;
+    const excerpt = formData.get("excerpt") as string;
+    const content = formData.get("content") as string;
+    const isHeadline = formData.get("isHeadline") === "on";
+
+    const imageFile = formData.get("image") as File | null;
+    let newImageUrl: string | undefined = undefined; // Kita gunakan
+
+    if (imageFile && imageFile.size > 0) {
+      const MAX_FILE_SIZE = 1 * 1024 * 1024;
+      if (imageFile.size > MAX_FILE_SIZE) {
+        throw new Error("Upload gagal: Ukuran gambar melebihi batas 1 MB.");
+      }
+
+      // 1. CARI DAN HAPUS GAMBAR LAMA DI SUPABASE
+      const oldArticle = await prisma.article.findUnique({
+        where: { id },
+        select: { imageUrl: true },
+      });
+
+      if (oldArticle?.imageUrl) {
+        const filePathParts = oldArticle.imageUrl.split("/article-images/");
+        if (filePathParts.length > 1) {
+          await supabase.storage
+            .from("article-images")
+            .remove([filePathParts[1]]);
+        }
+      }
+
+      // 2. UPLOAD GAMBAR BARU
+      const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.\-]/g, "");
+      const uniqueFilename = `${Date.now()}-${cleanFileName}`;
+
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const { error } = await supabase.storage
+        .from("article-images")
+        .upload(`${uniqueFilename}`, buffer, {
+          contentType: imageFile.type,
+          upsert: false,
+        });
+
+      if (error) throw new Error(`Supabase Error: ${error.message}`);
+
+      const { data: publicUrlData } = supabase.storage
+        .from("article-images")
+        .getPublicUrl(`${uniqueFilename}`);
+
+      newImageUrl = publicUrlData.publicUrl;
+    }
+
+    // Kita siapkan objek datanya dulu
+    const dataToUpdate: Prisma.ArticleUpdateInput = {
+      title,
+      category,
+      excerpt,
+      content,
+      isHeadline,
+    };
+
+    // Jika ada URL gambar baru, tambahkan ke objek update
+    // Jika tidak ada (newImageUrl undefined), Prisma tidak akan menyentuh kolom imageUrl
+    if (newImageUrl !== undefined) {
+      dataToUpdate.imageUrl = newImageUrl;
+    }
+
+    await prisma.article.update({
+      where: { id },
+      data: dataToUpdate,
+    });
+
+    // revalidatePath("/dashboard/articles");
+    // redirect("/dashboard/articles");
+
+    return { 
+      success: true, 
+      message: "Perubahan artikel berhasil disimpan." };
+  } catch (error: unknown) {
+    console.error("Create Article Error:", error);
+
+    return {
+      success: false,
+      message: error instanceof Error
+        ? error.message
+        : "Terjadi kesalahan saat memperbarui artikel.",
+    };
+  }
+}

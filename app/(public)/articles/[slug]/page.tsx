@@ -22,7 +22,11 @@ interface Article {
   content: string;
   category: string;
   imageUrl: string | null;
-  author: string;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+  };
   publishedDate: Date;
   slug: string;
   comments: Array<{
@@ -131,7 +135,7 @@ export default function ArticlePage() {
           <ArticleHeader
             title={article.title}
             category={article.category}
-            author={article.author}
+            author={article.author.name}
             publishedDate={article.publishedDate}
           />
 
@@ -142,7 +146,7 @@ export default function ArticlePage() {
                 src={article.imageUrl}
                 alt={article.title}
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
                 unoptimized
               />
@@ -153,18 +157,19 @@ export default function ArticlePage() {
           <ShareButtons title={article.title} url={articleUrl} />
 
           {/* Article Content */}
-          <div className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-foreground">
-            <p className="whitespace-pre-wrap leading-relaxed">
-              {article.content}
-            </p>
-          </div>
+          <div
+            className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-foreground prose-headings:text-[#0f172a] prose-a:text-blue-600 hover:prose-a:text-[#0f172a]"
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
 
           <div className="border-t border-b border-gray-200 py-4 md:py-6 my-6 md:my-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <p className="text-xs md:text-sm text-foreground/50">Ditulis oleh</p>
+                <p className="text-xs md:text-sm text-foreground/50">
+                  Ditulis oleh
+                </p>
                 <p className="font-bold text-sm md:text-base text-foreground">
-                  {article.author}
+                  {article.author.name}
                 </p>
               </div>
               <div className="md:text-right">
