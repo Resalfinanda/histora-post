@@ -14,6 +14,7 @@ import {
 import { TrendingSection } from "@/components/home/trending-section";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import { AdBanner } from "@/components/ui/ad-banner";
+import ArticleTracker from "@/components/article/articleViewTracker";
 
 interface Article {
   id: string;
@@ -39,7 +40,7 @@ interface Article {
 
 export default function ArticlePage() {
   const params = useParams();
-  const slug = params.slug as string;
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
   const [article, setArticle] = useState<Article | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
@@ -125,6 +126,7 @@ export default function ArticlePage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Main Article Column */}
         <article className="lg:col-span-2">
+          <ArticleTracker slug={article.slug} />
           {/* Breadcrumb */}
           <Breadcrumb
             items={[{ label: "Beranda", href: "/" }]}
