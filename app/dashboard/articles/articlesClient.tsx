@@ -63,8 +63,8 @@ export default function ArticlesClient({
       </div>
 
       {/* SEARCH & FILTER */}
-      <form method="GET" className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
+      <form method="GET" className="flex flex-col sm:flex-row gap-3 w-full">
+        <div className="relative w-full sm:flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
           <Input
             name="query"
@@ -74,7 +74,7 @@ export default function ArticlesClient({
           />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           <select
             name="category"
             defaultValue={category}
@@ -101,88 +101,96 @@ export default function ArticlesClient({
 
       {/* TABLE */}
       <div className=" bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-        {/* overflow-x-auto agar tabel bisa di-scroll di HP */}
-        <div className="overflow-x-auto">
-          <Table className="w-full table-auto min-w-150">
-            <TableHeader className="bg-slate-200">
-              <TableRow>
-                <TableHead className="w-[40%] pl-4">Judul Artikel</TableHead>
-                <TableHead>Kategori</TableHead>
-                {/* 3. Kolom Penulis hanya muncul untuk Admin */}
-                {isAdmin && <TableHead>Penulis</TableHead>}
-                <TableHead className="text-right pr-8 ">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
+        <Table>
+          <TableHeader className="bg-slate-200">
+            <TableRow>
+              <TableHead className="w-[60%] sm:w-[40%] pl-4">
+                Judul Artikel
+              </TableHead>
+              <TableHead className="hidden md:table-cell">Kategori</TableHead>
+              {/* 3. Kolom Penulis hanya muncul untuk Admin */}
+              {isAdmin && (
+                <TableHead className="hidden lg:table-cell">Penulis</TableHead>
+              )}
+              <TableHead className="text-right pr-8 ">Aksi</TableHead>
+            </TableRow>
+          </TableHeader>
 
-            <TableBody>
-              {articles.length === 0 ? (
-                <TableRow>
-                  {/* 4. Sesuaikan colSpan berdasarkan role agar tidak bolong */}
-                  <TableCell
-                    colSpan={isAdmin ? 4 : 3}
-                    className="h-32 text-center text-slate-500"
-                  >
-                    Tidak ada artikel yang ditemukan.
+          <TableBody>
+            {articles.length === 0 ? (
+              <TableRow>
+                {/* 4. Sesuaikan colSpan berdasarkan role agar tidak bolong */}
+                <TableCell
+                  colSpan={isAdmin ? 4 : 3}
+                  className="h-32 text-center text-slate-500"
+                >
+                  Tidak ada artikel yang ditemukan.
+                </TableCell>
+              </TableRow>
+            ) : (
+              articles.map((article) => (
+                <TableRow key={article.id} className="hover:bg-slate-50 ">
+                  <TableCell className="font-medium text-slate-800 pl-4 truncate">
+                    <span className="line-clamp-2 leading-snug truncate">
+                      {article.title}
+                    </span>
+                    {/* Trik: Tampilkan kategori di bawah judul khusus di HP */}
+                    <span className="block md:hidden text-xs text-slate-500 mt-1">
+                      {article.category}{" "}
+                      {isAdmin && `• ${article.author?.name}`}
+                    </span>
+                  </TableCell>
+
+                  <TableCell className="hidden md:table-cell">
+                    <Badge
+                      variant="secondary"
+                      className="bg-blue-200 text-blue-900 hover:bg-blue-300 font-bold"
+                    >
+                      {article.category}
+                    </Badge>
+                  </TableCell>
+
+                  {/* 5. Data Penulis hanya muncul untuk Admin */}
+                  {isAdmin && (
+                    <TableCell className="hidden lg:table-cell text-slate-500">
+                      {article.author?.name ?? "Unknown"}
+                    </TableCell>
+                  )}
+
+                  <TableCell className="text-right pr-8">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-8 w-8 focus-visible:ring-0"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Buka menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem className="cursor-pointer" asChild>
+                          <Link
+                            href={`/dashboard/articles/${article.id}/edit`}
+                            className="flex items-center w-full"
+                          >
+                            <Edit className="mr-2 h-4 w-4 text-slate-500" />
+                            <span>Edit Artikel</span>
+                          </Link>
+                        </DropdownMenuItem>
+
+                        {/* Komponen Hapus Kamu */}
+                        <DeleteAction articleId={article.id} />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
-              ) : (
-                articles.map((article) => (
-                  <TableRow key={article.id} className="hover:bg-slate-50 ">
-                    <TableCell className="font-medium text-slate-800 pl-4">
-                      {article.title}
-                    </TableCell>
-
-                    <TableCell>
-                      <Badge
-                        variant="secondary"
-                        className="bg-blue-200 text-blue-900 hover:bg-blue-300 font-bold"
-                      >
-                        {article.category}
-                      </Badge>
-                    </TableCell>
-
-                    {/* 5. Data Penulis hanya muncul untuk Admin */}
-                    {isAdmin && (
-                      <TableCell className="text-slate-500">
-                        {article.author?.name ?? "Unknown"}
-                      </TableCell>
-                    )}
-
-                    <TableCell className="text-right pr-8">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8 focus-visible:ring-0"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Buka menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-
-                        <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem className="cursor-pointer" asChild>
-                            <Link
-                              href={`/dashboard/articles/${article.id}/edit`}
-                              className="flex items-center w-full"
-                            >
-                              <Edit className="mr-2 h-4 w-4 text-slate-500" />
-                              <span>Edit Artikel</span>
-                            </Link>
-                          </DropdownMenuItem>
-
-                          {/* Komponen Hapus Kamu */}
-                          <DeleteAction articleId={article.id} />
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+              ))
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

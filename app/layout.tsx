@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Poppins } from "next/font/google";
+import { NextAuthProvider } from "@/components/provider/providers";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -19,7 +20,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        {children}
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
         <Toaster position="top-right" richColors />
       </body>
     </html>
