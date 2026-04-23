@@ -73,7 +73,12 @@ export default function SearchPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-      <AdBanner height="h-32 md:h-48" className="mb-8" />
+      <AdBanner
+        size="large"
+        className="mb-8"
+        imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+        adLink="https://makassarkota.go.id/"
+      />
       <Breadcrumb
         items={[{ label: "Beranda", href: "/" }]}
         currentPage="Pencarian"
@@ -109,7 +114,7 @@ export default function SearchPage() {
           ) : results.length === 0 ? (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
               <p className="text-foreground/60 text-lg">
-                Tidak ada artikel yang ditemukan untuk &quot;{ query }&quot;
+                Tidak ada artikel yang ditemukan untuk &quot;{query}&quot;
               </p>
               <p className="text-foreground/50 text-sm mt-2">
                 Coba gunakan kata kunci yang berbeda
@@ -157,6 +162,7 @@ export default function SearchPage() {
                       </p>
                     </div>
                   </article>
+                  <hr className="h-px my-3 bg-neutral-quaternary border"></hr>
                 </Link>
               ))}
             </div>
@@ -166,9 +172,17 @@ export default function SearchPage() {
         {/* Sidebar Column */}
         <aside className="space-y-6 md:space-y-8">
           <TrendingSection />
-          <AdBanner height="h-64 md:h-48" />
+          <AdBanner
+            size="small"
+            imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
+            adLink="https://dispora.makassarkota.go.id/"
+          />
           <TrendingSearchTopics />
-          <AdBanner height="h-64 md:h-48" />
+          <AdBanner
+            size="small"
+            imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+            adLink="https://makassarkota.go.id/"
+          />
           <NewsletterSection />
         </aside>
       </div>

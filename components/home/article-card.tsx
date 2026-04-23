@@ -75,6 +75,7 @@ export function ArticleCard({
           </p>
         </div>
       </article>
+      <hr className="h-px my-4 bg-neutral-quaternary border"></hr>
     </Link>
   );
 }

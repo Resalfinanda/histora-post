@@ -118,9 +118,6 @@ export default function ArticlesClient({
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Eye className="mr-2 h-4 w-4" /> Preview
-                      </DropdownMenuItem>
                       <DropdownMenuItem className="cursor-pointer" asChild>
                         <Link
                           href={`/dashboard/articles/${article.id}/edit`}

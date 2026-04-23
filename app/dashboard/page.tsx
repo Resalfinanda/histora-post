@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/app/actions/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, TrendingUp, Users, Eye } from "lucide-react";

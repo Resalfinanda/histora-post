@@ -108,15 +108,18 @@ export function MainContent() {
         </div>
       ) : (
         <>
+          {/* Ad Banner 1 - Below Headline */}
+          <div className="mb-4 md:mb-6">
+            <AdBanner
+              size="large"
+              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+              adLink="https://makassarkota.go.id/"
+            />
+          </div>
           {/* Featured Carousel */}
           {carouselArticles.length > 0 && (
             <FeaturedCarousel articles={carouselArticles} />
           )}
-
-          {/* Ad Banner 1 - Below Headline */}
-          <div className="my-8 md:my-12">
-            <AdBanner height="h-32 md:h-48" />
-          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative">
             {/* --- MAIN CONTENT SECTION --- */}
@@ -164,18 +167,23 @@ export function MainContent() {
 
             {/* --- SIDEBAR SECTION (STICKY & INDEPENDENT SCROLL) --- */}
             <div className=" lg:col-span-1 lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:no-scrollbar max-h-none overflow-visible self-start pb-4 space-y-6 md:space-y-8">
-
               {/* Trending Section */}
               <TrendingSection />
 
-              {/* Ad Banner 2 - Above Newsletter */}
-              <AdBanner size="medium" />
+              <AdBanner
+                size="small"
+                imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
+                adLink="https://dispora.makassarkota.go.id/"
+              />
 
               {/* Newsletter Section */}
               <NewsletterSection />
 
-              {/* Ad Banner 3 - Below Newsletter */}
-              <AdBanner size="medium" />
+              <AdBanner
+                size="small"
+                imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+                adLink="https://makassarkota.go.id/"
+              />
             </div>
           </div>
         </>

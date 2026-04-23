@@ -121,7 +121,11 @@ export default function ArticlePage() {
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
       {/* Ad Banner 1 - Below Navbar */}
       <div className="mb-6 md:mb-8">
-        <AdBanner height="h-40 md:h-64" />
+        <AdBanner
+          height="h-22 md:h-64"
+          imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+          adLink="https://makassarkota.go.id/"
+        />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Main Article Column */}
@@ -160,7 +164,7 @@ export default function ArticlePage() {
 
           {/* Article Content */}
           <div
-            className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-foreground prose-headings:text-[#0f172a] prose-a:text-blue-600 hover:prose-a:text-[#0f172a]"
+            className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-foreground prose-headings:text-[#0f172a] prose-a:text-blue-600 hover:prose-a:text-[#0f172a] article-content"
             dangerouslySetInnerHTML={{ __html: article.content }}
           />
 
@@ -191,7 +195,11 @@ export default function ArticlePage() {
 
           {/* Ad Banner 3 - Above Related Articles */}
           <div className="my-6 md:my-8">
-            <AdBanner height="h-40 md:h-64" />
+            <AdBanner
+              size="medium"
+              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
+              adLink="https://dispora.makassarkota.go.id/"
+            />
           </div>
 
           {/* Related Articles */}

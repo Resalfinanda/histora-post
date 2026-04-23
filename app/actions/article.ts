@@ -6,7 +6,7 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 //import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { auth } from "@/auth";
+import { auth } from "@/app/actions/auth";
 
 // Helper untuk membuat URL slug dari judul
 function generateSlug(title: string) {

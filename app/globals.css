@@ -183,6 +183,12 @@
   height: 0;
 }
 
+.article-content p {
+    margin-bottom: 1.5rem; /* Memberikan jarak antar paragraf */
+}
+
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

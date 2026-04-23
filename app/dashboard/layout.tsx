@@ -1,7 +1,14 @@
 import Link from "next/link";
-import { LayoutDashboard, FileText, Settings, LogOut } from "lucide-react";
-import { auth, signOut } from "@/auth";
+import {
+  LayoutDashboard,
+  FileText,
+  Settings,
+  LogOut,
+  Users,
+} from "lucide-react";
+import { auth, signOut } from "@/app/actions/auth";
 import { redirect } from "next/navigation";
+import { LogoutButton } from "@/components/ui/logoutButton";
 
 export default async function DashboardLayout({
   children,
@@ -41,31 +48,35 @@ export default async function DashboardLayout({
             <FileText size={20} />
             <span className="font-medium">Artikel Berita</span>
           </Link>
-          {/* Menu ini nantinya bisa di-hide untuk Redaktur */}
+          {/* Menu Manajemen Pengguna hanya untuk Admin */}
+          {session.user.role === "ADMIN" && (
+            <Link
+              href="/dashboard/users"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors"
+            >
+              <Users size={20} />
+              <span className="font-medium">Manajemen Pengguna</span>
+            </Link>
+          )}
           <Link
             href="/dashboard/settings"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors"
           >
             <Settings size={20} />
-            <span className="font-medium">Pengaturan</span>
+            <span className="font-medium">Ganti Password</span>
           </Link>
         </nav>
 
         <div className="p-4 border-t border-slate-700/50">
-          <form
+          <LogoutButton />
+          {/* <form
             action={async () => {
               "use server";
               await signOut({ redirectTo: "/login" });
             }}
           >
-            <button
-              type="submit"
-              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-red-400 transition-colors"
-            >
-              <LogOut size={20} />
-              <span className="font-medium">Logout</span>
-            </button>
-          </form>
+            
+          </form> */}
         </div>
       </aside>
 

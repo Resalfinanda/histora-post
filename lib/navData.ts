@@ -6,6 +6,8 @@ export const NAV_ITEMS = [
   { label: "Olahraga", href: "/" },
   { label: "Budaya", href: "/" },
   { label: "Sejarah", href: "/" },
+  { label: "Teknologi", href: "/" },
+  { label: "Sosial", href: "/" },
   { label: "Pendidikan", href: "/" },
   { label: "Ekonomi", href: "/" },
   { label: "Arsip", href: "/" },

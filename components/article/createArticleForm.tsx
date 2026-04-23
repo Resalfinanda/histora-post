@@ -5,7 +5,7 @@ import { createArticle } from "@/app/actions/article";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const initialState = {
@@ -29,7 +29,7 @@ function SubmitButton() {
 }
 
 export function CreateArticleForm({ children }: { children: React.ReactNode }) {
-  const [state, formAction] = useFormState(createArticle, initialState);
+  const [state, formAction] = useActionState(createArticle, initialState);
   const router = useRouter();
 
   useEffect(() => {
