@@ -24,7 +24,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 text-slate-900">
+    <div className="flex max-h-screen min-h-screen bg-gray-50 text-slate-900">
       {/* Sidebar - Navy Blue (#0f172a) */}
       <aside className="w-64 bg-[#0f172a] text-white flex flex-col">
         <div className="h-16 flex items-center px-6 border-b border-slate-700/50">

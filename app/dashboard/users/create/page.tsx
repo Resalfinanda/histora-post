@@ -50,7 +50,7 @@ export default function CreateUserPage() {
 
           <div className="space-y-2">
             <Label htmlFor="email">Email Login</Label>
-            <Input id="email" name="email" type="email" required placeholder="johndoe@historapost.com" />
+            <Input id="email" name="email" type="email" required placeholder="johndoe@gmail.com" />
           </div>
 
           <div className="space-y-2">
