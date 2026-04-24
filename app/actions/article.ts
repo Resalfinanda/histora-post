@@ -6,7 +6,7 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 //import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { auth } from "@/auth";
+import { auth } from "@/app/actions/auth";
 
 // Helper untuk membuat URL slug dari judul
 function generateSlug(title: string) {
@@ -116,7 +116,6 @@ export async function createArticle(
           : "Terjadi kesalahan saat membuat artikel.",
     };
   }
-  
 }
 
 export async function deleteArticle(id: string) {
@@ -129,7 +128,7 @@ export async function deleteArticle(id: string) {
 
     // 2. Jika artikel punya gambar, hapus dari Supabase Storage
     if (article?.imageUrl) {
-      const filePathParts = article.imageUrl.split("article-images");
+      const filePathParts = article.imageUrl.split("/article-images/");
 
       if (filePathParts.length > 1) {
         const filePath = filePathParts[1]; // Hasilnya: "covers/namafile.jpg"
@@ -165,7 +164,8 @@ export async function deleteArticle(id: string) {
 
 export async function updateArticle(
   prevState: ActionResponse,
-  formData: FormData): Promise<ActionResponse> {
+  formData: FormData,
+): Promise<ActionResponse> {
   try {
     const id = formData.get("id") as string; // Kita butuh ID untuk tahu artikel mana yang diupdate
     const title = formData.get("title") as string;
@@ -244,17 +244,19 @@ export async function updateArticle(
     // revalidatePath("/dashboard/articles");
     // redirect("/dashboard/articles");
 
-    return { 
-      success: true, 
-      message: "Perubahan artikel berhasil disimpan." };
+    return {
+      success: true,
+      message: "Perubahan artikel berhasil disimpan.",
+    };
   } catch (error: unknown) {
     console.error("Create Article Error:", error);
 
     return {
       success: false,
-      message: error instanceof Error
-        ? error.message
-        : "Terjadi kesalahan saat memperbarui artikel.",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat memperbarui artikel.",
     };
   }
 }

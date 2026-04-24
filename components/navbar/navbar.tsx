@@ -14,14 +14,14 @@ export function Navbar() {
   return (
     <>
       <header className="w-full bg-foreground border-b border-white/10 dark:border-white">
-        <div className="container mx-auto flex items-center justify-between md:justify-evenly h-16 px-4">
+        <div className="container mx-auto flex items-center justify-between xl:justify-evenly h-16 px-4">
           {/* Logo */}
           <Link href="/" className="text-background font-bold text-lg italic">
             Historapost
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <NavMenu items={NAV_ITEMS} />
           </div>
 

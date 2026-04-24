@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 interface AdBannerProps {
@@ -22,9 +24,9 @@ export function AdBanner({
   isClickable = true,
 }: AdBannerProps) {
   const sizeClasses = {
-    small: "h-16",
-    medium: "h-24",
-    large: "h-32",
+    small: "h-24",
+    medium: "h-24 md:h-48",
+    large: "h-24 md:h-64",
   };
 
   // Gunakan custom dimensions jika diberikan, atau gunakan size preset
@@ -45,23 +47,20 @@ export function AdBanner({
         href={adLink}
         target="_blank"
         rel="noopener noreferrer"
-        className={`block overflow-hidden rounded-lg ${widthClass} ${heightClass} ${className}`}
-        onClick={(e) => {
-          if (!isClickable) {
-            e.preventDefault();
-          }
-        }}
+        className={`relative block overflow-hidden rounded-lg ${widthClass} ${heightClass} ${className}`}
+        // onClick={(e) => {
+        //   if (!isClickable) {
+        //     e.preventDefault();
+        //   }
+        // }}
       >
         <Image
           src={imageUrl}
           alt={altText}
-          className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+          fill
+          className="object-conver hover:opacity-90 transition-opacity"
+          unoptimized
         />
-        {/* <img
-          src={imageUrl}
-          alt={altText}
-          className="w-full h-full object-cover hover:opacity-90 transition-opacity"
-        /> */}
       </a>
     );
   }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Mail } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -14,12 +15,18 @@ export function NewsletterSection() {
     setIsLoading(true);
 
     try {
-      // Add your newsletter subscription logic here
       await new Promise((resolve) => setTimeout(resolve, 500));
+
       setEmail("");
-      alert(
-        "Saa ini fitur belum tersedia, silakan coba lagi nanti. Terima kasih!",
-      );
+
+      toast.info("Fitur belum tersedia", {
+        description:
+          "Saat ini fitur newsletter belum tersedia. Silakan coba lagi nanti.",
+      });
+    } catch (error) {
+      toast.error("Terjadi kesalahan", {
+        description: "Gagal memproses langganan.",
+      });
     } finally {
       setIsLoading(false);
     }

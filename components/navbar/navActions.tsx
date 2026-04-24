@@ -4,7 +4,7 @@ import { Moon, Sun, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,SheetDescription } from "@/components/ui/sheet";
 import Link from "next/link";
 import { NAV_ITEMS } from "@/lib/navData";
 import { SearchBar } from "./search-bar";
@@ -40,6 +40,36 @@ export function NavbarActions({
           <Sun className="h-5 w-5 hidden dark:block text-background" />
           <Moon className="h-5 w-5 block dark:hidden text-background" />
         </Button>
+
+        <div className="lg:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon-lg"
+                className="hover:bg-transparent"
+              >
+                <Menu className="h-6 w-6 text-background" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="bg-background text-foreground"
+            >
+              <div className="flex flex-col gap-4 mt-6 ml-6">
+                {NAV_ITEMS.map((item, i) => (
+                  <Link
+                    key={i}
+                    href={item.href}
+                    className="text-base font-medium hover:text-muted-foreground"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
 
       {/* Mobile */}

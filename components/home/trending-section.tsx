@@ -3,15 +3,36 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { TrendingUp } from "lucide-react";
+import Image from "next/image";
 
 interface TrendingItem {
   id: string;
   title: string;
   slug: string;
+  thumbnail?: string;
+  views?: number;
+  createdAt?: string;
 }
 
 interface TrendingSectionProps {
   items?: TrendingItem[];
+}
+
+function formatViews(views: number = 0) {
+  if (views >= 1000) return (views / 1000).toFixed(1) + "k";
+  return views.toString();
+}
+
+function formatTime(dateString?: string) {
+  if (!dateString) return "";
+  const diff = Date.now() - new Date(dateString).getTime();
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+
+  if (hours < 1) return "baru saja";
+  if (hours < 24) return `${hours} jam lalu`;
+
+  const days = Math.floor(hours / 24);
+  return `${days} hari lalu`;
 }
 
 export function TrendingSection({ items: propItems }: TrendingSectionProps) {
@@ -24,7 +45,7 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
 
     const fetchTrendingArticles = async () => {
       try {
-        const response = await fetch("/api/articles");
+        const response = await fetch("/api/articles/trending");
         if (response.ok) {
           const data = await response.json();
           setItems(data.slice(0, 5));
@@ -44,7 +65,9 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
       <section className="mb-8 bg-linear-to-r from-blue-50 to-blue-100 rounded-lg p-6">
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="text-blue-400 w-5 h-5" />
-          <h3 className="text-lg font-bold text-gray-800">TRENDING SAAT INI</h3>
+          <h3 className="text-lg font-bold text-gray-800">
+            TRENDING SAAT INI
+          </h3>
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -62,7 +85,7 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
         <h3 className="text-lg font-bold text-gray-800">TRENDING SAAT INI</h3>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {items.length > 0 ? (
           items.slice(0, 5).map((item, index) => (
             <Link
@@ -70,12 +93,39 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
               href={`/articles/${item.slug}`}
               className="flex items-start gap-3 group"
             >
-              <div className="text-blue-400 font-bold text-sm pt-1 shrink-0">
-                {String(index + 1).padStart(2, "0")}
+              {/* Ranking */}
+              <div className="flex flex-col items-center shrink-0">
+                <span className="text-xs">🔥</span>
+                <span className="text-blue-500 font-bold text-sm">
+                  #{index + 1}
+                </span>
               </div>
-              <p className="text-sm text-gray-700 group-hover:text-blue-400 transition-colors line-clamp-2">
-                {item.title}
-              </p>
+
+              {/* Thumbnail */}
+              {item.thumbnail && (
+                <Image
+                  src={item.thumbnail}
+                  alt={item.title}
+                  className="w-14 h-14 object-cover rounded-md shrink-0"
+                />
+              )}
+
+              {/* Content */}
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-800 group-hover:text-blue-500 transition line-clamp-2">
+                  {item.title}
+                </p>
+
+                {/* Metadata */}
+                <div className="text-xs text-gray-500 mt-1 flex gap-2">
+                  {item.views !== undefined && (
+                    <span>{formatViews(item.views)} views</span>
+                  )}
+                  {item.createdAt && (
+                    <span>• {formatTime(item.createdAt)}</span>
+                  )}
+                </div>
+              </div>
             </Link>
           ))
         ) : (

@@ -32,10 +32,10 @@ export default async function EditArticlePage({
     notFound();
   }
 
-  const categories = await prisma.article.findMany({
-    select: { category: true },
-    distinct: ["category"],
-  });
+  // const categories = await prisma.article.findMany({
+  //   select: { category: true },
+  //   distinct: ["category"],
+  // });
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -74,13 +74,22 @@ export default async function EditArticlePage({
             <div className="space-y-2">
               <Label htmlFor="category">Kategori</Label>
               <select name="category" defaultValue={article.category}>
-                <option value="all">Semua</option>
+                <option value="Sosial">Sosial</option>
+                <option value="Teknologi">Teknologi</option>
+                <option value="Nasional">Nasional</option>
+                <option value="Ekonomi">Ekonomi</option>
+                <option value="Pendidikan">Pendidikan</option>
+                <option value="Olahraga">Olahraga</option>
+                <option value="Sejarah">Sejarah</option>
+                <option value="Budaya">Budaya</option>
+                <option value="Politik">Politik</option>
+                <option value="Arsip">Arsip</option>
 
-                {categories.map((c) => (
+                {/* {categories.map((c) => (
                   <option key={c.category} value={c.category}>
                     {c.category}
                   </option>
-                ))}
+                ))} */}
               </select>
             </div>
 

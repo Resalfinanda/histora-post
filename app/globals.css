@@ -82,7 +82,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 } */
- :root {
+:root {
   --background: #ffffff;
   --foreground: #0f172a;
 
@@ -145,7 +145,7 @@
   --sidebar-ring: oklch(0.556 0 0);
 } */
 .dark {
-  --background: #0f172a; 
+  --background: #0f172a;
   --foreground: #ffffff;
 
   --card: #1e293b;
@@ -153,7 +153,6 @@
 
   --popover: #1e293b;
   --popover-foreground: #e2e8f0;
-
 
   --primary: #1e2b45;
   --primary-foreground: #ffffff;
@@ -173,6 +172,22 @@
 
   --ring: #94a3b8;
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.article-content p {
+    margin-bottom: 1.5rem; /* Memberikan jarak antar paragraf */
+}
+
+
 
 @layer base {
   * {

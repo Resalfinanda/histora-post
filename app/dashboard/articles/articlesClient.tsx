@@ -31,6 +31,7 @@ type ArticlesClientProps = {
   query: string;
   category: string;
   categories: { category: string }[];
+  isAdmin: boolean; // 1. Tambahkan props isAdmin di sini
 };
 
 export default function ArticlesClient({
@@ -38,106 +39,159 @@ export default function ArticlesClient({
   query,
   category,
   categories,
+  isAdmin, // 2. Ekstrak isAdmin dari props
 }: ArticlesClientProps) {
   const [isPending] = useTransition();
 
   return (
     <div className="space-y-6">
       {/* HEADER */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Daftar Artikel</h2>
-        <Link href="/dashboard/articles/create">
-          <Button>
-            <Plus size={16} /> Tambah
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-[#0f172a]">Daftar Artikel</h2>
+          <p className="text-slate-500 text-sm mt-1">
+            {isAdmin
+              ? "Kelola semua publikasi artikel dari seluruh redaksi."
+              : "Kelola artikel yang telah Anda publikasikan."}
+          </p>
+        </div>
+        <Link href="/dashboard/articles/create" className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto bg-[#0f172a] text-white hover:bg-slate-800 gap-2">
+            <Plus size={16} /> Tambah Artikel
           </Button>
         </Link>
       </div>
 
       {/* SEARCH & FILTER */}
-      <form method="GET" className="flex gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 w-4 h-4" />
+      <form method="GET" className="flex flex-col sm:flex-row gap-3 w-full">
+        <div className="relative w-full sm:flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
           <Input
             name="query"
-            placeholder="Cari artikel..."
+            placeholder="Cari judul artikel..."
             defaultValue={query}
-            className="pl-8"
+            className="pl-9"
           />
         </div>
 
-        <select name="category" defaultValue={category}>
-          <option value="all">Semua</option>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <select
+            name="category"
+            defaultValue={category}
+            className="flex h-8 w-full sm:w-48 rounded-md border border-slate-300 bg-transparent px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f172a]"
+          >
+            <option value="all">Semua Kategori</option>
+            {categories.map((c) => (
+              <option key={c.category} value={c.category}>
+                {c.category}
+              </option>
+            ))}
+          </select>
 
-          {categories.map((c) => (
-            <option key={c.category} value={c.category}>
-              {c.category}
-            </option>
-          ))}
-        </select>
-
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Loading..." : "Filter"}
-        </Button>
+          <Button
+            type="submit"
+            disabled={isPending}
+            variant="outline"
+            className="w-20 shrink-0 bg-[#0f172a] text-white"
+          >
+            {isPending ? "Loading..." : "Filter"}
+          </Button>
+        </div>
       </form>
 
       {/* TABLE */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Judul</TableHead>
-            <TableHead>Kategori</TableHead>
-            <TableHead>Penulis</TableHead>
-            <TableHead>Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {articles.length === 0 ? (
+      <div className=" bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+        <Table>
+          <TableHeader className="bg-slate-200">
             <TableRow>
-              <TableCell colSpan={4} className="text-center">
-                Tidak ada data
-              </TableCell>
+              <TableHead className="w-[60%] sm:w-[40%] pl-4">
+                Judul Artikel
+              </TableHead>
+              <TableHead className="hidden md:table-cell">Kategori</TableHead>
+              {/* 3. Kolom Penulis hanya muncul untuk Admin */}
+              {isAdmin && (
+                <TableHead className="hidden lg:table-cell">Penulis</TableHead>
+              )}
+              <TableHead className="text-right pr-8 ">Aksi</TableHead>
             </TableRow>
-          ) : (
-            articles.map((article) => (
-              <TableRow key={article.id}>
-                <TableCell>{article.title}</TableCell>
+          </TableHeader>
 
-                <TableCell>
-                  <Badge>{article.category}</Badge>
-                </TableCell>
-
-                <TableCell>{article.author?.name ?? "Unknown"}</TableCell>
-
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="ghost">
-                        <MoreHorizontal />
-                      </Button>
-                    </DropdownMenuTrigger>
-
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Eye className="mr-2 h-4 w-4" /> Preview
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer" asChild>
-                        <Link
-                          href={`/dashboard/articles/${article.id}/edit`}
-                          className="flex items-center w-full"
-                        >
-                          <Edit className="mr-2 h-4 w-4" /> Edit Artikel
-                        </Link>
-                      </DropdownMenuItem>
-                     <DeleteAction articleId={article.id} />
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+          <TableBody>
+            {articles.length === 0 ? (
+              <TableRow>
+                {/* 4. Sesuaikan colSpan berdasarkan role agar tidak bolong */}
+                <TableCell
+                  colSpan={isAdmin ? 4 : 3}
+                  className="h-32 text-center text-slate-500"
+                >
+                  Tidak ada artikel yang ditemukan.
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : (
+              articles.map((article) => (
+                <TableRow key={article.id} className="hover:bg-slate-50 ">
+                  <TableCell className="font-medium text-slate-800 pl-4 truncate">
+                    <span className="line-clamp-2 leading-snug truncate">
+                      {article.title}
+                    </span>
+                    {/* Trik: Tampilkan kategori di bawah judul khusus di HP */}
+                    <span className="block md:hidden text-xs text-slate-500 mt-1">
+                      {article.category}{" "}
+                      {isAdmin && `• ${article.author?.name}`}
+                    </span>
+                  </TableCell>
+
+                  <TableCell className="hidden md:table-cell">
+                    <Badge
+                      variant="secondary"
+                      className="bg-blue-200 text-blue-900 hover:bg-blue-300 font-bold"
+                    >
+                      {article.category}
+                    </Badge>
+                  </TableCell>
+
+                  {/* 5. Data Penulis hanya muncul untuk Admin */}
+                  {isAdmin && (
+                    <TableCell className="hidden lg:table-cell text-slate-500">
+                      {article.author?.name ?? "Unknown"}
+                    </TableCell>
+                  )}
+
+                  <TableCell className="text-right pr-8">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-8 w-8 focus-visible:ring-0"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Buka menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem className="cursor-pointer" asChild>
+                          <Link
+                            href={`/dashboard/articles/${article.id}/edit`}
+                            className="flex items-center w-full"
+                          >
+                            <Edit className="mr-2 h-4 w-4 text-slate-500" />
+                            <span>Edit Artikel</span>
+                          </Link>
+                        </DropdownMenuItem>
+
+                        {/* Komponen Hapus Kamu */}
+                        <DeleteAction articleId={article.id} />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

@@ -59,7 +59,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
     <div className="mb-8">
       <Link href={`/articles/${currentArticle.slug}`}>
         <div
-          className="relative h-64 md:h-80 rounded-lg overflow-hidden group cursor-pointer"
+          className="relative h-64 md:h-96 rounded-lg overflow-hidden group cursor-pointer"
           onMouseEnter={() => setAutoPlay(false)}
           onMouseLeave={() => setAutoPlay(true)}
         >
