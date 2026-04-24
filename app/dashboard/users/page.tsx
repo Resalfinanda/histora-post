@@ -9,7 +9,7 @@ import { DeleteUserButton } from "@/components/ui/deleteUserButton";
 export default async function ManageUsersPage() {
   const session = await auth();
 
-  // Proteksi Halaman: Tendang keluar jika bukan ADMIN
+  // Proteksi Halaman
   if (session?.user?.role !== "ADMIN") {
     redirect("/dashboard");
   }
@@ -18,10 +18,10 @@ export default async function ManageUsersPage() {
   const users = await prisma.user.findMany({
     include: {
       _count: {
-        select: { articles: true }, // Menghitung relasi artikel (pastikan nama relasinya 'articles' di schema.prisma)
+        select: { articles: true },
       },
     },
-    orderBy: { role: "asc" }, // Tampilkan Admin di atas, lalu Redaktur
+    orderBy: { role: "asc" }, 
   });
 
   return (
@@ -84,7 +84,6 @@ export default async function ManageUsersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    {/* Jangan tampilkan tombol hapus untuk diri sendiri */}
                     {session.user?.id !== user.id && (
                       <DeleteUserButton
                         userId={user.id}

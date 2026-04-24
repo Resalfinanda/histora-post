@@ -1,4 +1,3 @@
-// app/dashboard/articles/page.tsx
 
 // import { prisma } from "@/lib/prisma";
 // import ArticlesClient from "./articlesClient";
@@ -63,7 +62,7 @@
 
 import { auth } from "@/app/actions/auth";
 import {prisma} from "@/lib/prisma";
-import ArticlesClient from "./articlesClient"; // Sesuaikan path jika berbeda
+import ArticlesClient from "./articlesClient";
 
 export default async function ArticlesPage({
   searchParams,
@@ -75,15 +74,15 @@ export default async function ArticlesPage({
   const query = params?.query || "";
   const category = params?.category || "all";
 
-  // 1. Ambil Sesi User
+  // Ambil Sesi User
   const session = await auth();
   const isAdmin = session?.user?.role === "ADMIN";
   const userId = session?.user?.id;
 
-  // 2. Logika Role: Jika bukan Admin, wajib filter berdasarkan authorId
+  // Logika Role: Jika bukan Admin, wajib filter berdasarkan authorId
   const roleFilter = isAdmin ? {} : { authorId: userId };
 
-  // 3. Eksekusi Kueri dengan Filter Gabungan (Search + Kategori + Role)
+  // Eksekusi Kueri dengan Filter Gabungan (Search + Kategori + Role)
   const articles = await prisma.article.findMany({
     where: {
       AND: [
@@ -130,7 +129,7 @@ export default async function ArticlesPage({
       query={query}
       category={category}
       categories={categories}
-      isAdmin={isAdmin} // <-- Lempar props ini agar tabel di Client bisa menyesuaikan
+      isAdmin={isAdmin} 
     />
   );
 }

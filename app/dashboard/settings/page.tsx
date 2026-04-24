@@ -30,7 +30,7 @@ export default function SettingsPage() {
       const result = await changePassword(formData);
       if (result.success) {
         toast.success(result.message);
-        (e.target as HTMLFormElement).reset(); // Bersihkan form
+        (e.target as HTMLFormElement).reset();
       } else {
         toast.error(result.message);
       }

@@ -1,4 +1,3 @@
-// components/editor/rich-text-editor.tsx
 "use client";
 
 import { useEditor, EditorContent,type Editor } from "@tiptap/react";
@@ -6,7 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { 
   Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Quote, Undo, Redo 
 } from "lucide-react";
-import { Toggle } from "@/components/ui/toggle"; // Pastikan kamu sudah: npx shadcn-ui@latest add toggle
+import { Toggle } from "@/components/ui/toggle";
 
 interface RichTextEditorProps {
   content: string;
@@ -18,7 +17,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     return null;
   }
 
-  // Buat variabel class yang bisa dipakai berulang agar kode rapi
   const activeClass = "data-[state=on]:bg-[#0f172a] data-[state=on]:text-white transition-colors";
 
   return (
@@ -96,7 +94,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       <div className="w-px h-6 bg-slate-300 mx-1 self-center" />
 
-      {/* Undo dan Redo tidak punya state "on/off", jadi tidak butuh activeClass */}
       <Toggle
         size="sm"
         onPressedChange={() => editor.chain().focus().undo().run()}
@@ -122,7 +119,6 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        // Styling area ketik agar mirip textarea bawaan shadcn
         class: "min-h-[300px] w-full rounded-b-md border border-t-0 border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f172a] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 prose prose-sm sm:prose max-w-none",
       },
     },

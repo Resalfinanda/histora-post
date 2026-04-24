@@ -1,4 +1,3 @@
-// components/navbar/Navbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -33,7 +32,6 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Search Input - appears below navbar */}
       <MobileSearchInput
         isOpen={isMobileSearchOpen}
         onClose={() => setIsMobileSearchOpen(false)}

@@ -1,14 +1,12 @@
-// app/actions/article.ts
 "use server";
 
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-//import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { auth } from "@/app/actions/auth";
 
-// Helper untuk membuat URL slug dari judul
+
 function generateSlug(title: string) {
   return title
     .toLowerCase()
@@ -56,15 +54,13 @@ export async function createArticle(
       const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.\-]/g, "");
       const uniqueFilename = `${Date.now()}-${cleanFileName}`;
 
-      // Ubah format file dari Request Next.js menjadi Buffer agar diterima Supabase
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      // 1. Upload ke bucket bernama 'articles' (Sesuaikan dengan nama bucket kamu)
       const { data, error } = await supabase.storage
         .from("article-images")
         .upload(`${uniqueFilename}`, buffer, {
-          contentType: imageFile.type, // Misal: image/jpeg
+          contentType: imageFile.type,
           upsert: false,
         });
 
@@ -73,7 +69,6 @@ export async function createArticle(
         throw new Error(`Upload gagal: ${error.message}`);
       }
 
-      // 2. Dapatkan URL Publik dari gambar yang baru diupload
       const { data: publicUrlData } = supabase.storage
         .from("article-images")
         .getPublicUrl(`${uniqueFilename}`);
@@ -83,7 +78,6 @@ export async function createArticle(
 
     const slug = `${generateSlug(title)}-${Math.random().toString(36).substring(2, 7)}`;
 
-    // Simpan data ke PostgreSQL melalui Prisma
     await prisma.article.create({
       data: {
         title,
@@ -92,14 +86,12 @@ export async function createArticle(
         excerpt,
         content,
         isHeadline,
-        imageUrl, // Berisi URL lengkap dari Supabase (https://...)
+        imageUrl, 
         authorId: loggedInUserId,
         publishedDate: new Date(),
       },
     });
 
-    // revalidatePath("/dashboard/articles");
-    // redirect("/dashboard/articles");
 
     return {
       success: true,
@@ -120,33 +112,27 @@ export async function createArticle(
 
 export async function deleteArticle(id: string) {
   try {
-    // 1. Cari data artikel terlebih dahulu untuk mengecek imageUrl
     const article = await prisma.article.findUnique({
       where: { id },
-      select: { imageUrl: true }, // Kita cuma butuh field imageUrl
+      select: { imageUrl: true },
     });
 
-    // 2. Jika artikel punya gambar, hapus dari Supabase Storage
     if (article?.imageUrl) {
       const filePathParts = article.imageUrl.split("/article-images/");
 
       if (filePathParts.length > 1) {
-        const filePath = filePathParts[1]; // Hasilnya: "covers/namafile.jpg"
+        const filePath = filePathParts[1]; 
 
-        // Perintah hapus file ke Supabase
         const { error: storageError } = await supabase.storage
           .from("article-images")
           .remove([filePath]);
 
         if (storageError) {
-          // Kita console.error saja agar jika gambar gagal dihapus (misal karena sudah tidak ada),
-          // artikel di database tetap bisa terhapus.
           console.error("Gagal menghapus gambar dari Supabase:", storageError);
         }
       }
     }
 
-    // 3. Setelah gambar di Storage aman (terhapus), baru hapus data di PostgreSQL
     await prisma.article.delete({
       where: { id },
     });
@@ -167,7 +153,7 @@ export async function updateArticle(
   formData: FormData,
 ): Promise<ActionResponse> {
   try {
-    const id = formData.get("id") as string; // Kita butuh ID untuk tahu artikel mana yang diupdate
+    const id = formData.get("id") as string; 
     const title = formData.get("title") as string;
     const category = formData.get("category") as string;
     const excerpt = formData.get("excerpt") as string;

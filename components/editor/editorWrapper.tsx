@@ -1,4 +1,3 @@
-// components/editor/editor-wrapper.tsx
 "use client";
 
 import { useState } from "react";

@@ -1,4 +1,3 @@
-// lib/nav-data.ts
 export const NAV_ITEMS = [
   { label: "Beranda", href: "/" },
   { label: "Nasional", href: "/" },

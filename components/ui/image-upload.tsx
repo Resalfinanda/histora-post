@@ -1,14 +1,13 @@
-// components/ui/image-upload.tsx
 "use client";
 
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { UploadCloud, X } from "lucide-react";
-import { toast } from "sonner"; // Import toast untuk memunculkan notifikasi error
+import { toast } from "sonner"; 
 
 interface ImageUploadProps {
   name: string;
-  defaultValue?: string | null; // Opsional, untuk menampilkan gambar lama saat edit
+  defaultValue?: string | null; 
 }
 
 export function ImageUpload({ name, defaultValue }: ImageUploadProps) {
@@ -22,7 +21,7 @@ export function ImageUpload({ name, defaultValue }: ImageUploadProps) {
     const file = e.target.files?.[0];
 
     if (file) {
-      // 1. Cek ukuran file
+      // Cek ukuran file
       if (file.size > MAX_FILE_SIZE) {
         toast.error("Ukuran gambar terlalu besar! Maksimal 1 MB.");
 
@@ -30,10 +29,10 @@ export function ImageUpload({ name, defaultValue }: ImageUploadProps) {
         if (inputRef.current) {
           inputRef.current.value = "";
         }
-        return; // Hentikan fungsi di sini
+        return; 
       }
 
-      // 2. Jika aman, buat preview
+      // preview
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
     }

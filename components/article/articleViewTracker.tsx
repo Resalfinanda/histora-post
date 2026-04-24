@@ -15,5 +15,5 @@ export default function ArticleTracker({ slug }: { slug: string }) {
     }).catch(err => console.error("Gagal mencatat view", err));
   }, [slug]);
 
-  return null; // Komponen ini tidak me-render apa-apa, hanya untuk tracking
+  return null; 
 }

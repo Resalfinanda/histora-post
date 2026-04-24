@@ -1,4 +1,3 @@
-// components/footer/SocialIcons.tsx
 import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

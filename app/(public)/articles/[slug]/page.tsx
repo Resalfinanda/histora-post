@@ -115,11 +115,10 @@ export default function ArticlePage() {
     );
   }
 
-  const articleUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/articles/${slug}`;
+  const articleUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/articles/${slug}`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-      {/* Ad Banner 1 - Below Navbar */}
       <div className="mb-6 md:mb-8">
         <AdBanner
           height="h-22 md:h-64"
@@ -193,7 +192,6 @@ export default function ArticlePage() {
             </div>
           </div>
 
-          {/* Ad Banner 3 - Above Related Articles */}
           <div className="my-6 md:my-8">
             <AdBanner
               size="medium"
@@ -223,7 +221,6 @@ export default function ArticlePage() {
         <aside className="space-y-6 md:space-y-8">
           <TrendingSection />
 
-          {/* Ad Banner 2 - Above Newsletter */}
           <AdBanner size="medium" />
 
           <NewsletterSection />
