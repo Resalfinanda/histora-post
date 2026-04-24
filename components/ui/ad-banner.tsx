@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 interface AdBannerProps {
@@ -46,11 +48,11 @@ export function AdBanner({
         target="_blank"
         rel="noopener noreferrer"
         className={`relative block overflow-hidden rounded-lg ${widthClass} ${heightClass} ${className}`}
-        onClick={(e) => {
-          if (!isClickable) {
-            e.preventDefault();
-          }
-        }}
+        // onClick={(e) => {
+        //   if (!isClickable) {
+        //     e.preventDefault();
+        //   }
+        // }}
       >
         <Image
           src={imageUrl}
