@@ -1,4 +1,3 @@
-// components/footer/Footer.tsx
 import Link from "next/link";
 import { FooterColumn } from "./footerColumn";
 import { SocialIcons } from "./socialIcons";

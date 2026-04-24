@@ -15,19 +15,19 @@ export async function changePassword(formData: FormData) {
   const newPassword = formData.get("newPassword") as string;
 
   try {
-    // 1. Ambil data user dari DB
+    // Ambil data user dari DB
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
     });
 
     if (!user) return { success: false, message: "User tidak ditemukan" };
 
-    // 2. Cek apakah password lama benar
+    // Cek apakah password lama benar
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch)
       return { success: false, message: "Password saat ini salah!" };
 
-    // 3. Hash password baru dan simpan
+    // Hash password baru dan simpan
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
     await prisma.user.update({
       where: { id: user.id },
@@ -76,7 +76,6 @@ export async function createUser(formData: FormData) {
         name,
         email,
         password: hashedPassword,
-        // Kita menggunakan as any karena Prisma biasanya membaca tipe Enum secara ketat
         role: role , 
       },
     });
@@ -94,12 +93,12 @@ export async function createUser(formData: FormData) {
 export async function deleteUser(userId: string) {
   const session = await auth();
   
-  // 1. Proteksi: Hanya ADMIN yang boleh menghapus
+  // Proteksi: Hanya ADMIN yang boleh menghapus
   if (session?.user?.role !== "ADMIN") {
     return { success: false, message: "Akses ditolak. Hanya Admin yang dapat menghapus akun." };
   }
 
-  // 2. Proteksi: Jangan biarkan admin menghapus dirinya sendiri
+  // Proteksi: admin tidak bisa menghapus dirinya sendiri
   if (session.user.id === userId) {
     return { success: false, message: "Anda tidak dapat menghapus akun Anda sendiri!" };
   }

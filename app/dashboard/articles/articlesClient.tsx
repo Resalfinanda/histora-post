@@ -39,7 +39,7 @@ export default function ArticlesClient({
   query,
   category,
   categories,
-  isAdmin, // 2. Ekstrak isAdmin dari props
+  isAdmin,
 }: ArticlesClientProps) {
   const [isPending] = useTransition();
 
@@ -119,7 +119,6 @@ export default function ArticlesClient({
           <TableBody>
             {articles.length === 0 ? (
               <TableRow>
-                {/* 4. Sesuaikan colSpan berdasarkan role agar tidak bolong */}
                 <TableCell
                   colSpan={isAdmin ? 4 : 3}
                   className="h-32 text-center text-slate-500"
@@ -134,7 +133,6 @@ export default function ArticlesClient({
                     <span className="line-clamp-2 leading-snug truncate">
                       {article.title}
                     </span>
-                    {/* Trik: Tampilkan kategori di bawah judul khusus di HP */}
                     <span className="block md:hidden text-xs text-slate-500 mt-1">
                       {article.category}{" "}
                       {isAdmin && `• ${article.author?.name}`}
@@ -150,7 +148,7 @@ export default function ArticlesClient({
                     </Badge>
                   </TableCell>
 
-                  {/* 5. Data Penulis hanya muncul untuk Admin */}
+                  {/* Data Penulis hanya muncul untuk Admin */}
                   {isAdmin && (
                     <TableCell className="hidden lg:table-cell text-slate-500">
                       {article.author?.name ?? "Unknown"}
@@ -181,7 +179,6 @@ export default function ArticlesClient({
                           </Link>
                         </DropdownMenuItem>
 
-                        {/* Komponen Hapus Kamu */}
                         <DeleteAction articleId={article.id} />
                       </DropdownMenuContent>
                     </DropdownMenu>

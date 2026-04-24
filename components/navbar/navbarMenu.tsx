@@ -1,4 +1,3 @@
-// components/navbar/NavMenu.tsx
 import { NavItem } from "./navItem"
 
 interface NavMenuProps {

@@ -1,11 +1,10 @@
-// app/api/seed/route.ts
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // 1. Cek apakah email admin ini sudah ada di database
+    // Cek apakah email admin ini sudah ada di database
     const existingAdmin = await prisma.user.findUnique({
       where: { email: "admin@historapost.com" },
     });
@@ -16,10 +15,10 @@ export async function GET() {
       });
     }
 
-    // 2. Hash password "admin123"
+    // Hash password 
     const hashedPassword = await bcrypt.hash("admin123", 10);
 
-    // 3. Masukkan ke database
+    // Masukkan ke database
     const newAdmin = await prisma.user.create({
       data: {
         name: "Admin Utama",

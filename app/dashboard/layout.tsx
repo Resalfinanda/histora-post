@@ -1,4 +1,3 @@
-// app/dashboard/layout.tsx
 import { auth } from "@/app/actions/auth";
 import { redirect } from "next/navigation";
 import DashboardClientLayout from "./dashboardClientlayout";

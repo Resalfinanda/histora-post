@@ -1,22 +1,19 @@
 // app/(dashboard)/dashboard/articles/create/page.tsx
 import Link from "next/link";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { prisma } from "@/lib/prisma";
 import { EditorWrapper } from "@/components/editor/editorWrapper";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { CreateArticleForm } from "@/components/article/createArticleForm";
 
-type CreateArticlePageProps = {
-  category: string;
-};
+// type CreateArticlePageProps = {
+//   category: string;
+// };
 
-export default async function CreateArticlePage({
-  category,
-}: CreateArticlePageProps) {
+export default async function CreateArticlePage() {
   // const categories = await prisma.article.findMany({
   //   select: { category: true },
   //   distinct: ["category"],
@@ -90,10 +87,6 @@ export default async function CreateArticlePage({
               </Label>
             </div>
 
-            {/* INPUT GAMBAR 
-              Atribut name="image" ini sangat penting karena harus sama dengan 
-              formData.get("image") di dalam Server Action.
-            */}
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="image">Gambar Sampul (Cover Image)</Label>
               <ImageUpload name="image" />

@@ -108,7 +108,6 @@ export function MainContent() {
         </div>
       ) : (
         <>
-          {/* Ad Banner 1 - Below Headline */}
           <div className="mb-4 md:mb-6">
             <AdBanner
               size="large"
@@ -131,7 +130,7 @@ export function MainContent() {
                 onCategoryChange={setActiveCategory}
               />
 
-              {/* Article Grid - Menggunakan Paginated Articles */}
+              {/* Article Grid  */}
               <ArticleGrid
                 articles={paginatedArticles}
                 title="Berita Terbaru"
@@ -165,7 +164,7 @@ export function MainContent() {
               )}
             </div>
 
-            {/* --- SIDEBAR SECTION (STICKY & INDEPENDENT SCROLL) --- */}
+            {/* --- SIDEBAR SECTION  --- */}
             <div className=" lg:col-span-1 lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:no-scrollbar max-h-none overflow-visible self-start pb-4 space-y-6 md:space-y-8">
               {/* Trending Section */}
               <TrendingSection />

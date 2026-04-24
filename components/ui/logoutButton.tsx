@@ -1,14 +1,13 @@
-// components/ui/logout-button.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react"; // Gunakan signOut dari NextAuth (Client)
+import { signOut } from "next-auth/react"; 
 import { LogOut, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-// Import komponen Alert Dialog dari shadcn
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -30,8 +29,7 @@ export function LogoutButton() {
     setIsLoading(true);
 
     try {
-      // PENTING: Gunakan redirect: false agar kita bisa memunculkan toast dulu
-      // sebelum browser berpindah halaman secara paksa.
+
       await signOut({ redirect: false });
 
       toast.success("Berhasil logout. Sampai jumpa kembali!");

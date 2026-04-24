@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Edit, Save } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 import { prisma } from "@/lib/prisma";
-import { updateArticle } from "@/app/actions/article";
 import { EditorWrapper } from "@/components/editor/editorWrapper";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { EditArticleForm } from "@/components/article/editArticleForm";
@@ -18,7 +17,6 @@ export default async function EditArticlePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // 2. Await params-nya sebelum mengambil id!
   const resolvedParams = await params;
   const articleId = resolvedParams.id;
 
@@ -109,7 +107,6 @@ export default async function EditArticlePage({
               <Label htmlFor="image" className="font-semibold text-slate-700">
                 Gambar Sampul (Cover Image)
               </Label>
-              {/* Panggil komponen custom kita dan lempar gambar lamanya */}
               <ImageUpload name="image" defaultValue={article.imageUrl} />
 
               <p className="text-xs text-slate-500">

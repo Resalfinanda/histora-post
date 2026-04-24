@@ -1,4 +1,3 @@
-// components/navbar/NavItem.tsx
 import Link from "next/link";
 
 interface NavItemProps {

@@ -1,5 +1,3 @@
-// components/footer/FooterColumn.tsx
-
 interface FooterColumnProps {
   title?: string
   children: React.ReactNode,

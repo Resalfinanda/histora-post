@@ -1,4 +1,3 @@
-// app/(dashboard)/dashboard/articles/components/delete-action.tsx
 "use client";
 
 import { useTransition } from "react";
@@ -19,7 +18,6 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export function DeleteAction({ articleId }: { articleId: string }) {
-  // useTransition agar kita bisa menampilkan status loading saat server action berjalan
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
@@ -27,16 +25,15 @@ export function DeleteAction({ articleId }: { articleId: string }) {
       const result = await deleteArticle(articleId);
       
       if (result.success) {
-        toast.success(result.message); // Toast hijau
+        toast.success(result.message); 
       } else {
-        toast.error(result.message); // Toast merah
+        toast.error(result.message);
       }
     });
   };
 
   return (
     <AlertDialog>
-      {/* asChild memastikan trigger menggunakan button di dalamnya, bukan membuat button baru */}
       <AlertDialogTrigger asChild>
         <button className="flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-red-50 text-red-600 focus:bg-red-50 focus:text-red-600">
           <Trash2 className="mr-2 h-4 w-4" /> Hapus
@@ -54,7 +51,7 @@ export function DeleteAction({ articleId }: { articleId: string }) {
           <AlertDialogCancel disabled={isPending}>Batal</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
-              e.preventDefault(); // Mencegah dialog langsung tertutup
+              e.preventDefault(); 
               handleDelete();
             }}
             disabled={isPending}

@@ -154,7 +154,7 @@ export default async function SearchPage({
           )}
         </div>
 
-        {/* Sidebar (UNCHANGED) */}
+        {/* Sidebar */}
         <aside className="space-y-6 md:space-y-8">
           <TrendingSection />
           <AdBanner

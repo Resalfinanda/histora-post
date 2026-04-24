@@ -27,7 +27,7 @@ export default function DashboardClientLayout({
 
   return (
     <div className="min-h-screen max-h-screen bg-gray-50 flex flex-col md:flex-row">
-      {/* ✅ HEADER MOBILE */}
+      {/* HEADER MOBILE */}
       <header className="md:hidden flex items-center justify-between p-4 bg-white border-b sticky top-0 z-40">
         <h1 className="font-bold text-lg text-[#0f172a]">Historapost</h1>
         <button
@@ -38,7 +38,7 @@ export default function DashboardClientLayout({
         </button>
       </header>
 
-      {/* ✅ OVERLAY */}
+      {/* OVERLAY */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-40 md:hidden"
@@ -46,7 +46,7 @@ export default function DashboardClientLayout({
         />
       )}
 
-      {/* ✅ SIDEBAR */}
+      {/* SIDEBAR */}
       <aside
         className={`
         fixed md:relative inset-y-0 left-0 z-50 w-64 bg-[#0f172a] text-white flex flex-col
@@ -110,7 +110,7 @@ export default function DashboardClientLayout({
         </div>
       </aside>
 
-      {/* ✅ MAIN CONTENT */}
+      {/* MAIN CONTENT */}
       <main className="flex-1 flex flex-col w-full">
         {/* Desktop Header */}
         <header className="hidden md:flex h-16 bg-white border-b items-center justify-end px-8">
