@@ -2,7 +2,7 @@ import { Breadcrumb } from "@/components/article";
 
 export default function PedomanPage() {
   return (
-    <article className="max-w-6xl mx-auto px-12 py-12 bg-white text-gray-800 leading-relaxed ">
+    <main className="max-w-6xl mx-auto px-12 py-12 bg-white text-gray-800 leading-relaxed ">
       <Breadcrumb
         items={[{ label: "Beranda", href: "/" }]}
         currentPage={"Pedoman Siber"}
@@ -34,27 +34,29 @@ export default function PedomanPage() {
       <div className="mt-10 space-y-12">
         {/* Pasal 1 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold flex items-center gap-2 mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold flex items-center gap-2 mb-4 border-l-4 border-blue-900 pl-3">
             1. Ruang Lingkup
           </h2>
           <ol className="list-[lower-alpha] ml-8 space-y-2">
             <li>
-              <strong>Media Siber</strong> adalah segala bentuk media yang
-              menggunakan wahana internet dan melaksanakan kegiatan jurnalistik,
-              serta memenuhi persyaratan Undang-Undang Pers dan Standar
-              Perusahaan Pers yang ditetapkan Dewan Pers.
+              Media Siber adalah segala bentuk media yang menggunakan wahana
+              internet dan melaksanakan kegiatan jurnalistik, serta memenuhi
+              persyaratan Undang-Undang Pers dan Standar Perusahaan Pers yang
+              ditetapkan Dewan Pers.
             </li>
             <li>
-              <strong>Isi Buatan Pengguna (User Generated Content)</strong>{" "}
-              adalah segala isi yang dibuat dan atau dipublikasikan oleh
-              pengguna media siber...
+              Isi Buatan Pengguna (User Generated Content) adalah segala isi
+              yang díbuat dan atau dípublikasikan oleh pengguna media siber,
+              antara lain, artikel, gambar, komentar, suara, video dan berbagai
+              bentuk unggahan yang melekat pada media siber, seperti blog,
+              forum, komentar pembaca atau pemirsa, dan bentuk lain.
             </li>
           </ol>
         </section>
 
         {/* Pasal 2 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             2. Verifikasi dan keberimbangan berita
           </h2>
           <ol className="list-[lower-alpha] ml-8 space-y-3">
@@ -85,7 +87,7 @@ export default function PedomanPage() {
 
         {/* Pasal 3 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             3. Isi Buatan Pengguna (User Generated Content)
           </h2>
           <ol className="list-[lower-alpha] ml-8 space-y-3">
@@ -151,7 +153,7 @@ export default function PedomanPage() {
 
         {/* Pasal 4 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             4. Ralat, Koreksi, dan Hak Jawab
           </h2>
           <ol className="list-[lower-alpha] ml-8 space-y-3">
@@ -201,7 +203,7 @@ export default function PedomanPage() {
 
         {/* Pasal 5 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             5. Pencabutan Berita
           </h2>
           <ol className="list-[lower-alpha] ml-8 space-y-3">
@@ -224,7 +226,7 @@ export default function PedomanPage() {
 
         {/* Pasal 6 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             6. Iklan
           </h2>
           <ol className="list-[lower-alpha] ml-8 space-y-3">
@@ -244,7 +246,7 @@ export default function PedomanPage() {
 
         {/* Pasal 7 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             7. Hak Cipta
           </h2>
           <p>
@@ -255,7 +257,7 @@ export default function PedomanPage() {
 
         {/* Pasal 8 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             8. Pencantuman Pedoman
           </h2>
           <p>
@@ -266,7 +268,7 @@ export default function PedomanPage() {
 
         {/* Pasal 9 */}
         <section className="text-justify">
-          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-600 pl-3">
+          <h2 className="text-xl font-bold mb-4 border-l-4 border-blue-900 pl-3">
             9. Sengketa
           </h2>
           <p>
@@ -283,6 +285,6 @@ export default function PedomanPage() {
           Jakarta, 3 Februari 2012).
         </p>
       </footer>
-    </article>
+    </main>
   );
 }
