@@ -15,7 +15,7 @@ interface SearchResult {
   category: string;
   imageUrl: string | null;
   slug: string;
-  publishedDate: string; // ⬅️ ubah ke string (dari API)
+  publishedDate: string; 
 }
 
 async function getSearchResults(query: string): Promise<SearchResult[]> {
