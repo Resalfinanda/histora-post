@@ -69,6 +69,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
               alt={currentArticle.title}
               fill
               className="object-cover group-hover:scale-110 transition-transform duration-300"
+              priority
             />
           ) : (
             <div className="w-full h-full bg-linear-to-br from-blue-200 to-blue-400" />
