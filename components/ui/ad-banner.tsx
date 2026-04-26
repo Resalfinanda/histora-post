@@ -59,7 +59,6 @@ export function AdBanner({
           alt={altText}
           fill
           className="object-conver hover:opacity-90 transition-opacity"
-          unoptimized
         />
       </a>
     );
