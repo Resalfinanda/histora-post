@@ -20,7 +20,9 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
 
   return (
     <section className="my-12 border-t border-gray-200 pt-12">
-      <h2 className="text-2xl font-bold text-foreground mb-6">Artikel Terkait</h2>
+      <h2 className="text-2xl font-bold text-foreground mb-6">
+        Artikel Terkait
+      </h2>
 
       <div className="space-y-4">
         {articles.map((article) => (
@@ -34,7 +36,6 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
                     alt={article.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
-                    unoptimized
                   />
                 ) : (
                   <div className="w-full h-full bg-linear-to-br from-gray-300 to-gray-400" />
