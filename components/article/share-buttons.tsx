@@ -42,7 +42,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 my-6 p-4 border rounded-xl bg-card">
+    <div className="flex flex-wrap items-center gap-4 my-4 p-4 rounded-xl bg-transparent">
       <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mr-2">
         <Share2 className="w-4 h-4" />
         <span>BAGIKAN</span>

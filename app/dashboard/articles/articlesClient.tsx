@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useTransition } from "react";
 
-import { Plus, Search, MoreHorizontal, Eye, Edit } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";

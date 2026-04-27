@@ -38,7 +38,6 @@ interface Article {
   }>;
 }
 
-// Terima slug dari Server Component (page.tsx)
 export default function ArticleClient({ slug }: { slug: string }) {
   const [article, setArticle] = useState<Article | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
