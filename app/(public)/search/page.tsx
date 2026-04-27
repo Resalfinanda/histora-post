@@ -3,11 +3,8 @@ import Image from "next/image";
 
 import { AdBanner } from "@/components/ui/ad-banner";
 import { Breadcrumb } from "@/components/article/breadcrumb";
-import { TrendingSection } from "@/components/home/trending-section";
-import { TrendingSearchTopics } from "@/components/home/trending-search-topics";
-import { NewsletterSection } from "@/components/home/newsletter-section";
 import { Badge } from "@/components/ui/badge";
-import StickyBox from "react-sticky-box";
+import { SearchSidebar } from "./sidebar";
 
 interface SearchResult {
   id: string;
@@ -154,23 +151,7 @@ export default async function SearchPage({
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-6 md:space-y-8 h-full">
-          <StickyBox offsetTop={32} offsetBottom={32}>
-            <TrendingSection />
-            <AdBanner
-              size="small"
-              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
-              adLink="https://dispora.makassarkota.go.id/"
-            />
-            <TrendingSearchTopics />
-            <AdBanner
-              size="small"
-              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-              adLink="https://makassarkota.go.id/"
-            />
-            <NewsletterSection />
-          </StickyBox>
-        </aside>
+        <SearchSidebar />
       </div>
     </div>
   );

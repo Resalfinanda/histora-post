@@ -11,7 +11,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Historapost - Portal Berita Sejarah, Budaya, dan Politik Indonesia",
+  title: {
+    default:
+      "Historapost - Portal Berita Sejarah, Budaya, dan Politik Indonesia",
+    template: "%s | Historapost",
+  },
   description:
     "Historapost adalah portal berita yang menyajikan informasi terkini seputar sejarah, budaya, dan politik Indonesia. Kami berkomitmen untuk memberikan berita yang akurat, mendalam, dan menarik bagi pembaca yang ingin memahami lebih dalam tentang warisan budaya dan dinamika politik di Indonesia.",
   openGraph: {
@@ -22,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Histora Post",
     images: [
       {
-        url: "https://histora-post.vercel.app/icon-share.png",
+        url: "https://histora-post.vercel.app/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Logo dan Preview Histora Post",
@@ -36,7 +40,7 @@ export const metadata: Metadata = {
     title: "Histora Post | Berita dan Sejarah",
     description:
       "Portal berita yang menyajikan informasi terkini dan artikel sejarah mendalam.",
-    images: ["https://histora-post.vercel.app/icon-share.png"],
+    images: ["https://histora-post.vercel.app/opengraph-image.png"],
   },
 };
 export default function RootLayout({
