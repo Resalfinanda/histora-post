@@ -7,6 +7,7 @@ import { TrendingSection } from "@/components/home/trending-section";
 import { TrendingSearchTopics } from "@/components/home/trending-search-topics";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import { Badge } from "@/components/ui/badge";
+import StickyBox from "react-sticky-box";
 
 interface SearchResult {
   id: string;
@@ -60,7 +61,7 @@ export default async function SearchPage({
   try {
     results = await getSearchResults(query);
   } catch (err) {
-    error = "Gagal memuat hasil pencarian";
+    error = err instanceof Error ? err.message : "Gagal memuat hasil pencarian";
   }
 
   return (
@@ -87,7 +88,7 @@ export default async function SearchPage({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
         {/* Results */}
         <div className="lg:col-span-2">
           {error ? (
@@ -153,20 +154,22 @@ export default async function SearchPage({
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-6 md:space-y-8 lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:no-scrollbar max-h-none overflow-visible self-start">
-          <TrendingSection />
-          <AdBanner
-            size="small"
-            imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
-            adLink="https://dispora.makassarkota.go.id/"
-          />
-          <TrendingSearchTopics />
-          <AdBanner
-            size="small"
-            imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-            adLink="https://makassarkota.go.id/"
-          />
-          <NewsletterSection />
+        <aside className="space-y-6 md:space-y-8 h-full">
+          <StickyBox offsetTop={32} offsetBottom={32}>
+            <TrendingSection />
+            <AdBanner
+              size="small"
+              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
+              adLink="https://dispora.makassarkota.go.id/"
+            />
+            <TrendingSearchTopics />
+            <AdBanner
+              size="small"
+              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+              adLink="https://makassarkota.go.id/"
+            />
+            <NewsletterSection />
+          </StickyBox>
         </aside>
       </div>
     </div>

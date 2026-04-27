@@ -8,6 +8,7 @@ import { ArticleGrid } from "./article-grid";
 import { NewsletterSection } from "./newsletter-section";
 import { AdBanner } from "@/components/ui/ad-banner";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import StickyBox from "react-sticky-box";
 
 interface Article {
   id: string;
@@ -120,7 +121,7 @@ export function MainContent() {
             <FeaturedCarousel articles={carouselArticles} />
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
             {/* --- MAIN CONTENT SECTION --- */}
             <div className="lg:col-span-2 flex flex-col min-h-0">
               {/* Category Filter */}
@@ -165,24 +166,26 @@ export function MainContent() {
             </div>
 
             {/* --- SIDEBAR SECTION  --- */}
-            <div className=" lg:col-span-1 lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:no-scrollbar max-h-none overflow-visible self-start pb-4 space-y-6 md:space-y-8">
-              {/* Trending Section */}
-              <TrendingSection />
+            <div className=" lg:col-span-1 pb-4 space-y-6 md:space-y-8 h-full">
+              <StickyBox offsetTop={32} offsetBottom={32}>
+                {/* Trending Section */}
+                <TrendingSection />
 
-              <AdBanner
-                size="small"
-                imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
-                adLink="https://dispora.makassarkota.go.id/"
-              />
+                <AdBanner
+                  size="small"
+                  imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
+                  adLink="https://dispora.makassarkota.go.id/"
+                />
 
-              {/* Newsletter Section */}
-              <NewsletterSection />
+                {/* Newsletter Section */}
+                <NewsletterSection />
 
-              <AdBanner
-                size="small"
-                imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-                adLink="https://makassarkota.go.id/"
-              />
+                <AdBanner
+                  size="small"
+                  imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+                  adLink="https://makassarkota.go.id/"
+                />
+              </StickyBox>
             </div>
           </div>
         </>
