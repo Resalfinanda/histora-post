@@ -35,8 +35,6 @@ export function ArticleHeader({
         <span>{author}</span>
         <span>•</span>
         <time>{formatDate(publishedDate)}</time>
-        <span>•</span>
-        <span>3 menit baca</span>
       </div>
     </div>
   );
