@@ -15,7 +15,7 @@ interface SearchResult {
   category: string;
   imageUrl: string | null;
   slug: string;
-  publishedDate: string; 
+  publishedDate: string;
 }
 
 async function getSearchResults(query: string): Promise<SearchResult[]> {
@@ -25,7 +25,7 @@ async function getSearchResults(query: string): Promise<SearchResult[]> {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/search?q=${encodeURIComponent(query)}`,
     {
       cache: "no-store",
-    }
+    },
   );
 
   if (!res.ok) {
@@ -37,9 +37,7 @@ async function getSearchResults(query: string): Promise<SearchResult[]> {
 
 function formatTimeAgo(date: string): string {
   const now = new Date();
-  const seconds = Math.floor(
-    (now.getTime() - new Date(date).getTime()) / 1000
-  );
+  const seconds = Math.floor((now.getTime() - new Date(date).getTime()) / 1000);
 
   if (seconds < 60) return "baru saja";
   if (seconds < 3600) return `${Math.floor(seconds / 60)} menit lalu`;
@@ -89,7 +87,7 @@ export default async function SearchPage({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative">
         {/* Results */}
         <div className="lg:col-span-2">
           {error ? (
@@ -155,7 +153,7 @@ export default async function SearchPage({
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-6 md:space-y-8">
+        <aside className="space-y-6 md:space-y-8 lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:no-scrollbar max-h-none overflow-visible self-start">
           <TrendingSection />
           <AdBanner
             size="small"

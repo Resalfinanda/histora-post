@@ -126,7 +126,7 @@ export default function ArticlePage() {
           adLink="https://makassarkota.go.id/"
         />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative">
         {/* Main Article Column */}
         <article className="lg:col-span-2">
           <ArticleTracker slug={article.slug} />
@@ -218,7 +218,7 @@ export default function ArticlePage() {
         </article>
 
         {/* Sidebar Column */}
-        <aside className="space-y-6 md:space-y-8">
+        <aside className="space-y-6 md:space-y-8 lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:no-scrollbar max-h-none overflow-visible self-start">
           <TrendingSection />
 
           <AdBanner size="medium" />
