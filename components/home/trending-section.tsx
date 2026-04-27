@@ -3,24 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { TrendingUp } from "lucide-react";
-import Image from "next/image";
 
 interface TrendingItem {
   id: string;
   title: string;
   slug: string;
-  thumbnail?: string;
-  views?: number;
   createdAt?: string;
 }
 
 interface TrendingSectionProps {
   items?: TrendingItem[];
-}
-
-function formatViews(views: number = 0) {
-  if (views >= 1000) return (views / 1000).toFixed(1) + "k";
-  return views.toString();
 }
 
 function formatTime(dateString?: string) {
@@ -40,7 +32,6 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
   const [isLoading, setIsLoading] = useState(!propItems);
 
   useEffect(() => {
-    // Jika props sudah diberikan, jangan fetch
     if (propItems) return;
 
     const fetchTrendingArticles = async () => {
@@ -65,9 +56,7 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
       <section className="mb-8 bg-linear-to-r from-blue-50 to-blue-100 rounded-lg p-6">
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="text-blue-400 w-5 h-5" />
-          <h3 className="text-lg font-bold text-gray-800">
-            TRENDING SAAT INI
-          </h3>
+          <h3 className="text-lg font-bold text-gray-800">TRENDING SAAT INI</h3>
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -101,15 +90,6 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
                 </span>
               </div>
 
-              {/* Thumbnail */}
-              {item.thumbnail && (
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title}
-                  className="w-14 h-14 object-cover rounded-md shrink-0"
-                />
-              )}
-
               {/* Content */}
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-800 group-hover:text-blue-500 transition line-clamp-2">
@@ -118,9 +98,6 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
 
                 {/* Metadata */}
                 <div className="text-xs text-gray-500 mt-1 flex gap-2">
-                  {item.views !== undefined && (
-                    <span>{formatViews(item.views)} views</span>
-                  )}
                   {item.createdAt && (
                     <span>• {formatTime(item.createdAt)}</span>
                   )}
