@@ -99,7 +99,7 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
                 {/* Metadata */}
                 <div className="text-xs text-gray-500 mt-1 flex gap-2">
                   {item.createdAt && (
-                    <span>• {formatTime(item.createdAt)}</span>
+                    <span>{formatTime(item.createdAt)}</span>
                   )}
                 </div>
               </div>
