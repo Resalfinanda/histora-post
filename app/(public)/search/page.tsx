@@ -114,7 +114,6 @@ export default async function SearchPage({
                           alt={result.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          unoptimized
                         />
                       ) : (
                         <div className="w-full h-full bg-linear-to-br from-gray-300 to-gray-400" />
