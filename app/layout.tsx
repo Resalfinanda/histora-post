@@ -22,11 +22,11 @@ export const metadata: Metadata = {
     title: "Histora Post | Berita dan Sejarah",
     description:
       "Portal berita yang menyajikan informasi terkini dan artikel sejarah mendalam.",
-    url: "https://histora-post.vercel.app",
+    url: "https://www.historapost.my.id",
     siteName: "Histora Post",
     images: [
       {
-        url: "https://histora-post.vercel.app/opengraph-image.png",
+        url: "https://www.historapost.my.id/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Logo dan Preview Histora Post",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Histora Post | Berita dan Sejarah",
     description:
       "Portal berita yang menyajikan informasi terkini dan artikel sejarah mendalam.",
-    images: ["https://histora-post.vercel.app/opengraph-image.png"],
+    images: ["https://www.historapost.my.id/opengraph-image.png"],
   },
 };
 export default function RootLayout({

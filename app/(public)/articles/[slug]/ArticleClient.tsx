@@ -145,7 +145,6 @@ export default function ArticleClient({ slug }: { slug: string }) {
                 fill
                 className="object-contain"
                 priority
-                unoptimized
               />
             </div>
           )}
