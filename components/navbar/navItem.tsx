@@ -7,7 +7,7 @@ interface NavItemProps {
 
 export function NavItem({ label, href }: NavItemProps) {
   return (
-    <Link href={href} className="text-sm font-medium text-background">
+    <Link href={href} className="text-sm font-medium text-white">
       {label}
     </Link>
   );

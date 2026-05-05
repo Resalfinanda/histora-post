@@ -173,21 +173,20 @@
   --ring: #94a3b8;
 }
 
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 
-.no-scrollbar::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, dan Opera */
+  }
 }
 
 .article-content p {
-    margin-bottom: 1.5rem; /* Memberikan jarak antar paragraf */
+  margin-bottom: 1.5rem; /* Memberikan jarak antar paragraf */
 }
-
-
 
 @layer base {
   * {
