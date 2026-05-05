@@ -13,11 +13,11 @@ export default function RedaksiPage() {
           Susunan Redaksi
         </h1>
         <p className="text-gray-500 mt-2 italic text-sm">
-          Update Terakhir: April 2026
+          Update Terakhir: Mei 2026
         </p>
       </header>
 
-      {/* <section className="space-y-8">
+      <section className="space-y-8">
         <div className="bg-slate-50 p-8 rounded-lg border-t-4 border-blue-900 shadow-sm">
           <p className="text-center text-lg mb-6 leading-relaxed">
             <strong>Histora Post</strong> dikelola oleh tenaga profesional yang
@@ -26,76 +26,49 @@ export default function RedaksiPage() {
           </p>
 
           <div className=" mt-10">
-            <div className="space-y-4">
+            <div className="space-y-1 mb-4">
               <h2 className="text-blue-900 text-center font-bold uppercase border-b border-gray-200 pb-2">
-                Manajemen
+                Direktur
               </h2>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">Pimpinan Umum</span>
-                <span className="font-bold text-right">[Nama Pimpinan]</span>
-              </div>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">
-                  Pimpinan Perusahaan
-                </span>
-                <span className="font-bold text-right">[Nama Pimpinan]</span>
-              </div>
+              <p className="text-gray-700 text-center">MULIAWAN IDHAM</p>
             </div>
-
-            <div className="space-y-4">
+            <div className="space-y-1 mb-4">
               <h2 className="text-blue-900 text-center font-bold uppercase border-b border-gray-200 pb-2">
-                Redaksi
+                Editorial
               </h2>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">
-                  Pemimpin Redaksi
-                </span>
-                <span className="font-bold text-right">[Nama Lengkap]</span>
-              </div>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">
-                  Redaktur Pelaksana
-                </span>
-                <span className="font-bold text-right">[Nama Lengkap]</span>
-              </div>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">Editor</span>
-                <span className="font-bold text-right">[Nama Lengkap]</span>
-              </div>
+              <p className="text-gray-700 text-center uppercase">
+                Insan IJ, Redo,resal
+              </p>
             </div>
-
-            <div className="space-y-4">
+            <div className="space-y-1 mb-4">
               <h2 className="text-blue-900 text-center font-bold uppercase border-b border-gray-200 pb-2">
-                Teknologi & Produk
+                Reporter
               </h2>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">
-                  Fullstack Developer
-                </span>
-                <span className="font-bold text-right">[Nama Kamu/Tim]</span>
-              </div>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">
-                  UI/UX Designer
-                </span>
-                <span className="font-bold text-right">[Nama Lengkap]</span>
-              </div>
+              <p className="text-gray-700 text-center uppercase">
+                Akbar Senggol, Aditya, Putri, Najwa, Sesilia
+              </p>
             </div>
-
-            <div className="space-y-4">
+            <div className="space-y-1 mb-4">
               <h2 className="text-blue-900 text-center font-bold uppercase border-b border-gray-200 pb-2">
-                Tim Kreatif & Multimedia
+                Medsos
               </h2>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">Videografer</span>
-                <span className="font-bold text-right">[Nama Lengkap]</span>
-              </div>
-              <div className="flex justify-around border-b border-dotted border-gray-300 pb-1">
-                <span className="font-medium text-gray-600">
-                  Social Media Specialist
-                </span>
-                <span className="font-bold text-right">[Nama Lengkap]</span>
-              </div>
+              <p className="text-gray-700 text-center uppercase">Fikri </p>
+            </div>
+            <div className="space-y-1 mb-4">
+              <h2 className="text-blue-900 text-center font-bold uppercase border-b border-gray-200 pb-2">
+                KONTAK
+              </h2>
+              <p className="text-gray-700 text-center uppercase">
+                085190035643
+              </p>
+            </div>
+            <div className="space-y-1 mb-4">
+              <h2 className="text-blue-900 text-center font-bold uppercase border-b border-gray-200 pb-2">
+                Email Redaksi
+              </h2>
+              <p className="text-gray-700 text-center uppercase">
+                pintesiaenergi@gmail.com
+              </p>
             </div>
           </div>
         </div>
@@ -112,7 +85,7 @@ export default function RedaksiPage() {
           bertugas. Pihak luar dilarang memberikan imbalan apapun kepada tim
           redaksi yang dapat mempengaruhi independensi pemberitaan.
         </p>
-      </section> */}
+      </section>
     </main>
   );
 }
