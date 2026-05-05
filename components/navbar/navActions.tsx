@@ -2,22 +2,12 @@
 
 import { Moon, Sun, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
-
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 import { NAV_ITEMS } from "@/lib/navData";
-import { SearchBar } from "./search-bar";
 
-interface NavbarActionsProps {
-  isMobileSearchOpen: boolean;
-  onMobileSearchChange: (isOpen: boolean) => void;
-}
-
-export function NavbarActions({
-  isMobileSearchOpen,
-  onMobileSearchChange,
-}: NavbarActionsProps) {
+export function NavbarActions() {
   const { resolvedTheme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -26,69 +16,19 @@ export function NavbarActions({
 
   return (
     <div className="flex items-center gap-2">
-      {/* Desktop */}
-      <div className="hidden md:flex items-center gap-2">
-        <SearchBar isMobile={false} />
+      {/* Tombol Tema */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="hover:bg-transparent hover:text-gray-300"
+        onClick={toggleTheme}
+      >
+        <Sun className="h-5 w-5 hidden dark:block text-white" />
+        <Moon className="h-5 w-5 block dark:hidden text-white" />
+      </Button>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hover:bg-transparent"
-          onClick={toggleTheme}
-        >
-          <Sun className="h-5 w-5 hidden dark:block text-background" />
-          <Moon className="h-5 w-5 block dark:hidden text-background" />
-        </Button>
-
-        <div className="lg:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon-lg"
-                className="hover:bg-transparent"
-              >
-                <Menu className="h-6 w-6 text-background" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="bg-background text-foreground"
-            >
-              <div className="flex flex-col gap-4 mt-6 ml-6">
-                {NAV_ITEMS.map((item, i) => (
-                  <Link
-                    key={i}
-                    href={item.href}
-                    className="text-base font-medium hover:text-muted-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </div>
-
-      {/* Mobile */}
-      <div className="md:hidden flex items-center gap-2">
-        <SearchBar
-          isMobile={true}
-          isOpen={isMobileSearchOpen}
-          onOpenChange={onMobileSearchChange}
-        />
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hover:bg-transparent"
-          onClick={toggleTheme}
-        >
-          <Sun className="h-5 w-5 hidden dark:block text-background" />
-          <Moon className="h-5 w-5 block dark:hidden text-background" />
-        </Button>
-
+      {/* Hamburger Menu Mobile (Opsional, untuk menu ekstra jika diperlukan) */}
+      <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -96,10 +36,9 @@ export function NavbarActions({
               size="icon-lg"
               className="hover:bg-transparent"
             >
-              <Menu className="h-6 w-6 text-background" />
+              <Menu className="h-6 w-6 text-white" />
             </Button>
           </SheetTrigger>
-
           <SheetContent side="right" className="bg-background text-foreground">
             <div className="flex flex-col gap-4 mt-6 ml-6">
               {NAV_ITEMS.map((item, i) => (

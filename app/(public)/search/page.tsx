@@ -64,7 +64,7 @@ export default async function SearchPage({
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
       <AdBanner
-        size="large"
+        height="h-22 md:h-64"
         className="mb-8"
         imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
         adLink="https://makassarkota.go.id/"

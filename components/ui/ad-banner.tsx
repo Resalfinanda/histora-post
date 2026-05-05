@@ -1,16 +1,24 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
+
+export interface AdItem {
+  imageUrl: string;
+  adLink?: string;
+}
 
 interface AdBannerProps {
   size?: "small" | "medium" | "large";
   className?: string;
-  width?: string; // Custom width (e.g., "w-full", "w-96")
-  height?: string; // Custom height (e.g., "h-48", "h-80")
-  imageUrl?: string; // URL gambar iklan
-  adLink?: string; // URL tujuan ketika iklan diklik
-  altText?: string; // Alt text untuk gambar
-  isClickable?: boolean; // Enable/disable clickable behavior
+  width?: string;
+  height?: string;
+  imageUrl?: string;
+  adLink?: string;
+  ads?: AdItem[];
+  interval?: number;
+  altText?: string;
+  isClickable?: boolean;
 }
 
 export function AdBanner({
@@ -20,54 +28,96 @@ export function AdBanner({
   height,
   imageUrl,
   adLink,
+  ads = [],
+  interval = 5000,
   altText = "Advertisement",
   isClickable = true,
 }: AdBannerProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const sizeClasses = {
     small: "h-24",
     medium: "h-24 md:h-48",
-    large: "h-24 md:h-64",
+    large: "h-24 md:h-48",
   };
 
-  // Gunakan custom dimensions jika diberikan, atau gunakan size preset
   const heightClass = height || sizeClasses[size];
   const widthClass = width || "w-full";
 
-  const handleAdClick = () => {
-    if (isClickable && adLink) {
-      // Buka link di tab baru
-      window.open(adLink, "_blank");
+  const displayAds =
+    ads.length > 0 ? ads : imageUrl ? [{ imageUrl, adLink }] : [];
+
+  useEffect(() => {
+    if (displayAds.length <= 1) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % displayAds.length);
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [displayAds.length, interval]);
+
+  const handleAdClick = (link?: string) => {
+    if (isClickable && link) {
+      window.open(link, "_blank");
     }
   };
 
-  // Jika ada imageUrl, tampilkan sebagai gambar, jika tidak tampilkan placeholder
-  if (imageUrl) {
+  if (displayAds.length > 0) {
     return (
-      <a
-        href={adLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`relative block overflow-hidden rounded-lg ${widthClass} ${heightClass} ${className}`}
-        // onClick={(e) => {
-        //   if (!isClickable) {
-        //     e.preventDefault();
-        //   }
-        // }}
+      <div
+        className={`relative block overflow-hidden rounded-lg bg-gray-100 ${widthClass} ${heightClass} ${className}`}
       >
-        <Image
-          src={imageUrl}
-          alt={altText}
-          fill
-          className="object-conver hover:opacity-90 transition-opacity"
-        />
-      </a>
+        {displayAds.map((ad, index) => {
+          const isCurrent = index === currentIndex;
+
+          return (
+            <div
+              key={index}
+              onClick={() => handleAdClick(ad.adLink)}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                isClickable && ad.adLink ? "cursor-pointer" : ""
+              } ${isCurrent ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+            >
+              <Image
+                src={ad.imageUrl}
+                alt={altText}
+                fill
+                className="object-cover hover:opacity-90 transition-opacity"
+              />
+            </div>
+          );
+        })}
+
+        {displayAds.length > 1 && (
+          <div className="absolute bottom-2 left-0 right-0 z-20 flex justify-center space-x-1.5">
+            {displayAds.map((_, index) => (
+              <button
+                key={index}
+                onClick={(e) => {
+                  e.stopPropagation(); 
+                  setCurrentIndex(index);
+                }}
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  index === currentIndex ? "bg-white" : "bg-white/50"
+                }`}
+                aria-label={`Go to ad ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     );
   }
 
   return (
     <div
-      className={`bg-linear-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 ${widthClass} ${heightClass} ${className} ${isClickable && adLink ? "cursor-pointer hover:from-gray-200 hover:to-gray-300 transition-colors" : ""}`}
-      onClick={handleAdClick}
+      className={`bg-linear-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 ${widthClass} ${heightClass} ${className} ${
+        isClickable && adLink
+          ? "cursor-pointer hover:from-gray-200 hover:to-gray-300 transition-colors"
+          : ""
+      }`}
+      onClick={() => handleAdClick(adLink)}
     >
       <div className="text-center">
         <p className="text-gray-500 font-semibold">ad space</p>

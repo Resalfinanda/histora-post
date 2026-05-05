@@ -4,6 +4,7 @@ import "../globals.css";
 import { Navbar } from "@/components/navbar/navbar";
 import { Footer } from "@/components/footer/footer";
 import { ThemeProvider } from "@/components/provider/themeProvider";
+import { Suspense } from "react";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -23,10 +24,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${poppins.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
-          <Navbar />
+          <Suspense fallback={<div className="h-20 bg-[#0f172a] w-full" />}>
+            <Navbar />
+          </Suspense>
           <main className="flex-1">{children}</main>
           <Footer />
         </ThemeProvider>

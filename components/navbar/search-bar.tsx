@@ -29,52 +29,32 @@ export function SearchBar({
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query)}`);
       setQuery("");
-      setIsOpen(false);
+      if (isMobile) setIsOpen(false);
     }
   };
 
-  // Desktop version - inline
+  // Tampilan Desktop - Sesuai gambar (selalu tampil & rounded)
   if (!isMobile) {
     return (
-      <div className="flex items-center gap-2">
-        {isOpen ? (
-          <form onSubmit={handleSearch} className="flex items-center gap-2">
-            <Input
-              type="text"
-              placeholder="Cari artikel..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="h-9 w-48 md:w-64 bg-white/10 border-white/20 text-background placeholder:text-gray-400"
-              autoFocus
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => {
-                setIsOpen(false);
-                setQuery("");
-              }}
-              className="hover:bg-transparent"
-            >
-              <X className="h-5 w-5 text-background" />
-            </Button>
-          </form>
-        ) : (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsOpen(true)}
-            className="hover:bg-transparent"
-          >
-            <Search className="h-5 w-5 text-background" />
-          </Button>
-        )}
-      </div>
+      <form onSubmit={handleSearch} className="relative w-full max-w-lg">
+        <Input
+          type="text"
+          placeholder="Search....."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full h-10 pl-4 pr-10 rounded-full bg-transparent border-white/40 text-white placeholder:text-gray-300 focus-visible:ring-1 focus-visible:ring-white/50"
+        />
+        <button
+          type="submit"
+          className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-gray-300"
+        >
+          <Search className="h-5 w-5 text-white" />
+        </button>
+      </form>
     );
   }
 
-  // Mobile version - just icon
+  // Tampilan Mobile - Ikon Toggle
   return (
     <Button
       variant="ghost"
@@ -87,7 +67,7 @@ export function SearchBar({
   );
 }
 
-// Mobile Search Input Component
+// Mobile Search Input Component (Tetap sama)
 export function MobileSearchInput({
   isOpen,
   onClose,
@@ -110,14 +90,14 @@ export function MobileSearchInput({
   if (!isOpen) return null;
 
   return (
-    <div className="w-full  border-b border-white/10 px-4 py-3">
+    <div className="w-full border-b border-white/10 px-4 py-3 bg-[#0f172a]">
       <form onSubmit={handleSearch} className="flex items-center gap-2">
         <Input
           type="text"
-          placeholder="Cari artikel..."
+          placeholder="Search....."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 h-10 w-full bg-white/10 border-blue-900 text-black placeholder:text-gray-400"
+          className="flex-1 h-10 w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400"
           autoFocus
         />
         <Button
@@ -130,7 +110,7 @@ export function MobileSearchInput({
           }}
           className="hover:bg-transparent"
         >
-          <X className="h-5 w-5 text-black" />
+          <X className="h-5 w-5 text-white" />
         </Button>
       </form>
     </div>
