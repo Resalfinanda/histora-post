@@ -21,7 +21,7 @@ interface Article {
   isHeadline: boolean;
 }
 
-const ITEMS_PER_PAGE = 7;
+const ITEMS_PER_PAGE = 5;
 
 export function MainContent() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -73,9 +73,6 @@ export function MainContent() {
   // Get unique categories
   const categories = Array.from(new Set(articles.map((a) => a.category)));
 
-  // Get trending articles (top 5 most recent)
-  //const trendingArticles = articles.slice(0, 5);
-
   // Get other articles (excluding carousel articles)
   const otherArticles = filteredArticles.filter(
     (a) => !carouselArticles.find((c) => c.id === a.id),
@@ -88,6 +85,19 @@ export function MainContent() {
     startIndex,
     startIndex + ITEMS_PER_PAGE,
   );
+
+  const mainBannerAds = [
+    {
+      imageUrl:
+        "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg",
+      adLink: "https://makassarkota.go.id/",
+    },
+    {
+      imageUrl:
+        "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg",
+      adLink: "https://dispora.makassarkota.go.id/",
+    },
+  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -109,21 +119,23 @@ export function MainContent() {
         </div>
       ) : (
         <>
-          <div className="mb-4 md:mb-6">
-            <AdBanner
-              size="large"
-              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-              adLink="https://makassarkota.go.id/"
-            />
-          </div>
-          {/* Featured Carousel */}
-          {carouselArticles.length > 0 && (
-            <FeaturedCarousel articles={carouselArticles} />
-          )}
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
-            {/* --- MAIN CONTENT SECTION --- */}
-            <div className="lg:col-span-2 flex flex-col min-h-0">
+            {/* --- MAIN CONTENT SECTION (KIRI) --- */}
+            <div className="lg:col-span-2 flex flex-col min-h-0 space-y-6">
+              {/* Featured Carousel */}
+              {carouselArticles.length > 0 && (
+                <FeaturedCarousel articles={carouselArticles} />
+              )}
+
+              {/* Banner Iklan Bawah Carousel */}
+              <div className="w-full">
+                <AdBanner
+                  size="large"
+                  ads={mainBannerAds}
+                  interval={5000}
+                />
+              </div>
+
               {/* Category Filter */}
               <CategoryFilter
                 categories={categories}
@@ -139,7 +151,7 @@ export function MainContent() {
 
               {/* Pagination Controls */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
+                <div className="flex items-center justify-between mt-2 pt-4 ">
                   <button
                     onClick={() =>
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
@@ -165,26 +177,30 @@ export function MainContent() {
               )}
             </div>
 
-            {/* --- SIDEBAR SECTION  --- */}
-            <div className=" lg:col-span-1 pb-4 space-y-6 md:space-y-8 h-full">
+            {/* --- SIDEBAR SECTION (KANAN) --- */}
+            <div className="lg:col-span-1 pb-4 h-full">
               <StickyBox offsetTop={32} offsetBottom={32}>
-                {/* Trending Section */}
-                <TrendingSection />
+                <div className="space-y-6 md:space-y-8">
+                  {/* Banner Iklan Atas */}
+                  <AdBanner
+                    size="small"
+                    imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
+                    adLink="https://dispora.makassarkota.go.id/"
+                  />
 
-                <AdBanner
-                  size="small"
-                  imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
-                  adLink="https://dispora.makassarkota.go.id/"
-                />
+                  {/* Trending Section */}
+                  <TrendingSection />
 
-                {/* Newsletter Section */}
-                <NewsletterSection />
+                  {/* Banner Iklan Tengah */}
+                  <AdBanner
+                    size="small"
+                    imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
+                    adLink="https://makassarkota.go.id/"
+                  />
 
-                <AdBanner
-                  size="small"
-                  imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-                  adLink="https://makassarkota.go.id/"
-                />
+                  {/* Newsletter Section */}
+                  <NewsletterSection />
+                </div>
               </StickyBox>
             </div>
           </div>
