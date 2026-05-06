@@ -15,24 +15,27 @@ export default function AboutPage() {
 
       <section className="space-y-6 text-justify">
         <p>
-          platform media online yang memproduksi berita teks dan video news
-          untuk memenuhi kebutuhan masyarakat akan informasi (berita) melalui
-          saluran website dan media sosial.
+          Platform ini merupakan media online yang menyajikan berita dalam
+          bentuk teks dan video untuk memenuhi kebutuhan informasi masyarakat.
+          Konten kami disalurkan melalui website dan media sosial agar lebih
+          mudah diakses oleh siapa saja.
         </p>
         <p className="bg-slate-100 border-l-6 border-blue-900 p-4">
-          Visi kami adalah menjadi sumber berita terdepan dalam kemasan visual
-          yang dapat dinikmati khalayak di seluruh dunia.
+          Visi kami adalah menjadi sumber berita yang terpercaya dengan
+          penyajian visual yang jelas dan nyaman untuk diikuti, sehingga bisa
+          menjangkau audiens yang lebih luas.
         </p>
         <p className="bg-slate-100 border-l-6 border-blue-900 p-4">
-          Misi kami, selain memberikan informasi peristiwa dan fakta seputar
-          sosial-politik, ekonomi-bisnis, dan olahraga-hiburan bagi masyarakat,
-          juga menjalin kolaborasi bisnis dengan lembaga maupun pelaku usaha
-          lainnya.
+          Misi kami adalah menyampaikan informasi seputar sosialpolitik,
+          ekonomi-bisnis, serta olahraga dan hiburan secara relevan dan dapat
+          dipahami. Selain itu, kami juga membuka peluang kerja sama dengan
+          berbagai lembaga dan pelaku usaha.
         </p>
         <p>
-          Kami juga akan terus berinovasi untuk memenuhi harapan audiens kami
-          dan berharap ikut memberi pengaruh positif dalam perkembangan industri
-          media dan pembangunan baik pemerintahan maun non pemerintahan.
+          Kami akan terus melakukan pengembangan agar konten yang disajikan
+          tetap sesuai dengan kebutuhan audiens, sekaligus berupaya memberikan
+          dampak positif bagi perkembangan media dan lingkungan sekitar, baik di
+          sektor pemerintahan maupun nonpemerintahan.
         </p>
       </section>
       <footer className="pt-20 text-center">
