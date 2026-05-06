@@ -1,14 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // 1. Tambahkan ini
+import { useSearchParams } from "next/navigation";
 import { FeaturedCarousel } from "./featured-carousel";
 import { TrendingSection } from "./trending-section";
 import { ArticleGrid } from "./article-grid";
 import { NewsletterSection } from "./newsletter-section";
 import { AdBanner } from "@/components/ui/ad-banner";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import StickyBox from "react-sticky-box";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface Article {
   id: string;
@@ -24,15 +32,14 @@ interface Article {
 const ITEMS_PER_PAGE = 5;
 
 export function MainContent() {
-  const searchParams = useSearchParams(); // 2. Ambil parameter dari URL
-  const activeCategory = searchParams.get("category"); // 3. Dapatkan kategori aktif
+  const searchParams = useSearchParams();
+  const activeCategory = searchParams.get("category");
 
   const [articles, setArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch articles
   useEffect(() => {
     const fetchArticles = async () => {
       try {
@@ -49,44 +56,115 @@ export function MainContent() {
     fetchArticles();
   }, []);
 
-  // Filter articles by category from URL
   useEffect(() => {
-    setCurrentPage(1); // Reset ke halaman 1 setiap ganti kategori
+    setCurrentPage(1);
 
     if (activeCategory) {
       setFilteredArticles(
-        articles.filter((article) => article.category === activeCategory)
+        articles.filter((article) => article.category === activeCategory),
       );
     } else {
-      setFilteredArticles(articles); // Jika null (Semua), tampilkan semua
+      setFilteredArticles(articles);
     }
-  }, [articles, activeCategory]); // 4. Dependensi berubah ke activeCategory dari URL
+  }, [articles, activeCategory]);
 
-  // Get featured articles
   const featuredArticles = articles.filter((a) => a.isHeadline).slice(0, 5);
   const carouselArticles =
     featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 5);
 
-  // Get other articles
   const otherArticles = filteredArticles.filter(
-    (a) => !carouselArticles.find((c) => c.id === a.id)
+    (a) => !carouselArticles.find((c) => c.id === a.id),
   );
 
-  // Pagination Logic
   const totalPages = Math.ceil(otherArticles.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedArticles = otherArticles.slice(
     startIndex,
-    startIndex + ITEMS_PER_PAGE
+    startIndex + ITEMS_PER_PAGE,
   );
+
+  // Pagination controls helper function
+  const getPaginationItems = () => {
+    const items = [];
+    const maxVisible = 5;
+    let startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+    if (endPage - startPage < maxVisible - 1) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    // First page button
+    if (startPage > 1) {
+      items.push(
+        <PaginationItem key="first">
+          <PaginationLink
+            onClick={() => setCurrentPage(1)}
+            className="cursor-pointer"
+          >
+            1
+          </PaginationLink>
+        </PaginationItem>
+      );
+
+      if (startPage > 2) {
+        items.push(
+          <PaginationItem key="ellipsis-start">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+    }
+
+    // Page number buttons
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            onClick={() => setCurrentPage(i)}
+            isActive={i === currentPage}
+            className="cursor-pointer"
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    // Last page button
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        items.push(
+          <PaginationItem key="ellipsis-end">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+
+      items.push(
+        <PaginationItem key="last">
+          <PaginationLink
+            onClick={() => setCurrentPage(totalPages)}
+            className="cursor-pointer"
+          >
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    return items;
+  };
 
   const mainBannerAds = [
     {
-      imageUrl: "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg",
+      imageUrl:
+        "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg",
       adLink: "https://makassarkota.go.id/",
     },
     {
-      imageUrl: "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg",
+      imageUrl:
+        "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg",
       adLink: "https://dispora.makassarkota.go.id/",
     },
   ];
@@ -98,7 +176,10 @@ export function MainContent() {
           <div className="h-80 bg-gray-200 rounded-lg animate-pulse" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-64 bg-gray-200 rounded-lg animate-pulse" />
+              <div
+                key={i}
+                className="h-64 bg-gray-200 rounded-lg animate-pulse"
+              />
             ))}
           </div>
         </div>
@@ -110,7 +191,6 @@ export function MainContent() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
           {/* MAIN CONTENT SECTION */}
           <div className="lg:col-span-2 flex flex-col min-h-0 space-y-6">
-            
             {/* Featured Carousel (Hanya tampil jika di halaman Semua/Homepage) */}
             {!activeCategory && carouselArticles.length > 0 && (
               <FeaturedCarousel articles={carouselArticles} />
@@ -120,34 +200,45 @@ export function MainContent() {
               <AdBanner size="large" ads={mainBannerAds} interval={5000} />
             </div>
 
-            {/* KOMPONEN CATEGORY FILTER DIHAPUS DARI SINI */}
-
             <ArticleGrid
               articles={paginatedArticles}
-              title={activeCategory ? `Berita Kategori: ${activeCategory}` : "Berita Terbaru"}
+              title={
+                activeCategory
+                  ? `Berita Kategori: ${activeCategory}`
+                  : "Berita Terbaru"
+              }
             />
 
-            {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between mt-2 pt-4 ">
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <ChevronLeft className="w-4 h-4 inline-block mr-1" />
-                </button>
-                <span className="text-sm text-gray-600">
-                  Halaman {currentPage} dari {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <ChevronRight className="w-4 h-4 inline-block ml-1" />
-                </button>
-              </div>
+              <Pagination className="mt-8">
+                <PaginationContent>
+                  {currentPage > 1 && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() =>
+                          setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
+                        className="cursor-pointer"
+                      />
+                    </PaginationItem>
+                  )}
+
+                  {getPaginationItems()}
+
+                  {currentPage < totalPages && (
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            Math.min(prev + 1, totalPages)
+                          )
+                        }
+                        className="cursor-pointer"
+                      />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
             )}
           </div>
 
