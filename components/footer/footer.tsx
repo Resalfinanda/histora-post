@@ -4,7 +4,7 @@ import { SocialIcons } from "./socialIcons";
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-background mt-16">
+    <footer className="bg-foreground text-background mt-4">
       {/* Top Section */}
       <div className="container mx-auto px-4 py-10 flex  flex-col justify-evenly md:flex-row gap-10 md:gap-40">
         {/* Kolom 1 - Branding */}

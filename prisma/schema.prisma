@@ -19,14 +19,16 @@ enum Role {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String    // Sebaiknya di-hash menggunakan bcrypt
-  role      Role      @default(REDAKTUR)
-  articles  Article[] // Relasi one-to-many: satu user bisa nulis banyak artikel
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password      String
+  resetToken    String?   @unique 
+  resetTokenExpiry   DateTime?    
+  role          Role      @default(REDAKTUR)
+  articles      Article[] // Relasi one-to-many: satu user bisa nulis banyak artikel
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
 
   @@map("users")
 }
