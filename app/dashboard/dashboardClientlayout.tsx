@@ -9,6 +9,7 @@ import {
   Users,
   Menu,
   X,
+  Image,
 } from "lucide-react";
 import { Session } from "next-auth";
 import { LogoutButton } from "@/components/ui/logoutButton";
@@ -91,6 +92,17 @@ export default function DashboardClientLayout({
             >
               <Users size={20} />
               Manajemen Pengguna
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link
+              href="/dashboard/advertisements"
+              onClick={closeSidebar}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800"
+            >
+              <Image size={20} aria-label="Manajemen Iklan" />
+              Manajemen Iklan
             </Link>
           )}
 

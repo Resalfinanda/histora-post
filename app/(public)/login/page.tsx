@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function LoginPage() {
         router.refresh();
       }
     } catch (error) {
+      console.error("Error saat login:", error);
       toast.error("Terjadi kesalahan yang tidak terduga.");
     } finally {
       setLoading(false);
@@ -49,7 +51,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+    <div className=" flex items-center justify-center bg-slate-50 py-12 p-4">
       <div className="w-full max-w-md bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
         <h1 className="text-2xl font-bold text-center mb-6 text-[#0f172a]">
           Histora Post Login
@@ -68,8 +70,15 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-
+            <span className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <Link
+                href="/forgotPassword"
+                className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+              >
+                Lupa password?
+              </Link>
+            </span>
             <div className="relative">
               <Input
                 id="password"

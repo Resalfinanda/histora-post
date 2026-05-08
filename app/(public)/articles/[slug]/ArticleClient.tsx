@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import {
   Breadcrumb,
@@ -83,6 +83,62 @@ export default function ArticleClient({ slug }: { slug: string }) {
     }
   };
 
+  const renderArticleContent = useMemo(() => {
+    if (!article?.content) return null;
+
+    if (typeof window === "undefined") {
+      return (
+        <div
+          className="prose prose-sm md:prose-lg max-w-none text-foreground prose-headings:text-[#0f172a] prose-a:text-blue-600 hover:prose-a:text-[#0f172a] article-content"
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        />
+      );
+    }
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(article.content, "text/html");
+    const nodes: React.ReactNode[] = [];
+    let paragraphCount = 0;
+
+    Array.from(doc.body.childNodes).forEach((child, index) => {
+      const html =
+        child instanceof HTMLElement
+          ? child.outerHTML
+          : child.textContent || "";
+
+      if (!html.trim()) return;
+
+      nodes.push(
+        <div
+          key={`content-${index}`}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />,
+      );
+
+      if (child.nodeName.toLowerCase() === "p") {
+        paragraphCount += 1;
+
+        if (paragraphCount === 2) {
+          nodes.push(
+            <div key="ad-after-paragraph-2" className="my-6 md:my-8">
+              <AdBanner
+                size="medium"
+                placement="ARTICLE_MIDDLE"
+                topic={article?.category}
+              />
+            </div>,
+          );
+        }
+      }
+    });
+
+    return (
+      <div className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-foreground prose-headings:text-[#0f172a] prose-a:text-blue-600 hover:prose-a:text-[#0f172a] article-content">
+        {nodes}
+      </div>
+    );
+  }, [article?.content]);
+
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12">
@@ -115,9 +171,9 @@ export default function ArticleClient({ slug }: { slug: string }) {
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
       <div className="mb-6 md:mb-8">
         <AdBanner
-          height="h-22 md:h-64"
-          imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-          adLink="https://makassarkota.go.id/"
+          size="large"
+          placement="ARTICLE_HEADER"
+          topic={article?.category}
         />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
@@ -151,10 +207,7 @@ export default function ArticleClient({ slug }: { slug: string }) {
 
           <ShareButtons title={article.title} url={articleUrl} />
 
-          <div
-            className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 text-foreground prose-headings:text-[#0f172a] prose-a:text-blue-600 hover:prose-a:text-[#0f172a] article-content"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
+          {renderArticleContent}
 
           <div className="border-t border-b border-gray-200 py-4 md:py-6 my-6 md:my-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -184,8 +237,8 @@ export default function ArticleClient({ slug }: { slug: string }) {
           <div className="my-6 md:my-8">
             <AdBanner
               size="medium"
-              imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
-              adLink="https://dispora.makassarkota.go.id/"
+              placement="ARTICLE_FOOTER"
+              topic={article?.category}
             />
           </div>
 
@@ -207,7 +260,7 @@ export default function ArticleClient({ slug }: { slug: string }) {
         <aside className="space-y-6 md:space-y-8 h-full">
           <StickyBox offsetTop={32} offsetBottom={32}>
             <TrendingSection />
-            <AdBanner size="medium" />
+            <AdBanner size="medium" placement="SIDEBAR_MIDDLE" />
             <NewsletterSection />
           </StickyBox>
         </aside>

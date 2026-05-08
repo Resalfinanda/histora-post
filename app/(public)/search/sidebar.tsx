@@ -1,4 +1,4 @@
-'use client'; 
+"use client";
 
 import StickyBox from "react-sticky-box";
 import { TrendingSection } from "@/components/home/trending-section";
@@ -11,17 +11,9 @@ export function SearchSidebar() {
     <aside className="space-y-6 md:space-y-8 h-full">
       <StickyBox offsetTop={32} offsetBottom={32}>
         <TrendingSection />
-        <AdBanner
-          size="small"
-          imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
-          adLink="https://dispora.makassarkota.go.id/"
-        />
+        <AdBanner size="small" placement="SIDEBAR_MIDDLE" />
         <TrendingSearchTopics />
-        <AdBanner
-          size="small"
-          imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-          adLink="https://makassarkota.go.id/"
-        />
+        <AdBanner height="h-96" placement="SIDEBAR_BOTTOM" />
         <NewsletterSection />
       </StickyBox>
     </aside>

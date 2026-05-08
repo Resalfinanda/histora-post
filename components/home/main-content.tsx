@@ -31,6 +31,21 @@ interface Article {
 
 const ITEMS_PER_PAGE = 5;
 
+const mainBannerAds = [
+  {
+    id: "pemkot-1",
+    imageUrl:
+      "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg",
+    adLink: "https://makassarkota.go.id/",
+  },
+  {
+    id: "dispora-1",
+    imageUrl:
+      "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg",
+    adLink: "https://dispora.makassarkota.go.id/",
+  },
+];
+
 export function MainContent() {
   const searchParams = useSearchParams();
   const activeCategory = searchParams.get("category");
@@ -104,14 +119,14 @@ export function MainContent() {
           >
             1
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
 
       if (startPage > 2) {
         items.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     }
@@ -127,7 +142,7 @@ export function MainContent() {
           >
             {i}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 
@@ -137,7 +152,7 @@ export function MainContent() {
         items.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -149,25 +164,12 @@ export function MainContent() {
           >
             {totalPages}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 
     return items;
   };
-
-  const mainBannerAds = [
-    {
-      imageUrl:
-        "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg",
-      adLink: "https://makassarkota.go.id/",
-    },
-    {
-      imageUrl:
-        "https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg",
-      adLink: "https://dispora.makassarkota.go.id/",
-    },
-  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -197,7 +199,12 @@ export function MainContent() {
             )}
 
             <div className="w-full">
-              <AdBanner size="large" ads={mainBannerAds} interval={5000} />
+              <AdBanner
+                size="medium"
+                placement="HOMEPAGE_BANNER"
+                interval={7000}
+                ads={mainBannerAds}
+              />
             </div>
 
             <ArticleGrid
@@ -209,6 +216,7 @@ export function MainContent() {
               }
             />
 
+            {/* KOMPONEN PAGINATION DIKEMBALIKAN UTUH */}
             {totalPages > 1 && (
               <Pagination className="mt-8">
                 <PaginationContent>
@@ -230,7 +238,7 @@ export function MainContent() {
                       <PaginationNext
                         onClick={() =>
                           setCurrentPage((prev) =>
-                            Math.min(prev + 1, totalPages)
+                            Math.min(prev + 1, totalPages),
                           )
                         }
                         className="cursor-pointer"
@@ -246,15 +254,11 @@ export function MainContent() {
           <div className="lg:col-span-1 pb-4 h-full">
             <StickyBox offsetTop={120} offsetBottom={32}>
               <div className="space-y-6 md:space-y-8">
-                <AdBanner
-                  size="small"
-                  imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Dispora.jpeg"
-                  adLink="https://dispora.makassarkota.go.id/"
-                />
+                <AdBanner size="small" placement="SIDEBAR_TOP" />
                 <TrendingSection />
-                <AdBanner />
+                <AdBanner size="squareMedium" placement="SIDEBAR_MIDDLE" />
                 <NewsletterSection />
-                <AdBanner height="h-96" />
+                <AdBanner size="small" placement="SIDEBAR_BOTTOM" />
               </div>
             </StickyBox>
           </div>
