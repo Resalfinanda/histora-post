@@ -75,14 +75,14 @@ function PaginationControls({
       items.push(
         <PaginationItem key="first">
           <PaginationLink href={getPageUrl(1)}>1</PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
 
       if (startPage > 2) {
         items.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     }
@@ -90,13 +90,10 @@ function PaginationControls({
     for (let i = startPage; i <= endPage; i++) {
       items.push(
         <PaginationItem key={i}>
-          <PaginationLink
-            href={getPageUrl(i)}
-            isActive={i === currentPage}
-          >
+          <PaginationLink href={getPageUrl(i)} isActive={i === currentPage}>
             {i}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 
@@ -105,7 +102,7 @@ function PaginationControls({
         items.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -114,7 +111,7 @@ function PaginationControls({
           <PaginationLink href={getPageUrl(totalPages)}>
             {totalPages}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 
@@ -169,7 +166,7 @@ export function SearchPageContent() {
           `/api/search?q=${encodeURIComponent(query)}&page=${page}`,
           {
             cache: "no-store",
-          }
+          },
         );
 
         if (!res.ok) {
@@ -180,7 +177,9 @@ export function SearchPageContent() {
         setData(result);
       } catch (err) {
         console.error("Search fetch error:", err);
-        setError(err instanceof Error ? err.message : "Gagal memuat hasil pencarian");
+        setError(
+          err instanceof Error ? err.message : "Gagal memuat hasil pencarian",
+        );
       } finally {
         setIsLoading(false);
       }
@@ -198,8 +197,7 @@ export function SearchPageContent() {
       <AdBanner
         height="h-22 md:h-64"
         className="mb-8"
-        imageUrl="https://uyqexwhmwognigyqfegc.supabase.co/storage/v1/object/public/iklan/Banner-Pemkot-scaled.jpg"
-        adLink="https://makassarkota.go.id/"
+        placement="SEARCH_RESULTS"
       />
 
       <Breadcrumb
@@ -222,7 +220,9 @@ export function SearchPageContent() {
         <div className="lg:col-span-2">
           {isLoading ? (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-              <p className="text-foreground/60 text-lg">Memuat hasil pencarian...</p>
+              <p className="text-foreground/60 text-lg">
+                Memuat hasil pencarian...
+              </p>
             </div>
           ) : error ? (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
