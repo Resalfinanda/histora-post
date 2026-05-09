@@ -20,6 +20,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 
 interface Advertisement {
@@ -40,6 +47,7 @@ export default function AdvertisementsClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showSpecifications, setShowSpecifications] = useState(false);
 
   useEffect(() => {
     fetchAds();
@@ -127,11 +135,16 @@ export default function AdvertisementsClient() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:align-center">
         <h1 className="text-3xl font-bold">Manajemen Iklan</h1>
-        <Link href="/dashboard/advertisements/create">
-          <Button>Tambah Iklan</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/dashboard/advertisements/create">
+            <Button>Tambah Iklan</Button>
+          </Link>
+          <Button variant="outline" onClick={() => setShowSpecifications(true)}>
+            Spesifikasi Ruang Iklan
+          </Button>
+        </div>
       </div>
 
       {ads.length === 0 ? (
@@ -145,23 +158,41 @@ export default function AdvertisementsClient() {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <Table>
             <TableHeader className="bg-gray-700">
-              <TableRow >
-                <TableHead className="text-white font-bold text-center uppercase">Judul</TableHead>
-                <TableHead className="text-white font-bold text-center uppercase">Penempatan</TableHead>
-                <TableHead className="text-white font-bold text-center uppercase">Topik</TableHead>
-                <TableHead className="text-white font-bold text-center uppercase">Status</TableHead>
-                <TableHead className="text-white font-bold text-center uppercase">Tanggal Mulai</TableHead>
-                <TableHead className="text-white font-bold text-center uppercase">Tanggal Berakhir</TableHead>
-                <TableHead className="text-white font-bold text-center uppercase">Klik</TableHead>
-                <TableHead className="text-white font-bold text-center uppercase">Aksi</TableHead>
+              <TableRow>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Judul
+                </TableHead>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Penempatan
+                </TableHead>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Topik
+                </TableHead>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Status
+                </TableHead>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Tanggal Mulai
+                </TableHead>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Tanggal Berakhir
+                </TableHead>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Klik
+                </TableHead>
+                <TableHead className="text-white font-bold text-center uppercase">
+                  Aksi
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="text-center">
               {ads.map((ad) => (
                 <TableRow key={ad.id}>
-                  <TableCell className="font-medium text-start">{ad.title}</TableCell>
+                  <TableCell className="font-medium text-start">
+                    {ad.title}
+                  </TableCell>
                   <TableCell>{ad.placement}</TableCell>
-                  <TableCell >
+                  <TableCell>
                     <div className="flex flex-wrap gap-1 pl-4">
                       {ad.topics && ad.topics.length > 0 ? (
                         ad.topics.map((topic) => (
@@ -202,7 +233,7 @@ export default function AdvertisementsClient() {
                   <TableCell>{ad.clicks}</TableCell>
                   <TableCell className="space-x-2">
                     <Link href={`/dashboard/advertisements/${ad.id}`}>
-                      <Button variant="outline" size="sm" >
+                      <Button variant="outline" size="sm">
                         Edit
                       </Button>
                     </Link>
@@ -246,6 +277,157 @@ export default function AdvertisementsClient() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={showSpecifications} onOpenChange={setShowSpecifications}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Spesifikasi Ruang Iklan</DialogTitle>
+            <DialogDescription>
+              Panduan ukuran banner untuk memastikan visibilitas dan kualitas
+              visual yang optimal
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-6">
+            {/* Homepage Banner */}
+            <div className="border-l-4 border-blue-500 pl-4">
+              <h3 className="font-semibold text-lg mb-2">
+                1. Area Beranda (Homepage Banner)
+              </h3>
+              <p className="text-sm text-gray-600 mb-3">
+                Berada di area konten utama untuk eksposur maksimal.
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <strong>Ukuran Mobile:</strong> 736x192px
+                </li>
+                <li>
+                  <strong>Ukuran Desktop:</strong> 848x192px
+                </li>
+                <li>
+                  <strong>Rasio:</strong> 4:1
+                </li>
+              </ul>
+            </div>
+
+            {/* Article Page Banners */}
+            <div className="border-l-4 border-green-500 pl-4">
+              <h3 className="font-semibold text-lg mb-2">
+                2. Halaman Artikel (Article Page Banners)
+              </h3>
+              <p className="text-sm text-gray-600 mb-3">
+                Penempatan strategis di dalam alur baca audiens portal berita.
+              </p>
+
+              <div className="space-y-3">
+                {/* Header */}
+                <div className="bg-gray-50 p-3 rounded">
+                  <h4 className="font-medium text-sm mb-2">
+                    Header (Atas Artikel)
+                  </h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>
+                      <strong>Ukuran Mobile:</strong> 736x256px
+                    </li>
+                    <li>
+                      <strong>Ukuran Desktop:</strong> 848x256px
+                    </li>
+                    <li>
+                      <strong>Rasio:</strong> 3.3:1
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Tengah & Bawah */}
+                <div className="bg-gray-50 p-3 rounded">
+                  <h4 className="font-medium text-sm mb-2">
+                    Tengah & Bawah Artikel
+                  </h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>
+                      <strong>Ukuran Mobile:</strong> 736x192px
+                    </li>
+                    <li>
+                      <strong>Ukuran Desktop:</strong> 848x192px
+                    </li>
+                    <li>
+                      <strong>Rasio:</strong> 4:1
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="border-l-4 border-purple-500 pl-4">
+              <h3 className="font-semibold text-lg mb-2">
+                3. Sidebar (Khusus Desktop)
+              </h3>
+              <p className="text-sm text-gray-600 mb-3">
+                Tampil secara persisten di sisi halaman untuk pembaca via
+                PC/Laptop.
+              </p>
+
+              <div className="space-y-3">
+                {/* Posisi Atas & Bawah */}
+                <div className="bg-gray-50 p-3 rounded">
+                  <h4 className="font-medium text-sm mb-2">
+                    Posisi Atas & Bawah
+                  </h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>
+                      <strong>Ukuran:</strong> 424x128px
+                    </li>
+                    <li>
+                      <strong>Rasio:</strong> 3.3:1
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Posisi Tengah */}
+                <div className="bg-gray-50 p-3 rounded">
+                  <h4 className="font-medium text-sm mb-2">Posisi Tengah</h4>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Fleksibel, tersedia opsi:
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    <li>
+                      <strong>Banner Horizontal:</strong> 424x192px | Rasio
+                      2.2:1
+                    </li>
+                    <li>
+                      <strong>Kotak Persegi:</strong> 424x384px | Rasio 1:1
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Halaman Pencarian */}
+                <div className="bg-gray-50 p-3 rounded">
+                  <h4 className="font-medium text-sm mb-2">
+                    Khusus Halaman Pencarian
+                  </h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>
+                      <strong>Ukuran:</strong> 424x384px
+                    </li>
+                    <li>
+                      <strong>Rasio:</strong> 1:1
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Important Note */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
+              <p className="text-sm text-gray-700">
+                <strong>⚠️ Catatan Penting:</strong> Materi desain diharapkan
+                dikirimkan sesuai resolusi rekomendasi di atas agar tetap tajam
+                dan responsif di berbagai ukuran layar.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

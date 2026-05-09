@@ -32,16 +32,16 @@ export default async function DashboardOverview() {
     activeWritersCount,
     recentArticles,
   ] = await Promise.all([
-    // A. Menghitung total artikel
+    // Total artikel
     prisma.article.count({ where: articleCondition }),
 
-    // B. Menghitung total akumulasi views dari semua artikel
+    // akumulasi views dari semua artikel
     prisma.article.aggregate({
       _sum: { views: true },
       where: articleCondition,
     }),
 
-    // C. Mencari Kategori Terpopuler (berdasarkan jumlah artikel terbanyak)
+    // Kategori Terpopuler 
     prisma.article.groupBy({
       by: ["category"],
       _count: { category: true },
@@ -50,12 +50,12 @@ export default async function DashboardOverview() {
       take: 1,
     }),
 
-    // D. Menghitung jumlah Redaktur (Hanya dieksekusi jika yang login Admin)
+    // Menghitung jumlah Redaktur 
     isAdmin
       ? prisma.user.count({ where: { role: "REDAKTUR" } })
       : Promise.resolve(0),
 
-    // E. Mengambil 5 artikel terbaru untuk tabel list
+    // 5 artikel terbaru
     prisma.article.findMany({
       where: articleCondition,
       orderBy: { createdAt: "desc" },
@@ -66,7 +66,7 @@ export default async function DashboardOverview() {
     }),
   ]);
 
-  // Ekstrak hasil query
+
   const totalViews = viewsAggregation._sum.views || 0;
   const topCategory =
     categoryGrouping.length > 0
