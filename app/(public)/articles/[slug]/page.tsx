@@ -58,6 +58,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ArticlePage({ params }: Props) {
   const resolvedParams = await params;
 
-  // Lempar slug ke Client Component agar tidak perlu useParams lagi
   return <ArticleClient slug={resolvedParams.slug} />;
 }

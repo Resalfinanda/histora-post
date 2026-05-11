@@ -44,7 +44,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
   return (
     <div className="flex flex-wrap items-center gap-4 my-4 p-4 rounded-xl bg-transparent">
       <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mr-2">
-        <Share2 className="w-4 h-4" />
+        <Share2 className="w-3 h-3" />
         <span>BAGIKAN</span>
       </div>
 
@@ -57,7 +57,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
           aria-label="Bagikan ke Facebook"
           className="p-2.5 rounded-full bg-[#1877F2] hover:opacity-90 text-white transition-all hover:scale-110"
         >
-          <Facebook className="w-4 h-4 fill-current" />
+          <Facebook className="w-3 h-3 fill-current" />
         </a>
 
         {/* X  */}
@@ -68,7 +68,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
           aria-label="Bagikan ke X"
           className="p-2.5 rounded-full bg-black hover:opacity-90 text-white transition-all hover:scale-110"
         >
-          <XIcon className="w-4 h-4" />
+          <XIcon className="w-3 h-3" />
         </a>
 
         {/* LinkedIn */}
@@ -79,7 +79,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
           aria-label="Bagikan ke LinkedIn"
           className="p-2.5 rounded-full bg-[#0077B5] hover:opacity-90 text-white transition-all hover:scale-110"
         >
-          <Linkedin className="w-4 h-4 fill-current" />
+          <Linkedin className="w-3 h-3 fill-current" />
         </a>
       </div>
 
@@ -97,13 +97,13 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
       >
         {copied ? (
           <>
-            <Check className="w-4 h-4" />
+            <Check className="w-3 h-3" />
             <span>Tersalin</span>
           </>
         ) : (
           <>
-            <Copy className="w-4 h-4" />
-            <span>Salin Link</span>
+            <Copy className="w-3 h-3" />
+            <span>Salin</span>
           </>
         )}
       </Button>

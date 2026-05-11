@@ -54,22 +54,19 @@ export function ArticleCard({
 
         {/* Content */}
         <div className="pl-2 md:pl-4 flex flex-col justify-between flex-1">
-          <Badge
-            variant="secondary"
-            className=" bg-blue-400 text-white w-fit text-[10px] md:text-xs"
-          >
+          <Badge className=" bg-[#0f172a] hover:bg-blue-400 text-white w-fit text-[10px] md:text-xs">
             {category}
           </Badge>
 
-          <h4 className="font-bold text-foreground line-clamp-2 text-[10px] md:text-base">
+          <h2 className="font-bold text-foreground line-clamp-2 mb-0.5 text-[10px] md:text-base">
             {title}
-          </h4>
+          </h2>
 
-          <p className="text-[10px] md:text-sm text-foreground/50 mb-1 md:mb-3 line-clamp-2">
+          <p className="text-[10px] md:text-sm text-foreground/80 mb-0.5 md:mb-1 line-clamp-2">
             {excerpt}
           </p>
 
-          <p className="text-xs text-foreground/50 hidden md:block">
+          <p className="text-[10px] text-foreground/80 hidden md:block">
             {timeAgo}
           </p>
         </div>

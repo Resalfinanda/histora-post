@@ -261,7 +261,7 @@ export function SearchPageContent() {
                       <div className="pl-2 md:pl-4 flex flex-col justify-between flex-1">
                         <Badge
                           variant="secondary"
-                          className="bg-blue-500 text-white w-fit text-[10px]"
+                          className="bg-[#0f172a] hover:bg-blue-400 text-white w-fit text-[10px]"
                         >
                           {result.category}
                         </Badge>

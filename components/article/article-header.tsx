@@ -25,7 +25,7 @@ export function ArticleHeader({
 }: ArticleHeaderProps) {
   return (
     <div className="mb-6">
-      <Badge className="mb-3 bg-blue-400 hover:bg-blue-900">{category}</Badge>
+      <Badge className="mb-3 bg-blue-900 hover:bg-blue-400">{category}</Badge>
 
       <h1 className="text-3xl lg:text-4xl md:text-5xl font-bold text-foreground mb-4 leading-10">
         {title}

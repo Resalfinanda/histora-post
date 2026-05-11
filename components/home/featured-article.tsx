@@ -39,7 +39,7 @@ export function FeaturedArticle({
 
         {/* Content */}
         <div className="absolute inset-0 flex flex-col justify-end p-6">
-          <Badge className="w-fit mb-3 bg-blue-400 hover:bg-blue-600">
+          <Badge className="w-fit mb-3 bg-[#0f172a] hover:bg-blue-400">
             {category}
           </Badge>
           <h2 className="text-3xl font-bold text-foreground mb-2">{title}</h2>
