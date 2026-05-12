@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 interface ArticleItem {
   id: string;
@@ -59,17 +60,21 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
     <div className="mb-8">
       <Link href={`/articles/${currentArticle.slug}`}>
         <div
-          className="relative h-64 md:h-96 rounded-lg overflow-hidden group cursor-pointer"
+          className="relative w-full aspect-[4/3] md:aspect-[16/10] rounded-lg overflow-hidden group cursor-pointer bg-gray-100"
           onMouseEnter={() => setAutoPlay(false)}
           onMouseLeave={() => setAutoPlay(true)}
+          style={{ contain: "layout style paint" }}
         >
           {currentArticle.imageUrl ? (
             <Image
               src={currentArticle.imageUrl}
               alt={currentArticle.title}
               fill
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
+              sizes={imageSizes.featuredCarousel}
               priority
+              placeholder="blur"
+              blurDataURL={getBlurDataUrl()}
+              className="object-cover group-hover:scale-110 transition-transform duration-300"
             />
           ) : (
             <div className="w-full h-full bg-linear-to-br from-blue-200 to-blue-400" />

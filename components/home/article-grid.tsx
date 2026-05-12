@@ -30,7 +30,7 @@ export function ArticleGrid({ articles, title }: ArticleGridProps) {
   }
 
   return (
-    <section className="my-2">
+    <section className="my-2" style={{ contain: "layout style" }}>
       <h1 className="text-4xl font-bold text-foreground mb-6">{title}</h1>
       <div className="grid grid-cols-1 gap-4">
         {articles.map((article) => (

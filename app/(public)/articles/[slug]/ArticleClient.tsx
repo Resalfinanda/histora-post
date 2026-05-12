@@ -15,6 +15,7 @@ import { NewsletterSection } from "@/components/home/newsletter-section";
 import { AdBanner } from "@/components/ui/ad-banner";
 import ArticleTracker from "@/components/article/articleViewTracker";
 import StickyBox from "react-sticky-box";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 interface Article {
   id: string;
@@ -209,8 +210,11 @@ export default function ArticleClient({ slug }: { slug: string }) {
                 src={article.imageUrl}
                 alt={article.title}
                 fill
+                sizes={imageSizes.articleHeader}
                 className="object-contain"
                 priority
+                placeholder="blur"
+                blurDataURL={getBlurDataUrl()}
               />
             </div>
           )}

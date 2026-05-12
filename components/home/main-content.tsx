@@ -217,7 +217,10 @@ export function MainContent() {
           <p className="text-gray-600">Tidak ada artikel tersedia</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
+        <div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start"
+          style={{ contain: "layout style" }}
+        >
           {/* MAIN CONTENT SECTION */}
           <div className="lg:col-span-2 flex flex-col min-h-0 space-y-6">
             {!activeCategory &&
@@ -275,7 +278,10 @@ export function MainContent() {
           </div>
 
           {/* SIDEBAR SECTION */}
-          <div className="lg:col-span-1 pb-4 h-full">
+          <div
+            className="lg:col-span-1 pb-4 h-full"
+            style={{ contain: "layout style paint" }}
+          >
             <StickyBox offsetTop={120} offsetBottom={32}>
               <div className="space-y-6 md:space-y-8">
                 <AdBanner size="small" placement="SIDEBAR_TOP" />

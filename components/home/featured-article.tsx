@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 interface FeaturedArticleProps {
   title: string;
@@ -27,8 +28,11 @@ export function FeaturedArticle({
             src={imageUrl}
             alt={title}
             fill
+            sizes={imageSizes.featuredArticle}
+            priority
+            placeholder="blur"
+            blurDataURL={getBlurDataUrl()}
             className="object-cover group-hover:scale-110 transition-transform duration-300"
-            unoptimized
           />
         ) : (
           <div className="w-full h-full bg-linear-to-br from-blue-200 to-blue-400" />

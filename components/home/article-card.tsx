@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 interface ArticleCardProps {
   title: string;
@@ -37,14 +38,21 @@ export function ArticleCard({
 
   return (
     <Link href={`/articles/${slug}`}>
-      <article className="group rounded-lg overflow-hidden transition-shadow flex h-24 md:h-32">
+      <article
+        className="group rounded-lg overflow-hidden transition-shadow flex h-24 md:h-32"
+        style={{ contain: "layout style paint" }}
+      >
         {/* Image */}
-        <div className="relative w-24 md:w-32  overflow-hidden shrink-0">
+        <div className="relative w-24 md:w-32 aspect-square overflow-hidden shrink-0 bg-gray-100">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={title}
               fill
+              sizes={imageSizes.articleCard}
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL={getBlurDataUrl()}
               className="object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
             />
           ) : (

@@ -9,6 +9,7 @@ import { AdBanner } from "@/components/ui/ad-banner";
 import { Breadcrumb } from "@/components/article/breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { SearchSidebar } from "./sidebar";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 import {
   Pagination,
   PaginationContent,
@@ -250,6 +251,10 @@ export function SearchPageContent() {
                             src={result.imageUrl}
                             alt={result.title}
                             fill
+                            sizes={imageSizes.articleCard}
+                            loading="lazy"
+                            placeholder="blur"
+                            blurDataURL={getBlurDataUrl()}
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (

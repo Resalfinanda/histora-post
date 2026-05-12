@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 export interface AdItem {
   id: string;
@@ -55,8 +56,17 @@ export function AdBanner({
     squareMedium: "h-[384px]",
   };
 
+  // Aspect ratio classes to prevent CLS - used when image loads
+  const aspectRatioClasses = {
+    small: "aspect-[728/90]",
+    medium: "aspect-[728/192]",
+    large: "aspect-[728/256]",
+    squareMedium: "aspect-square",
+  };
+
   const heightClass = height || sizeClasses[size];
   const widthClass = width || "w-full";
+  const aspectClass = aspectRatioClasses[size];
 
   useEffect(() => {
     // Handle static ads case (no placement)
@@ -174,10 +184,11 @@ export function AdBanner({
   if (isLoading && displayAds.length === 0) {
     return (
       <div
-        className={`relative block overflow-hidden rounded-lg bg-gray-100 ${widthClass} ${heightClass} ${className}`}
+        className={`relative block overflow-hidden rounded-lg bg-gray-100 ${widthClass} ${heightClass} ${aspectClass} ${className}`}
         role="status"
         aria-busy="true"
         aria-label="Loading advertisements"
+        style={{ contain: "layout style paint" }}
       >
         <div className="absolute inset-0 animate-pulse bg-linear-to-r from-gray-100 via-gray-50 to-gray-100" />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -193,8 +204,9 @@ export function AdBanner({
   if (error && displayAds.length === 0) {
     return (
       <div
-        className={`relative block overflow-hidden rounded-lg bg-yellow-50 border-2 border-yellow-200 ${widthClass} ${heightClass} ${className}`}
+        className={`relative block overflow-hidden rounded-lg bg-yellow-50 border-2 border-yellow-200 ${widthClass} ${heightClass} ${aspectClass} ${className}`}
         role="alert"
+        style={{ contain: "layout style paint" }}
       >
         <div className="flex items-center justify-center h-full">
           <div className="text-center px-4">
@@ -211,9 +223,10 @@ export function AdBanner({
   if (displayAds.length > 0) {
     return (
       <div
-        className={`relative block overflow-hidden rounded-lg bg-gray-100 ${widthClass} ${heightClass} ${className}`}
+        className={`relative block overflow-hidden rounded-lg bg-gray-100 ${widthClass} ${heightClass} ${aspectClass} ${className}`}
         role="region"
         aria-label="Advertisement carousel"
+        style={{ contain: "layout style paint" }}
       >
         {displayAds.map((ad, index) => {
           const isCurrent = index === currentIndex;
@@ -238,9 +251,18 @@ export function AdBanner({
                 src={ad.imageUrl}
                 alt={altText}
                 fill
+                sizes={imageSizes.adBanner}
+                loading={isCurrent ? "eager" : "lazy"}
+                priority={isCurrent && index === 0}
+                placeholder="blur"
+                blurDataURL={getBlurDataUrl("#f3f4f6")}
                 className="object-cover hover:opacity-90 transition-opacity duration-300"
-                onError={(error) => {
-                  console.error(`Failed to load image for ad ${ad.id}:`, error);
+                unoptimized
+                onError={() => {
+                  console.error(`Failed to load image for ad ${ad.id}`, {
+                    imageUrl: ad.imageUrl,
+                  });
+                  setError(`Image failed to load for ad ${ad.id}`);
                 }}
               />
             </div>
