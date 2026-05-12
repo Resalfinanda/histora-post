@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 interface RelatedArticlesProps {
   articles: Array<{
@@ -33,6 +34,10 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
                     src={article.imageUrl}
                     alt={article.title}
                     fill
+                    sizes={imageSizes.relatedArticles}
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL={getBlurDataUrl()}
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                 ) : (

@@ -15,6 +15,7 @@ import { NewsletterSection } from "@/components/home/newsletter-section";
 import { AdBanner } from "@/components/ui/ad-banner";
 import ArticleTracker from "@/components/article/articleViewTracker";
 import StickyBox from "react-sticky-box";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 interface Article {
   id: string;
@@ -52,14 +53,24 @@ export default function ArticleClient({ slug }: { slug: string }) {
         const data = await response.json();
         setArticle(data);
 
-        // Fetch related articles
-        const allArticlesResponse = await fetch("/api/articles");
-        const allArticles = await allArticlesResponse.json();
-        const related = allArticles
-          .filter(
-            (a: Article) => a.category === data.category && a.id !== data.id,
-          )
+        const queryParams = new URLSearchParams({
+          category: data.category,
+          limit: "10",
+        });
+
+        const relatedResponse = await fetch(
+          `/api/articles?${queryParams.toString()}`,
+        );
+        const relatedData = await relatedResponse.json();
+
+        const articlesArray = Array.isArray(relatedData)
+          ? relatedData
+          : relatedData.articles || [];
+
+        const related = articlesArray
+          .filter((a: Article) => a.id !== data.id)
           .slice(0, 5);
+
         setRelatedArticles(related);
       } catch (err) {
         setError(
@@ -199,8 +210,11 @@ export default function ArticleClient({ slug }: { slug: string }) {
                 src={article.imageUrl}
                 alt={article.title}
                 fill
+                sizes={imageSizes.articleHeader}
                 className="object-contain"
                 priority
+                placeholder="blur"
+                blurDataURL={getBlurDataUrl()}
               />
             </div>
           )}

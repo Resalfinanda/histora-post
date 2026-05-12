@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
 interface ArticleItem {
   id: string;
@@ -59,17 +60,21 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
     <div className="mb-8">
       <Link href={`/articles/${currentArticle.slug}`}>
         <div
-          className="relative h-64 md:h-96 rounded-lg overflow-hidden group cursor-pointer"
+          className="relative w-full aspect-[4/3] md:aspect-[16/10] rounded-lg overflow-hidden group cursor-pointer bg-gray-100"
           onMouseEnter={() => setAutoPlay(false)}
           onMouseLeave={() => setAutoPlay(true)}
+          style={{ contain: "layout style paint" }}
         >
           {currentArticle.imageUrl ? (
             <Image
               src={currentArticle.imageUrl}
               alt={currentArticle.title}
               fill
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
+              sizes={imageSizes.featuredCarousel}
               priority
+              placeholder="blur"
+              blurDataURL={getBlurDataUrl()}
+              className="object-cover group-hover:scale-110 transition-transform duration-300"
             />
           ) : (
             <div className="w-full h-full bg-linear-to-br from-blue-200 to-blue-400" />
@@ -80,7 +85,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
 
           {/* Content */}
           <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
-            <Badge className="w-fit mb-2 md:mb-3 bg-blue-400 hover:bg-blue-600 text-xs md:text-sm">
+            <Badge className="w-fit mb-2 md:mb-3 bg-[#0f172a] hover:bg-blue-400 text-xs md:text-sm">
               {currentArticle.category}
             </Badge>
             <h2 className="text-xl md:text-3xl font-bold text-white mb-1 md:mb-2 line-clamp-2">
@@ -100,6 +105,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
                   goToPrevious();
                 }}
                 className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 transition-all opacity-0 group-hover:opacity-100"
+                aria-label="Previous Slide"
               >
                 <ChevronLeft className="w-5 h-5 text-gray-800" />
               </button>
@@ -109,6 +115,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
                   goToNext();
                 }}
                 className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 transition-all opacity-0 group-hover:opacity-100"
+                aria-label="Next Slide"
               >
                 <ChevronRight className="w-5 h-5 text-gray-800" />
               </button>
@@ -129,6 +136,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
                   ? "bg-foreground   w-6"
                   : "bg-gray-300 hover:bg-gray-400"
               }`}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>

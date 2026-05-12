@@ -46,6 +46,7 @@ export function SearchBar({
         />
         <button
           type="submit"
+          aria-label="Search"
           className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-gray-300"
         >
           <Search className="h-5 w-5 text-white" />
@@ -59,10 +60,12 @@ export function SearchBar({
     <Button
       variant="ghost"
       size="icon"
+      aria-label="Open Search"
       onClick={() => setIsOpen(!isOpen)}
-      className="hover:bg-transparent"
+      className="flex flex-col gap-1 hover:bg-transparent"
     >
-      <Search className="h-5 w-5 text-background" />
+      <Search className="h-5 w-5 text-white" />
+      <p className="text-[10px] font-medium text-white">Search</p>
     </Button>
   );
 }

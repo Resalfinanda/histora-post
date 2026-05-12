@@ -3,9 +3,9 @@
 import { Moon, Sun, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import Link from "next/link";
-import { NAV_ITEMS } from "@/lib/navData";
+//import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+//import Link from "next/link";
+//import { NAV_ITEMS } from "@/lib/navData";
 
 export function NavbarActions() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -15,20 +15,21 @@ export function NavbarActions() {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      {/* Tombol Tema */}
+    <div>
       <Button
         variant="ghost"
         size="icon"
-        className="hover:bg-transparent hover:text-gray-300"
+        className="flex flex-col gap-1 hover:bg-transparent hover:text-gray-300 "
         onClick={toggleTheme}
       >
         <Sun className="h-5 w-5 hidden dark:block text-white" />
         <Moon className="h-5 w-5 block dark:hidden text-white" />
+        <p className="text-[10px] font-medium text-white dark:hidden">Gelap</p>
+        <p className="text-[10px] font-medium text-white hidden dark:block">Terang</p>
       </Button>
 
       {/* Hamburger Menu Mobile (Opsional, untuk menu ekstra jika diperlukan) */}
-      <div className="lg:hidden">
+      {/* <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -53,7 +54,7 @@ export function NavbarActions() {
             </div>
           </SheetContent>
         </Sheet>
-      </div>
+      </div> */}
     </div>
   );
 }

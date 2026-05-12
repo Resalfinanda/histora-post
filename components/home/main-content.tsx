@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { FeaturedCarousel } from "./featured-carousel";
 import { TrendingSection } from "./trending-section";
 import { ArticleGrid } from "./article-grid";
@@ -48,19 +48,71 @@ const mainBannerAds = [
 
 export function MainContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const activeCategory = searchParams.get("category");
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
   const [articles, setArticles] = useState<Article[]>([]);
-  const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
+  const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const createPageURL = (pageNumber: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", pageNumber.toString());
+    return `?${params.toString()}`;
+  };
+
+  const handleNavigate = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    pageNumber: number,
+  ) => {
+    e.preventDefault();
+    const newUrl = createPageURL(pageNumber);
+    router.push(newUrl, { scroll: true });
+  };
 
   useEffect(() => {
     const fetchArticles = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch("/api/articles");
+        const queryParams = new URLSearchParams({
+          page: currentPage.toString(),
+          limit: ITEMS_PER_PAGE.toString(),
+          ...(activeCategory && { category: activeCategory }),
+        });
+
+        const response = await fetch(`/api/articles?${queryParams.toString()}`);
         const data = await response.json();
-        setArticles(data);
+
+        if (Array.isArray(data)) {
+          const allArticles: Article[] = data;
+          const filtered = activeCategory
+            ? allArticles.filter((a) => a.category === activeCategory)
+            : allArticles;
+
+          const headlines = allArticles.filter((a) => a.isHeadline).slice(0, 5);
+          setFeaturedArticles(headlines);
+
+          const carouselIds = headlines.map((h) => h.id);
+          const otherArticles = filtered.filter(
+            (a) => !carouselIds.includes(a.id),
+          );
+
+          setTotalPages(Math.ceil(otherArticles.length / ITEMS_PER_PAGE));
+          const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+          setArticles(
+            otherArticles.slice(startIndex, startIndex + ITEMS_PER_PAGE),
+          );
+        } else {
+          setArticles(data.articles || []);
+          setTotalPages(data.totalPages || 1);
+          if (data.featuredArticles) {
+            setFeaturedArticles(data.featuredArticles);
+          }
+        }
       } catch (error) {
         console.error("Failed to fetch articles:", error);
       } finally {
@@ -69,36 +121,11 @@ export function MainContent() {
     };
 
     fetchArticles();
-  }, []);
+  }, [currentPage, activeCategory]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-
-    if (activeCategory) {
-      setFilteredArticles(
-        articles.filter((article) => article.category === activeCategory),
-      );
-    } else {
-      setFilteredArticles(articles);
-    }
-  }, [articles, activeCategory]);
-
-  const featuredArticles = articles.filter((a) => a.isHeadline).slice(0, 5);
   const carouselArticles =
     featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 5);
 
-  const otherArticles = filteredArticles.filter(
-    (a) => !carouselArticles.find((c) => c.id === a.id),
-  );
-
-  const totalPages = Math.ceil(otherArticles.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedArticles = otherArticles.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE,
-  );
-
-  // Pagination controls helper function
   const getPaginationItems = () => {
     const items = [];
     const maxVisible = 5;
@@ -109,12 +136,12 @@ export function MainContent() {
       startPage = Math.max(1, endPage - maxVisible + 1);
     }
 
-    // First page button
     if (startPage > 1) {
       items.push(
         <PaginationItem key="first">
           <PaginationLink
-            onClick={() => setCurrentPage(1)}
+            href={createPageURL(1)}
+            onClick={(e) => handleNavigate(e, 1)}
             className="cursor-pointer"
           >
             1
@@ -131,12 +158,12 @@ export function MainContent() {
       }
     }
 
-    // Page number buttons
     for (let i = startPage; i <= endPage; i++) {
       items.push(
         <PaginationItem key={i}>
           <PaginationLink
-            onClick={() => setCurrentPage(i)}
+            href={createPageURL(i)}
+            onClick={(e) => handleNavigate(e, i)}
             isActive={i === currentPage}
             className="cursor-pointer"
           >
@@ -146,7 +173,6 @@ export function MainContent() {
       );
     }
 
-    // Last page button
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         items.push(
@@ -159,7 +185,8 @@ export function MainContent() {
       items.push(
         <PaginationItem key="last">
           <PaginationLink
-            onClick={() => setCurrentPage(totalPages)}
+            href={createPageURL(totalPages)}
+            onClick={(e) => handleNavigate(e, totalPages)}
             className="cursor-pointer"
           >
             {totalPages}
@@ -190,13 +217,17 @@ export function MainContent() {
           <p className="text-gray-600">Tidak ada artikel tersedia</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
+        <div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start"
+          style={{ contain: "layout style" }}
+        >
           {/* MAIN CONTENT SECTION */}
           <div className="lg:col-span-2 flex flex-col min-h-0 space-y-6">
-            {/* Featured Carousel (Hanya tampil jika di halaman Semua/Homepage) */}
-            {!activeCategory && carouselArticles.length > 0 && (
-              <FeaturedCarousel articles={carouselArticles} />
-            )}
+            {!activeCategory &&
+              currentPage === 1 &&
+              carouselArticles.length > 0 && (
+                <FeaturedCarousel articles={carouselArticles} />
+              )}
 
             <div className="w-full">
               <AdBanner
@@ -208,7 +239,7 @@ export function MainContent() {
             </div>
 
             <ArticleGrid
-              articles={paginatedArticles}
+              articles={articles}
               title={
                 activeCategory
                   ? `Berita Kategori: ${activeCategory}`
@@ -216,16 +247,15 @@ export function MainContent() {
               }
             />
 
-            {/* KOMPONEN PAGINATION DIKEMBALIKAN UTUH */}
+            {/* KONTROL PAGINATION */}
             {totalPages > 1 && (
               <Pagination className="mt-8">
                 <PaginationContent>
                   {currentPage > 1 && (
                     <PaginationItem>
                       <PaginationPrevious
-                        onClick={() =>
-                          setCurrentPage((prev) => Math.max(prev - 1, 1))
-                        }
+                        href={createPageURL(currentPage - 1)}
+                        onClick={(e) => handleNavigate(e, currentPage - 1)}
                         className="cursor-pointer"
                       />
                     </PaginationItem>
@@ -236,11 +266,8 @@ export function MainContent() {
                   {currentPage < totalPages && (
                     <PaginationItem>
                       <PaginationNext
-                        onClick={() =>
-                          setCurrentPage((prev) =>
-                            Math.min(prev + 1, totalPages),
-                          )
-                        }
+                        href={createPageURL(currentPage + 1)}
+                        onClick={(e) => handleNavigate(e, currentPage + 1)}
                         className="cursor-pointer"
                       />
                     </PaginationItem>
@@ -251,7 +278,10 @@ export function MainContent() {
           </div>
 
           {/* SIDEBAR SECTION */}
-          <div className="lg:col-span-1 pb-4 h-full">
+          <div
+            className="lg:col-span-1 pb-4 h-full"
+            style={{ contain: "layout style paint" }}
+          >
             <StickyBox offsetTop={120} offsetBottom={32}>
               <div className="space-y-6 md:space-y-8">
                 <AdBanner size="small" placement="SIDEBAR_TOP" />
