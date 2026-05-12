@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
     if (process.env.NODE_ENV === "production") {
       return [
         {
-          source: "/_next/static/**",
+          source: "/_next/static/:path*",
           headers: [
             {
               key: "Cache-Control",
