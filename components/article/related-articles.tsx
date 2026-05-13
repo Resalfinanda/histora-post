@@ -49,7 +49,7 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
               <div className="flex-1 min-w-0">
                 <Badge
                   variant="secondary"
-                  className="mb-2 bg-blue-400 text-white"
+                  className="mb-2 bg-[#0f172a] text-white"
                 >
                   {article.category}
                 </Badge>
