@@ -257,7 +257,6 @@ export function AdBanner({
                 placeholder="blur"
                 blurDataURL={getBlurDataUrl("#f3f4f6")}
                 className="object-cover hover:opacity-90 transition-opacity duration-300"
-                unoptimized
                 onError={() => {
                   console.error(`Failed to load image for ad ${ad.id}`, {
                     imageUrl: ad.imageUrl,
