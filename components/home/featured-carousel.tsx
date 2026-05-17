@@ -24,13 +24,12 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
 
-  // Auto-play carousel
   useEffect(() => {
     if (!autoPlay || articles.length === 0) return;
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % articles.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(timer);
   }, [autoPlay, articles.length]);
@@ -60,7 +59,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
     <div className="mb-8">
       <Link href={`/articles/${currentArticle.slug}`}>
         <div
-          className="relative w-full aspect-[4/3] md:aspect-[16/10] rounded-lg overflow-hidden group cursor-pointer bg-gray-100"
+          className="relative w-full aspect-4/3 md:aspect-16/10 rounded-lg overflow-hidden group cursor-pointer bg-gray-100"
           onMouseEnter={() => setAutoPlay(false)}
           onMouseLeave={() => setAutoPlay(true)}
           style={{ contain: "layout style paint" }}
@@ -80,7 +79,6 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
             <div className="w-full h-full bg-linear-to-br from-blue-200 to-blue-400" />
           )}
 
-          {/* Dark overlay */}
           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
 
           {/* Content */}
@@ -124,7 +122,7 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
         </div>
       </Link>
 
-      {/* Dot indicators - Show on all devices */}
+      {/* Dot indicators */}
       {articles.length > 1 && (
         <div className="flex justify-center gap-2 mt-4">
           {articles.map((_, index) => (

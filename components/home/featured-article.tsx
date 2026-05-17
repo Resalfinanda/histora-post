@@ -38,7 +38,6 @@ export function FeaturedArticle({
           <div className="w-full h-full bg-linear-to-br from-blue-200 to-blue-400" />
         )}
 
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
 
         {/* Content */}

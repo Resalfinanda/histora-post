@@ -9,12 +9,12 @@ import { DeleteUserButton } from "@/components/ui/deleteUserButton";
 export default async function ManageUsersPage() {
   const session = await auth();
 
-  // Proteksi Halaman
+ 
   if (session?.user?.role !== "ADMIN") {
     redirect("/dashboard");
   }
 
-  // Ambil semua user beserta jumlah artikel yang mereka buat
+  //semua user beserta jumlah artikel yang telah dipublish oleh masing-masing user
   const users = await prisma.user.findMany({
     include: {
       _count: {

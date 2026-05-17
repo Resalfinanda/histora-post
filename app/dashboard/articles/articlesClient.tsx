@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ArticleWithAuthor } from "@/types/article";
-import { DeleteAction } from "@/components/article/deleteActions";
+import { DeleteAction } from "@/components/article";
 
 import {
   Table,
@@ -31,7 +31,7 @@ type ArticlesClientProps = {
   query: string;
   category: string;
   categories: { category: string }[];
-  isAdmin: boolean; // 1. Tambahkan props isAdmin di sini
+  isAdmin: boolean;
 };
 
 export default function ArticlesClient({
@@ -108,7 +108,7 @@ export default function ArticlesClient({
                 Judul Artikel
               </TableHead>
               <TableHead className="hidden md:table-cell">Kategori</TableHead>
-              {/* 3. Kolom Penulis hanya muncul untuk Admin */}
+              {/*Kolom Penulis hanya muncul untuk Admin */}
               {isAdmin && (
                 <TableHead className="hidden lg:table-cell">Penulis</TableHead>
               )}

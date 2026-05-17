@@ -5,15 +5,14 @@ import Image from "next/image";
 import {
   Breadcrumb,
   ArticleHeader,
+  ArticleTracker,
   ShareButtons,
   RelatedArticles,
   CommentForm,
   CommentsList,
 } from "@/components/article";
-import { TrendingSection } from "@/components/home/trending-section";
-import { NewsletterSection } from "@/components/home/newsletter-section";
+import { TrendingSection, NewsletterSection } from "@/components/home";
 import { AdBanner } from "@/components/ui/ad-banner";
-import ArticleTracker from "@/components/article/articleViewTracker";
 import StickyBox from "react-sticky-box";
 import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 

@@ -123,7 +123,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
       },
     },
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML()); // Mengirim format HTML ke parent
+      onChange(editor.getHTML()); 
     },
   });
 

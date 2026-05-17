@@ -42,7 +42,6 @@ export function ArticleCard({
         className="group rounded-lg overflow-hidden transition-shadow flex h-24 md:h-32"
         style={{ contain: "layout style paint" }}
       >
-        {/* Image */}
         <div className="relative w-24 md:w-32 aspect-square overflow-hidden shrink-0 bg-gray-100">
           {imageUrl ? (
             <Image
@@ -60,7 +59,6 @@ export function ArticleCard({
           )}
         </div>
 
-        {/* Content */}
         <div className="pl-2 md:pl-4 flex flex-col justify-between flex-1">
           <Badge className=" bg-[#0f172a] hover:bg-blue-400 text-white w-fit text-[10px] md:text-xs">
             {category}
