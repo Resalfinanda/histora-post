@@ -11,7 +11,6 @@ import { EditorWrapper } from "@/components/editor/editorWrapper";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { EditArticleForm } from "@/components/article/editArticleForm";
 
-// 1. Ubah tipe data params menjadi Promise
 export default async function EditArticlePage({
   params,
 }: {
@@ -20,12 +19,10 @@ export default async function EditArticlePage({
   const resolvedParams = await params;
   const articleId = resolvedParams.id;
 
-  // Fetch data artikel lama dari database
   const article = await prisma.article.findUnique({
     where: { id: articleId },
   });
 
-  // Jika artikel tidak ditemukan
   if (!article) {
     notFound();
   }
@@ -76,6 +73,7 @@ export default async function EditArticlePage({
                 <option value="Teknologi">Teknologi</option>
                 <option value="Nasional">Nasional</option>
                 <option value="Ekonomi">Ekonomi</option>
+                <option value="UMKM">UMKM</option>
                 <option value="Pendidikan">Pendidikan</option>
                 <option value="Olahraga">Olahraga</option>
                 <option value="Sejarah">Sejarah</option>

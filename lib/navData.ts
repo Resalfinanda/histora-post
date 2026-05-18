@@ -3,6 +3,7 @@ export const NAV_ITEMS = [
   { label: "Nasional", href: "/?category=Nasional" },
   { label: "Politik", href: "/?category=Politik" },
   { label: "Olahraga", href: "/?category=Olahraga" },
+  { label: "UMKM", href: "/?category=UMKM" },
   { label: "Budaya", href: "/?category=Budaya" },
   { label: "Sejarah", href: "/?category=Sejarah" },
   { label: "Teknologi", href: "/?category=Teknologi" },

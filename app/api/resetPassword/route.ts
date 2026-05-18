@@ -8,7 +8,6 @@ export async function POST(request: Request) {
   try {
     const { token, newPassword } = await request.json();
 
-    // Cari user berdasarkan token dan pastikan belum kedaluwarsa
     const user = await prisma.user.findFirst({
       where: {
         resetToken: token,
@@ -25,10 +24,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Hash password baru
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update password dan hapus token
     await prisma.user.update({
       where: { id: user.id },
       data: {

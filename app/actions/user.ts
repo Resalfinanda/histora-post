@@ -47,9 +47,11 @@ export async function changePassword(formData: FormData) {
 export async function createUser(formData: FormData) {
   const session = await auth();
 
-  // Proteksi Keamanan: Hanya ADMIN yang boleh membuat user baru
   if (session?.user?.role !== "ADMIN") {
-    return { success: false, message: "Akses ditolak. Hanya Admin yang dapat membuat akun." };
+    return {
+      success: false,
+      message: "Akses ditolak. Hanya Admin yang dapat membuat akun.",
+    };
   }
 
   const name = formData.get("name") as string;
@@ -58,49 +60,55 @@ export async function createUser(formData: FormData) {
   const role = formData.get("role") as Role;
 
   try {
-    // Cek apakah email sudah terdaftar di database
-    const existingUser = await prisma.user.findUnique({ 
-      where: { email } 
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
     });
-    
+
     if (existingUser) {
-      return { success: false, message: "Email sudah digunakan oleh pengguna lain." };
+      return {
+        success: false,
+        message: "Email sudah digunakan oleh pengguna lain.",
+      };
     }
 
-    // Hash password sebelum disimpan
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Simpan data ke database
     await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-        role: role , 
+        role: role,
       },
     });
 
-    // Refresh halaman daftar user agar data baru langsung muncul
     revalidatePath("/dashboard/users");
-    
+
     return { success: true, message: "Pengguna baru berhasil ditambahkan!" };
   } catch (error: unknown) {
     console.error("Create User Error:", error);
-    return { success: false, message: "Terjadi kesalahan sistem saat menyimpan data." };
+    return {
+      success: false,
+      message: "Terjadi kesalahan sistem saat menyimpan data.",
+    };
   }
 }
 
 export async function deleteUser(userId: string) {
   const session = await auth();
-  
-  // Proteksi: Hanya ADMIN yang boleh menghapus
+
   if (session?.user?.role !== "ADMIN") {
-    return { success: false, message: "Akses ditolak. Hanya Admin yang dapat menghapus akun." };
+    return {
+      success: false,
+      message: "Akses ditolak. Hanya Admin yang dapat menghapus akun.",
+    };
   }
 
-  // Proteksi: admin tidak bisa menghapus dirinya sendiri
   if (session.user.id === userId) {
-    return { success: false, message: "Anda tidak dapat menghapus akun Anda sendiri!" };
+    return {
+      success: false,
+      message: "Anda tidak dapat menghapus akun Anda sendiri!",
+    };
   }
 
   try {
@@ -112,6 +120,10 @@ export async function deleteUser(userId: string) {
     return { success: true, message: "Akun pengguna berhasil dihapus." };
   } catch (error) {
     console.error("Delete User Error:", error);
-    return { success: false, message: "Gagal menghapus pengguna. Pastikan pengguna ini tidak terikat dengan data penting lainnya." };
+    return {
+      success: false,
+      message:
+        "Gagal menghapus pengguna. Pastikan pengguna ini tidak terikat dengan data penting lainnya.",
+    };
   }
 }

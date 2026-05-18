@@ -4,3 +4,7 @@ export { ShareButtons } from "./share-buttons";
 export { RelatedArticles } from "./related-articles";
 export { CommentForm } from "./comment-form";
 export { CommentsList } from "./comments-list";
+export { ArticleTracker } from "./articleViewTracker";
+export { CreateArticleForm } from "./createArticleForm";
+export { DeleteAction } from "./deleteActions";
+export { EditArticleForm } from "./editArticleForm";

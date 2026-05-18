@@ -1,9 +1,11 @@
 "use client";
 
 import StickyBox from "react-sticky-box";
-import { TrendingSection } from "@/components/home/trending-section";
-import { TrendingSearchTopics } from "@/components/home/trending-search-topics";
-import { NewsletterSection } from "@/components/home/newsletter-section";
+import {
+  TrendingSection,
+  TrendingSearchTopics,
+  NewsletterSection,
+} from "@/components/home";
 import { AdBanner } from "@/components/ui/ad-banner";
 
 export function SearchSidebar() {

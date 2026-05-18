@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { AdBanner } from "@/components/ui/ad-banner";
-import { Breadcrumb } from "@/components/article/breadcrumb";
+import { Breadcrumb } from "@/components/article";
 import { Badge } from "@/components/ui/badge";
 import { SearchSidebar } from "./sidebar";
 import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";

@@ -15,7 +15,6 @@ export async function POST(
       );
     }
 
-    // Menggunakan fitur increment dari Prisma
     const updatedArticle = await prisma.article.update({
       where: { slug: slug },
       data: {

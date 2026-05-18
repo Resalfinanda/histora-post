@@ -13,10 +13,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ articles: [], total: 0, totalPages: 0 });
     }
 
-    // Calculate skip value for pagination
+
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
-    // Get total count for pagination
+
     const total = await prisma.article.count({
       where: {
         OR: [
@@ -42,7 +42,6 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Search in title, excerpt, and content with pagination
     const articles = await prisma.article.findMany({
       where: {
         OR: [
@@ -54,12 +53,6 @@ export async function GET(request: NextRequest) {
           },
           {
             excerpt: {
-              contains: query,
-              mode: "insensitive",
-            },
-          },
-          {
-            content: {
               contains: query,
               mode: "insensitive",
             },

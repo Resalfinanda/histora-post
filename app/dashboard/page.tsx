@@ -32,7 +32,7 @@ export default async function DashboardOverview() {
     activeWritersCount,
     recentArticles,
   ] = await Promise.all([
-    // Total artikel
+    // Total artikel yang dipublish oleh user (atau semua jika admin)
     prisma.article.count({ where: articleCondition }),
 
     // akumulasi views dari semua artikel
@@ -139,7 +139,7 @@ export default async function DashboardOverview() {
           </CardContent>
         </Card>
 
-        {/* Card ke-4 Dinamis: Admin lihat Redaktur, Redaktur lihat Rata-rata Views */}
+        {/* Admin lihat Redaktur, Redaktur lihat Rata-rata Views */}
         {isAdmin ? (
           <Card className="border-slate-200 shadow-sm h-36">
             <CardHeader className="flex flex-col items-center justify-between md:pb-2 space-y-0">

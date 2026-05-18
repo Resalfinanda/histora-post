@@ -5,3 +5,6 @@ export { CategoryFilter } from "./category-filter";
 export { ArticleCard } from "./article-card";
 export { ArticleGrid } from "./article-grid";
 export { NewsletterSection } from "./newsletter-section";
+export { TrendingSearchTopics } from "./trending-search-topics";
+export { FeaturedCarousel } from "./featured-carousel";
+

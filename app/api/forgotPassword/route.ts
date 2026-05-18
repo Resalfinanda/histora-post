@@ -16,11 +16,9 @@ export async function POST(request: Request) {
       });
     }
 
-    // Generate Token & Expiry (1 jam)
     const resetToken = crypto.randomBytes(32).toString("hex");
     const resetTokenExpiry = new Date(Date.now() + 3600000);
 
-    // Simpan token ke database
     await prisma.user.update({
       where: { email },
       data: {
@@ -29,7 +27,6 @@ export async function POST(request: Request) {
       },
     });
 
-    // Konfigurasi Nodemailer
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
@@ -39,7 +36,6 @@ export async function POST(request: Request) {
       },
     });
 
-    // Kirim Email
     const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${resetToken}`;
 
     await transporter.sendMail({

@@ -6,7 +6,6 @@ import { revalidatePath } from "next/cache";
 import { supabase } from "@/lib/supabase";
 import { auth } from "@/app/actions/auth";
 
-
 function generateSlug(title: string) {
   return title
     .toLowerCase()
@@ -41,8 +40,6 @@ export async function createArticle(
     const imageFile = formData.get("image") as File;
     let imageUrl = null;
 
-    // PROSES UPLOAD KE SUPABASE
-    // BATAS UKURAN: 1 MB
     const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
     if (imageFile && imageFile.size > 0) {
@@ -86,12 +83,11 @@ export async function createArticle(
         excerpt,
         content,
         isHeadline,
-        imageUrl, 
+        imageUrl,
         authorId: loggedInUserId,
         publishedDate: new Date(),
       },
     });
-
 
     return {
       success: true,
@@ -121,7 +117,7 @@ export async function deleteArticle(id: string) {
       const filePathParts = article.imageUrl.split("/article-images/");
 
       if (filePathParts.length > 1) {
-        const filePath = filePathParts[1]; 
+        const filePath = filePathParts[1];
 
         const { error: storageError } = await supabase.storage
           .from("article-images")
@@ -153,7 +149,7 @@ export async function updateArticle(
   formData: FormData,
 ): Promise<ActionResponse> {
   try {
-    const id = formData.get("id") as string; 
+    const id = formData.get("id") as string;
     const title = formData.get("title") as string;
     const category = formData.get("category") as string;
     const excerpt = formData.get("excerpt") as string;
@@ -169,7 +165,6 @@ export async function updateArticle(
         throw new Error("Upload gagal: Ukuran gambar melebihi batas 1 MB.");
       }
 
-      // 1. CARI DAN HAPUS GAMBAR LAMA DI SUPABASE
       const oldArticle = await prisma.article.findUnique({
         where: { id },
         select: { imageUrl: true },
@@ -184,7 +179,6 @@ export async function updateArticle(
         }
       }
 
-      // 2. UPLOAD GAMBAR BARU
       const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.\-]/g, "");
       const uniqueFilename = `${Date.now()}-${cleanFileName}`;
 
@@ -207,7 +201,6 @@ export async function updateArticle(
       newImageUrl = publicUrlData.publicUrl;
     }
 
-    // Kita siapkan objek datanya dulu
     const dataToUpdate: Prisma.ArticleUpdateInput = {
       title,
       category,
@@ -216,8 +209,6 @@ export async function updateArticle(
       isHeadline,
     };
 
-    // Jika ada URL gambar baru, tambahkan ke objek update
-    // Jika tidak ada (newImageUrl undefined), Prisma tidak akan menyentuh kolom imageUrl
     if (newImageUrl !== undefined) {
       dataToUpdate.imageUrl = newImageUrl;
     }
