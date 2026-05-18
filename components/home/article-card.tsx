@@ -60,9 +60,12 @@ export function ArticleCard({
         </div>
 
         <div className="pl-2 md:pl-4 flex flex-col justify-between flex-1">
-          <Badge className=" bg-[#0f172a] hover:bg-blue-400 text-white w-fit text-[10px] md:text-xs">
-            {category}
-          </Badge>
+          <div className="flex justify-between items-center mb-1">
+            <Badge className=" bg-[#0f172a] hover:bg-blue-400 text-white w-fit text-[10px] md:text-xs">
+              {category}
+            </Badge>
+            <p className="text-[10px] text-foreground/80 md:hidden">{timeAgo}</p>
+          </div>
 
           <h2 className="font-bold text-foreground line-clamp-2 mb-0.5 text-[10px] md:text-base">
             {title}
@@ -72,9 +75,7 @@ export function ArticleCard({
             {excerpt}
           </p>
 
-          <p className="text-[10px] text-foreground/80 hidden md:block">
-            {timeAgo}
-          </p>
+          <p className="text-[10px] text-foreground/80 hidden md:block">{timeAgo}</p>
         </div>
       </article>
       <hr className="h-px my-4 bg-neutral-quaternary border"></hr>
