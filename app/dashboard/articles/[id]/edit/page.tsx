@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { prisma } from "@/lib/prisma";
 import { EditorWrapper } from "@/components/editor/editorWrapper";
 import { ImageUpload } from "@/components/ui/image-upload";
-import { EditArticleForm } from "@/components/article/editArticleForm";
+import { EditArticleForm } from "@/components/article";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 export default async function EditArticlePage({
   params,
@@ -121,6 +122,14 @@ export default async function EditArticlePage({
                 defaultValue={article.excerpt || ""}
                 placeholder="Tulis ringkasan singkat yang akan muncul di halaman depan..."
                 rows={2}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="publishedDate">Tanggal Publish</Label>
+              <DateTimePicker
+                name="publishedDate"
+                defaultValue={article.publishedDate}
               />
             </div>
 

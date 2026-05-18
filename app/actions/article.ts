@@ -156,6 +156,16 @@ export async function updateArticle(
     const content = formData.get("content") as string;
     const isHeadline = formData.get("isHeadline") === "on";
 
+    const publishedDateRaw = formData.get("publishedDate") as string | null;
+
+    let publishedDate: Date | undefined = undefined;
+    if (publishedDateRaw) {
+      const parsedDate = new Date(publishedDateRaw);
+      if (!isNaN(parsedDate.getTime())) {
+        publishedDate = parsedDate;
+      }
+    }
+
     const imageFile = formData.get("image") as File | null;
     let newImageUrl: string | undefined = undefined; // Kita gunakan
 
@@ -207,6 +217,7 @@ export async function updateArticle(
       excerpt,
       content,
       isHeadline,
+      ...(publishedDate ? { publishedDate } : {}),
     };
 
     if (newImageUrl !== undefined) {
