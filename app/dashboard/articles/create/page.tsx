@@ -61,6 +61,7 @@ export default async function CreateArticlePage() {
                 <option value="Teknologi">Teknologi</option>
                 <option value="Nasional">Nasional</option>
                 <option value="Ekonomi">Ekonomi</option>
+                <option value="UMKM">UMKM</option>
                 <option value="Pendidikan">Pendidikan</option>
                 <option value="Olahraga">Olahraga</option>
                 <option value="Sejarah">Sejarah</option>
