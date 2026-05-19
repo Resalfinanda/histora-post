@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${resetToken}`;
+    const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/resetPassword?token=${resetToken}`;
 
     await transporter.sendMail({
       from: '"Tim Historapost" <historapost@gmail.com>',
