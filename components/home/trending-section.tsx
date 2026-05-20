@@ -56,7 +56,7 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
       <section className="mb-8 bg-linear-to-r from-blue-50 to-blue-100 rounded-lg p-6">
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="text-blue-400 w-5 h-5" />
-          <h3 className="text-lg font-bold text-gray-800">TRENDING SAAT INI</h3>
+          <h3 className="text-lg font-bold text-gray-800">Trending Saat Ini</h3>
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -71,7 +71,7 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
     <section className="mb-8 bg-linear-to-r from-blue-50 to-blue-100 rounded-lg p-6">
       <div className="flex items-center gap-2 mb-4">
         <TrendingUp className="text-blue-400 w-5 h-5" />
-        <h3 className="text-lg font-bold text-gray-800">TRENDING SAAT INI</h3>
+        <h3 className="text-lg font-bold text-gray-800">Trending Saat Ini</h3>
       </div>
 
       <div className="space-y-4">
@@ -98,9 +98,7 @@ export function TrendingSection({ items: propItems }: TrendingSectionProps) {
 
                 {/* Metadata */}
                 <div className="text-xs text-gray-500 mt-1 flex gap-2">
-                  {item.createdAt && (
-                    <span>{formatTime(item.createdAt)}</span>
-                  )}
+                  {item.createdAt && <span>{formatTime(item.createdAt)}</span>}
                 </div>
               </div>
             </Link>

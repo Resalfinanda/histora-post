@@ -37,7 +37,7 @@ export function NewsletterSection() {
       <div className="flex flex-col gap-4">
         <div className="flex items-start gap-4">
           <Mail className="w-6 h-6 text-blue-400" />
-          <h3 className="text-xl font-bold text-gray-800">NEWSLETTER</h3>
+          <h3 className="text-xl font-bold text-gray-800">Newsletter</h3>
         </div>
 
         <div className="flex-1">

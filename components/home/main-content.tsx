@@ -6,6 +6,8 @@ import { FeaturedCarousel } from "./featured-carousel";
 import { TrendingSection } from "./trending-section";
 import { ArticleGrid } from "./article-grid";
 import { NewsletterSection } from "./newsletter-section";
+import { StorySection } from "./story-section";
+
 import { AdBanner } from "@/components/ui/ad-banner";
 import StickyBox from "react-sticky-box";
 import {
@@ -226,8 +228,16 @@ export function MainContent() {
             {!activeCategory &&
               currentPage === 1 &&
               carouselArticles.length > 0 && (
-                <FeaturedCarousel articles={carouselArticles} />
+                <FeaturedCarousel
+                  articles={carouselArticles.filter(
+                    (a) => a.category !== "Inspiratif",
+                  )}
+                />
               )}
+
+
+
+
 
             <div className="w-full">
               <AdBanner
@@ -239,7 +249,7 @@ export function MainContent() {
             </div>
 
             <ArticleGrid
-              articles={articles}
+              articles={activeCategory ? articles : articles.filter((a) => a.category !== "Inspiratif")}
               title={
                 activeCategory
                   ? `Berita Kategori: ${activeCategory}`
@@ -285,6 +295,7 @@ export function MainContent() {
             <StickyBox offsetTop={120} offsetBottom={32}>
               <div className="space-y-6 md:space-y-8">
                 <AdBanner size="small" placement="SIDEBAR_TOP" />
+                <StorySection />
                 <TrendingSection />
                 <AdBanner size="squareMedium" placement="SIDEBAR_MIDDLE" />
                 <NewsletterSection />
