@@ -39,7 +39,16 @@ export function StorySection() {
       try {
         const res = await fetch("/api/articles?limit=7&category=Inspiratif");
 
-        if (!res.ok) return;
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          console.error(
+            "StorySection: request failed",
+            res.status,
+            res.statusText,
+            text,
+          );
+          return;
+        }
 
         const data = await res.json();
 
@@ -48,8 +57,8 @@ export function StorySection() {
           : data?.articles || [];
 
         setItems(list.slice(0, 7));
-      } catch {
-        // ignore
+      } catch (err) {
+        console.error("StorySection: fetch error", err);
       } finally {
         setIsLoading(false);
       }
