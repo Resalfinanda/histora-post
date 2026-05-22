@@ -8,14 +8,19 @@ export async function GET(request: NextRequest) {
     const pageParam = searchParams.get("page");
     const limitParam = searchParams.get("limit");
     const categoryParam = searchParams.get("category");
+    const excludeCategoryParam = searchParams.get("excludeCategory");
 
     const page = pageParam ? parseInt(pageParam, 10) : 1;
-    const limit = limitParam ? parseInt(limitParam, 10) : 5;
+    const limit = limitParam ? parseInt(limitParam, 10) : 7;
     const skip = (page - 1) * limit;
 
     const whereCondition: Prisma.ArticleWhereInput = {};
     if (categoryParam) {
       whereCondition.category = categoryParam;
+    } else if (excludeCategoryParam) {
+      whereCondition.category = {
+        not: excludeCategoryParam,
+      };
     }
 
     const [articles, totalCount, featuredArticles] = await Promise.all([
@@ -33,8 +38,13 @@ export async function GET(request: NextRequest) {
 
       page === 1 && !categoryParam
         ? prisma.article.findMany({
-            where: { isHeadline: true },
-            take: 5,
+            where: {
+              isHeadline: true,
+              ...(excludeCategoryParam && {
+                category: { not: excludeCategoryParam },
+              }),
+            },
+            take: 7,
             orderBy: { createdAt: "desc" },
           })
         : Promise.resolve([]),

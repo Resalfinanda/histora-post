@@ -31,7 +31,7 @@ interface Article {
   isHeadline: boolean;
 }
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 7;
 
 const mainBannerAds = [
   {
@@ -86,6 +86,12 @@ export function MainContent() {
           ...(activeCategory && { category: activeCategory }),
         });
 
+        if (activeCategory) {
+          queryParams.append("category", activeCategory);
+        } else {
+          queryParams.append("excludeCategory", "Inspiratif");
+        }
+
         const response = await fetch(`/api/articles?${queryParams.toString()}`);
         const data = await response.json();
 
@@ -126,7 +132,7 @@ export function MainContent() {
   }, [currentPage, activeCategory]);
 
   const carouselArticles =
-    featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 5);
+    featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 7);
 
   const getPaginationItems = () => {
     const items = [];
@@ -220,7 +226,7 @@ export function MainContent() {
         </div>
       ) : (
         <div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start "
           style={{ contain: "layout style" }}
         >
           {/* MAIN CONTENT SECTION */}
@@ -228,16 +234,8 @@ export function MainContent() {
             {!activeCategory &&
               currentPage === 1 &&
               carouselArticles.length > 0 && (
-                <FeaturedCarousel
-                  articles={carouselArticles.filter(
-                    (a) => a.category !== "Inspiratif",
-                  )}
-                />
+                <FeaturedCarousel articles={carouselArticles} />
               )}
-
-
-
-
 
             <div className="w-full">
               <AdBanner
@@ -249,7 +247,7 @@ export function MainContent() {
             </div>
 
             <ArticleGrid
-              articles={activeCategory ? articles : articles.filter((a) => a.category !== "Inspiratif")}
+              articles={articles}
               title={
                 activeCategory
                   ? `Berita Kategori: ${activeCategory}`
