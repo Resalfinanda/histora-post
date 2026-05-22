@@ -18,7 +18,6 @@ export function SearchSidebar() {
         <TrendingSection />
         <AdBanner size="small" placement="SIDEBAR_MIDDLE" />
         <TrendingSearchTopics />
-        <AdBanner height="h-96" placement="SIDEBAR_BOTTOM" />
         <NewsletterSection />
       </StickyBox>
     </aside>
