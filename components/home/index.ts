@@ -7,4 +7,4 @@ export { ArticleGrid } from "./article-grid";
 export { NewsletterSection } from "./newsletter-section";
 export { TrendingSearchTopics } from "./trending-search-topics";
 export { FeaturedCarousel } from "./featured-carousel";
-
+export { StorySection } from "./story-section";

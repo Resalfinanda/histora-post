@@ -67,6 +67,7 @@ export default async function CreateArticlePage() {
                 <option value="Sejarah">Sejarah</option>
                 <option value="Budaya">Budaya</option>
                 <option value="Politik">Politik</option>
+                <option value="Inspiratif">Inspiratif</option>
                 <option value="Arsip">Arsip</option>
 
                 {/* {categories.map((c) => (

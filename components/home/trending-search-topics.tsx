@@ -29,7 +29,7 @@ export function TrendingSearchTopics({ topics }: TrendingSearchProps) {
     <section className="bg-linear-to-r from-blue-50 to-blue-100 rounded-lg p-6 my-8">
       <div className="flex items-center gap-2 mb-4">
         <TrendingUp className="text-blue-500 w-5 h-5" />
-        <h3 className="text-lg font-bold text-gray-800">TRENDING PENCARIAN</h3>
+        <h3 className="text-lg font-bold text-gray-800">Trending Pencarian</h3>
       </div>
 
       <div className="space-y-3">

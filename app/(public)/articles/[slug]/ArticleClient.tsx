@@ -11,7 +11,12 @@ import {
   CommentForm,
   CommentsList,
 } from "@/components/article";
-import { TrendingSection, NewsletterSection } from "@/components/home";
+import {
+  TrendingSection,
+  NewsletterSection,
+  StorySection,
+} from "@/components/home";
+
 import { AdBanner } from "@/components/ui/ad-banner";
 import StickyBox from "react-sticky-box";
 import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
@@ -272,6 +277,7 @@ export default function ArticleClient({ slug }: { slug: string }) {
         {/* Sidebar Column */}
         <aside className="space-y-6 md:space-y-8 h-full">
           <StickyBox offsetTop={32} offsetBottom={32}>
+            <StorySection />
             <TrendingSection />
             <AdBanner size="medium" placement="SIDEBAR_MIDDLE" />
             <NewsletterSection />
