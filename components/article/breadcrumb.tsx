@@ -22,7 +22,7 @@ export function Breadcrumb({ items, currentPage }: BreadcrumbProps) {
           <ChevronRight className="w-4 h-4" />
         </div>
       ))}
-      <span className="text-foreground">{currentPage}</span>
+      <span className="text-foreground line-clamp-1">{currentPage}</span>
     </nav>
   );
 }

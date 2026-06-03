@@ -228,7 +228,7 @@ export default function ArticleClient({ slug }: { slug: string }) {
           {renderArticleContent}
 
           <div className="border-t border-b border-gray-200 py-4 md:py-6 my-6 md:my-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-xs md:text-sm text-foreground/50">
                   Ditulis oleh
