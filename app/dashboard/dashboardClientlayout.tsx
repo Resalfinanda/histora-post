@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   LayoutDashboard,
   FileText,
@@ -9,7 +10,7 @@ import {
   Users,
   Menu,
   X,
-  Image,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
 import { LogoutButton } from "@/components/ui/logoutButton";
@@ -101,7 +102,7 @@ export default function DashboardClientLayout({
               onClick={closeSidebar}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800"
             >
-              <Image size={20} aria-label="Manajemen Iklan" />
+              <ImageIcon size={20} aria-label="Manajemen Iklan" />
               Manajemen Iklan
             </Link>
           )}
@@ -131,9 +132,21 @@ export default function DashboardClientLayout({
               <p className="font-semibold">{session.user.name}</p>
               <p className="text-xs text-slate-500">{session.user.role}</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-[#0f172a]">
-              {session.user.name?.charAt(0).toUpperCase()}
-            </div>
+            {session.user.profileImageUrl ? (
+              <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
+                <Image
+                  src={session.user.profileImageUrl}
+                  alt={session.user.name || "Profile"}
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-[#0f172a] shrink-0">
+                {session.user.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
           </div>
         </header>
 

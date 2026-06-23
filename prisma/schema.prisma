@@ -47,7 +47,10 @@ model User {
   email         String    @unique
   password      String
   resetToken    String?   @unique 
-  resetTokenExpiry   DateTime?    
+  resetTokenExpiry   DateTime?
+  phoneNumber   String?   @map("phone_number")
+  institution   String?
+  profileImageUrl String?  @map("profile_image_url")
   role          Role      @default(REDAKTUR)
   articles      Article[] // Relasi one-to-many: satu user bisa nulis banyak artikel
   createdAt     DateTime  @default(now()) @map("created_at")
