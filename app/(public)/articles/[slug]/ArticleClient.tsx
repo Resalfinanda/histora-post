@@ -32,6 +32,8 @@ interface Article {
     id: string;
     name: string;
     email: string;
+    institution: string | null;
+    profileImageUrl: string | null;
   };
   publishedDate: Date;
   slug: string;
@@ -228,14 +230,38 @@ export default function ArticleClient({ slug }: { slug: string }) {
           {renderArticleContent}
 
           <div className="border-t border-b border-gray-200 py-4 md:py-6 my-6 md:my-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <p className="text-xs md:text-sm text-foreground/50">
-                  Ditulis oleh
-                </p>
-                <p className="font-bold text-sm md:text-base text-foreground">
-                  {article.author.name}
-                </p>
+            <div className="flex flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                {article.author.profileImageUrl ? (
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                    <Image
+                      src={article.author.profileImageUrl}
+                      alt={article.author.name}
+                      width={48}
+                      height={48}
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-foreground/70">
+                    {article.author.name
+                      .split(" ")
+                      .map((part) => part[0])
+                      .slice(0, 2)
+                      .join("")
+                      .toUpperCase()}
+                  </div>
+                )}
+                <div>
+                  <p className="font-bold text-sm md:text-base text-foreground">
+                    {article.author.name}
+                  </p>
+                  {article.author.institution && (
+                    <p className="text-xs md:text-sm text-foreground/70">
+                      {article.author.institution}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="md:text-right">
                 <p className="text-xs md:text-sm text-foreground/50">

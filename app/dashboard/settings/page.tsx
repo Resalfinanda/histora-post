@@ -1,100 +1,196 @@
 "use client";
 
-import { useTransition } from "react";
-import { Lock, Save, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  User as UserIcon,
+  UserPen,
+  Mail,
+  Phone,
+  Building2,
+  Loader2,
+} from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { changePassword } from "@/app/actions/user";
+import { Card } from "@/components/ui/card";
+import {
+  ChangePasswordDialog,
+  ProfileImageUploader,
+  ProfileForm,
+} from "@/components/profile";
+import { getUserProfile } from "@/app/actions/user";
+import { UserProfile } from "@/types/user";
 
-export default function SettingsPage() {
-  const [isPending, startTransition] = useTransition();
+export default function ProfilePage() {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const newPass = formData.get("newPassword") as string;
-    const confirmPass = formData.get("confirmPassword") as string;
-
-    // Validasi sederhana di sisi client
-    if (newPass !== confirmPass) {
-      return toast.error("Konfirmasi password baru tidak cocok!");
-    }
-
-    if (newPass.length < 8) {
-      return toast.error("Password baru minimal 8 karakter!");
-    }
-
-    startTransition(async () => {
-      const result = await changePassword(formData);
-      if (result.success) {
-        toast.success(result.message);
-        (e.target as HTMLFormElement).reset();
+  const loadUserProfile = async () => {
+    setIsLoading(true);
+    try {
+      const result = await getUserProfile();
+      if (result.success && result.data) {
+        setUser(result.data);
       } else {
-        toast.error(result.message);
+        toast.error(result.message || "Gagal memuat profil");
+        setUser(null);
       }
-    });
+    } catch (error) {
+      toast.error("Terjadi kesalahan saat memuat profil");
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6 py-8">
+        <div className="flex items-center justify-center h-96">
+          <Loader2 size={32} className="animate-spin text-slate-400" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6 py-8">
+        <div className="text-center">
+          <p className="text-slate-500">Data profil tidak ditemukan</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 py-8">
+      {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-[#0f172a]">Pengaturan Akun</h2>
-        <p className="text-slate-500 text-sm mt-1">Perbarui keamanan akun kamu di Histora Post.</p>
+        <h2 className="text-3xl font-bold text-[#0f172a] flex items-center gap-2">
+          <UserIcon size={32} className="text-slate-600" />
+          Profil Saya
+        </h2>
+        <p className="text-slate-500 text-sm mt-1">
+          Kelola informasi akun dan pengaturan keamanan Anda
+        </p>
       </div>
 
-      <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-slate-100 mb-4">
-            <Lock size={18} className="text-slate-500" />
-            <h3 className="font-semibold text-slate-700">Ganti Password</h3>
-          </div>
+      {/* Main Profile Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Sidebar - Foto Profil */}
+        <div className="md:col-span-1">
+          <Card className="p-6 border border-slate-200 shadow-sm">
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+                <UserIcon size={18} className="text-slate-600" />
+                Foto Profil
+              </h3>
+              <ProfileImageUploader
+                currentImageUrl={user.profileImageUrl}
+                userName={user.name}
+                onUploadSuccess={loadUserProfile}
+              />
+            </div>
+          </Card>
 
-          <div className="space-y-2">
-            <Label htmlFor="currentPassword">Password Saat Ini</Label>
-            <Input 
-              id="currentPassword" 
-              name="currentPassword" 
-              type="password" 
-              required 
-              placeholder="Masukkan password lama"
-            />
-          </div>
+          {/* Quick Info Card */}
+          <Card className="mt-6 p-6 border border-slate-200 shadow-sm">
+            <h3 className="font-semibold text-slate-900 mb-4">
+              Informasi Cepat
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-start gap-2">
+                <Mail size={16} className="text-slate-400 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-slate-600">Email</p>
+                  <p className="font-medium text-slate-900 break-all">
+                    {user.email}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <UserIcon
+                  size={16}
+                  className="text-slate-400 mt-0.5 shrink-0"
+                />
+                <div>
+                  <p className="text-slate-600">Role</p>
+                  <p className="font-medium text-slate-900 capitalize">
+                    {user.role === "ADMIN" ? "Administrator" : "Redaktur"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="newPassword">Password Baru</Label>
-            <Input 
-              id="newPassword" 
-              name="newPassword" 
-              type="password" 
-              required 
-              placeholder="Minimal 8 karakter"
-            />
-          </div>
+        {/* Main Content */}
+        <div className="md:col-span-2 space-y-6">
+          {/* Informasi Profil */}
+          <Card className="p-6 border border-slate-200 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4 pb-4 border-b border-slate-100">
+              Informasi Profil
+            </h3>
 
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Konfirmasi Password Baru</Label>
-            <Input 
-              id="confirmPassword" 
-              name="confirmPassword" 
-              type="password" 
-              required 
-              placeholder="Ulangi password baru"
-            />
-          </div>
+            <div className="grid grid-cols-1 gap-4 mb-6">
+              {/* Nama */}
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <UserPen size={16} className="text-slate-400" />
+                  <p className="text-sm text-slate-600">Nama Lengkap</p>
+                </div>
+                <p className="text-base font-medium text-slate-900 ml-6">
+                  {user.name}
+                </p>
+              </div>
 
-          <div className="pt-4 flex justify-end">
-            <Button 
-              type="submit" 
-              disabled={isPending}
-              className="bg-[#0f172a] hover:bg-slate-800 text-white gap-2"
-            >
-              {isPending ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-              {isPending ? "Memproses..." : "Update Password"}
-            </Button>
-          </div>
-        </form>
+              {/* Nomor Kontak */}
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Phone size={16} className="text-slate-400" />
+                  <p className="text-sm text-slate-600">Nomor Kontak</p>
+                </div>
+                <p className="text-base font-medium text-slate-900 ml-6">
+                  {user.phoneNumber || "-"}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Building2 size={16} className="text-slate-400" />
+                  <p className="text-sm text-slate-600">Institusi</p>
+                </div>
+                <p className="text-base font-medium text-slate-900 ml-6">
+                  {user.institution || "-"}
+                </p>
+              </div>
+            </div>
+
+            {/* Edit Form */}
+            <div className="border-t border-slate-100 pt-6">
+              <h4 className="font-semibold text-slate-900 mb-4">
+                Edit Informasi
+              </h4>
+              <ProfileForm user={user} onUpdateSuccess={loadUserProfile} />
+            </div>
+          </Card>
+
+          <Card className="p-6 border border-slate-200 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4 pb-4 border-b border-slate-100">
+              Keamanan Akun
+            </h3>
+
+            <div className="space-y-4">
+              <p className="text-sm text-slate-600">
+                Kelola password akun Anda untuk menjaga keamanan.
+              </p>
+              <ChangePasswordDialog />
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );

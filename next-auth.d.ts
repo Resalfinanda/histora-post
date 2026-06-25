@@ -5,9 +5,11 @@ declare module "next-auth" {
     user: {
       id: string;
       role: string;
+      profileImageUrl?: string | null;
     } & DefaultSession["user"];
   }
   interface User {
     role: string;
+    profileImageUrl?: string | null;
   }
 }

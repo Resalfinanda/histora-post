@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 class InvalidLoginError extends CredentialsSignin {
   constructor(message: string) {
     super();
-    this.code = message; 
+    this.code = message;
   }
 }
 
@@ -20,6 +20,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            password: true,
+            role: true,
+            profileImageUrl: true,
+          },
         });
 
         // ERROR: User tidak ditemukan
@@ -42,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           name: user.name,
           email: user.email,
           role: user.role,
+          profileImageUrl: user.profileImageUrl,
         };
       },
     }),
@@ -51,6 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.role = user.role;
         token.id = user.id;
+        token.profileImageUrl = user.profileImageUrl;
       }
       return token;
     },
@@ -58,12 +68,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.role = token.role as string;
         session.user.id = token.id as string;
+        session.user.profileImageUrl = token.profileImageUrl as
+          | string
+          | null
+          | undefined;
       }
       return session;
     },
   },
   pages: {
-    signIn: "/login", 
+    signIn: "/login",
   },
   session: {
     strategy: "jwt",

@@ -5,8 +5,20 @@ import bcrypt from "bcryptjs";
 import { auth } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
 import { Role } from "@prisma/client";
+import {
+  GetUserProfileResponse,
+  UpdateProfileResponse,
+} from "@/types/user";
 
-export async function changePassword(formData: FormData) {
+type ChangePasswordResponse = {
+  success: boolean;
+  message: string;
+  error?: string;
+};
+
+export async function changePassword(
+  formData: FormData,
+): Promise<ChangePasswordResponse> {
   const session = await auth();
   if (!session?.user?.id)
     return { success: false, message: "Tidak terautentikasi" };
@@ -44,7 +56,14 @@ export async function changePassword(formData: FormData) {
   }
 }
 
-export async function createUser(formData: FormData) {
+type CreateUserResponse = {
+  success: boolean;
+  message: string;
+};
+
+export async function createUser(
+  formData: FormData,
+): Promise<CreateUserResponse> {
   const session = await auth();
 
   if (session?.user?.role !== "ADMIN") {
@@ -94,7 +113,12 @@ export async function createUser(formData: FormData) {
   }
 }
 
-export async function deleteUser(userId: string) {
+type DeleteUserResponse = {
+  success: boolean;
+  message: string;
+};
+
+export async function deleteUser(userId: string): Promise<DeleteUserResponse> {
   const session = await auth();
 
   if (session?.user?.role !== "ADMIN") {
@@ -124,6 +148,141 @@ export async function deleteUser(userId: string) {
       success: false,
       message:
         "Gagal menghapus pengguna. Pastikan pengguna ini tidak terikat dengan data penting lainnya.",
+    };
+  }
+}
+
+export async function getUserProfile(): Promise<GetUserProfileResponse> {
+  const session = await auth();
+  if (!session?.user?.id)
+    return { success: false, message: "Tidak terautentikasi", data: null };
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phoneNumber: true,
+        institution: true,
+        profileImageUrl: true,
+        role: true,
+      },
+    });
+
+    if (!user)
+      return { success: false, message: "User tidak ditemukan", data: null };
+
+    return {
+      success: true,
+      message: "Profil user berhasil diambil",
+      data: user,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Terjadi kesalahan sistem",
+      error: (error as Error).message,
+      data: null,
+    };
+  }
+}
+
+export async function updateUserProfile(
+  formData: FormData,
+): Promise<UpdateProfileResponse> {
+  const session = await auth();
+  if (!session?.user?.id)
+    return { success: false, message: "Tidak terautentikasi" };
+
+  const name = formData.get("name") as string;
+  const phoneNumber = formData.get("phoneNumber") as string;
+  const institution = formData.get("institution") as string;
+
+  try {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        name: name || undefined,
+        phoneNumber: phoneNumber || null,
+        institution: institution || null,
+      },
+    });
+
+    const updatedUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phoneNumber: true,
+        institution: true,
+        profileImageUrl: true,
+        role: true,
+      },
+    });
+
+    if (!updatedUser) {
+      return {
+        success: false,
+        message: "Gagal mengambil data profil setelah update",
+      };
+    }
+
+    revalidatePath("/dashboard/settings");
+    return {
+      success: true,
+      message: "Profil berhasil diperbarui!",
+      data: updatedUser,
+    };
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+    return {
+      success: false,
+      message: "Terjadi kesalahan saat memperbarui profil",
+      error: (error as Error).message,
+    };
+  }
+}
+
+export async function updateProfileImage(
+  profileImageUrl: string,
+): Promise<UpdateProfileResponse> {
+  const session = await auth();
+  if (!session?.user?.id)
+    return { success: false, message: "Tidak terautentikasi" };
+
+  try {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { profileImageUrl },
+    });
+
+    const updatedUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phoneNumber: true,
+        institution: true,
+        profileImageUrl: true,
+        role: true,
+      },
+    });
+
+    revalidatePath("/dashboard/settings");
+    return {
+      success: true,
+      message: "Foto profil berhasil diperbarui!",
+      data: updatedUser || undefined,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Gagal memperbarui foto profil",
+      error: (error as Error).message,
     };
   }
 }
