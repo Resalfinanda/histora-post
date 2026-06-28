@@ -53,13 +53,33 @@ function PaginationControls({
   currentPage,
   totalPages,
   query,
+  startDate,
+  endDate,
 }: {
   currentPage: number;
   totalPages: number;
   query: string;
+  startDate: string;
+  endDate: string;
 }) {
   const getPageUrl = (page: number) => {
-    return `/search?q=${encodeURIComponent(query)}&page=${page}`;
+    const params = new URLSearchParams();
+
+    if (query) {
+      params.set("q", query);
+    }
+
+    if (startDate) {
+      params.set("startDate", startDate);
+    }
+
+    if (endDate) {
+      params.set("endDate", endDate);
+    }
+
+    params.set("page", page.toString());
+
+    return `/search?${params.toString()}`;
   };
 
   const getPaginationItems = () => {
@@ -146,6 +166,8 @@ export function SearchPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const page = parseInt(searchParams.get("page") || "1", 10);
+  const startDate = searchParams.get("startDate") || "";
+  const endDate = searchParams.get("endDate") || "";
 
   const [data, setData] = useState<SearchResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -156,19 +178,32 @@ export function SearchPageContent() {
       setIsLoading(true);
       setError(null);
 
-      if (!query.trim()) {
+      if (!query.trim() && !startDate && !endDate) {
         setData({ articles: [], total: 0, totalPages: 0, currentPage: 1 });
         setIsLoading(false);
         return;
       }
 
       try {
-        const res = await fetch(
-          `/api/search?q=${encodeURIComponent(query)}&page=${page}`,
-          {
-            cache: "no-store",
-          },
-        );
+        const params = new URLSearchParams();
+
+        if (query.trim()) {
+          params.set("q", query.trim());
+        }
+
+        if (startDate) {
+          params.set("startDate", startDate);
+        }
+
+        if (endDate) {
+          params.set("endDate", endDate);
+        }
+
+        params.set("page", page.toString());
+
+        const res = await fetch(`/api/search?${params.toString()}`, {
+          cache: "no-store",
+        });
 
         if (!res.ok) {
           throw new Error(`Failed to fetch results: ${res.status}`);
@@ -187,11 +222,16 @@ export function SearchPageContent() {
     };
 
     fetchResults();
-  }, [query, page]);
+  }, [query, page, startDate, endDate]);
 
   const results = data?.articles || [];
   const totalPages = data?.totalPages || 0;
   const currentPage = data?.currentPage || 1;
+  const hasDateFilter = Boolean(startDate || endDate);
+  const dateSummary =
+    startDate || endDate
+      ? ` (${startDate ? `dari ${startDate}` : "dari awal"}${endDate ? ` sampai ${endDate}` : ""})`
+      : "";
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
@@ -206,18 +246,22 @@ export function SearchPageContent() {
         currentPage="Pencarian"
       />
 
-      {/* Search Info */}
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
           Hasil Pencarian
         </h1>
         <p className="text-foreground/60">
-          {`${data?.total || 0} hasil ditemukan untuk "${query}"`}
+          {`${data?.total || 0} hasil ditemukan${query ? ` untuk "${query}"` : ""}${dateSummary}`}
         </p>
       </div>
 
+      {hasDateFilter && (
+        <div className="mb-6 rounded-lg border border-border/70 bg-muted/40 px-4 py-3 text-sm text-foreground/70">
+          Menampilkan artikel berdasarkan rentang tanggal yang dipilih.
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 relative items-start">
-        {/* Results */}
         <div className="lg:col-span-2">
           {isLoading ? (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
@@ -232,10 +276,13 @@ export function SearchPageContent() {
           ) : results.length === 0 ? (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
               <p className="text-foreground/60 text-lg">
-                Tidak ada artikel yang ditemukan untuk &quot;{query}&quot;
+                Tidak ada artikel yang ditemukan
+                {query
+                  ? ` untuk &quot;${query}&quot;`
+                  : " untuk rentang tanggal yang dipilih"}
               </p>
               <p className="text-foreground/50 text-sm mt-2">
-                Coba gunakan kata kunci yang berbeda
+                Coba gunakan kata kunci yang berbeda atau ubah rentang tanggal
               </p>
             </div>
           ) : (
@@ -244,7 +291,6 @@ export function SearchPageContent() {
                 {results.map((result) => (
                   <Link key={result.id} href={`/articles/${result.slug}`}>
                     <article className="group rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex h-24 md:h-32 mb-6">
-                      {/* Image */}
                       <div className="relative w-24 md:w-32 bg-gray-200 overflow-hidden shrink-0">
                         {result.imageUrl ? (
                           <Image
@@ -262,7 +308,6 @@ export function SearchPageContent() {
                         )}
                       </div>
 
-                      {/* Content */}
                       <div className="pl-2 md:pl-4 flex flex-col justify-between flex-1">
                         <Badge
                           variant="secondary"
@@ -289,17 +334,17 @@ export function SearchPageContent() {
                 ))}
               </div>
 
-              {/* Pagination */}
               <PaginationControls
                 currentPage={currentPage}
                 totalPages={totalPages}
                 query={query}
+                startDate={startDate}
+                endDate={endDate}
               />
             </>
           )}
         </div>
 
-        {/* Sidebar */}
         <SearchSidebar />
       </div>
     </div>
