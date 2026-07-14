@@ -80,7 +80,7 @@ export default async function DashboardOverview() {
       {/* Header Responsif */}
       <div className="flex flex-col gap-1">
         <h2 className="text-2xl md:text-3xl font-bold text-[#0f172a]">
-          Halo, {user.name}! 👋
+          Halo, {user.name}!
         </h2>
         <p className="text-slate-500 text-sm md:text-base">
           {isAdmin

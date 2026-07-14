@@ -33,6 +33,15 @@ interface AdBannerProps {
 
 const EMPTY_ADS: AdItem[] = [];
 
+const CACHE_TTL_MS = 1000 * 60 * 5; // cache ads for 5 minutes per placement/topic
+
+type AdCacheEntry = {
+  ads: AdItem[];
+  timestamp: number;
+};
+
+const adCache = new Map<string, AdCacheEntry>();
+
 const FALLBACK_ASPECT: Record<NonNullable<AdBannerProps["size"]>, string> = {
   small: "aspect-[728/90]",
   medium: "aspect-[728/192]",
@@ -60,6 +69,7 @@ export function AdBanner({
   const [isLoading, setIsLoading] = useState(!!placement);
   const [error, setError] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set());
 
   const [adDimensions, setAdDimensions] = useState<
     Record<string, ImageDimensions>
@@ -91,6 +101,17 @@ export function AdBanner({
       return;
     }
 
+    const cacheKey = `${placement}:${topic ?? ""}`;
+    const cached = adCache.get(cacheKey);
+    const now = Date.now();
+
+    if (cached && now - cached.timestamp < CACHE_TTL_MS) {
+      setDisplayAds(cached.ads);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
+
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
@@ -109,7 +130,9 @@ export function AdBanner({
         const data = await response.json();
         if (!Array.isArray(data)) throw new Error("Invalid ads data format");
 
-        setDisplayAds(data.length > 0 ? data : []);
+        const adsToDisplay = data.length > 0 ? data : [];
+        setDisplayAds(adsToDisplay);
+        adCache.set(cacheKey, { ads: adsToDisplay, timestamp: Date.now() });
         setError(null);
       } catch (err) {
         if (err instanceof Error) {
@@ -175,7 +198,6 @@ export function AdBanner({
         paddingTop: `${(1 / aspectRatio) * 100}%`,
         maxHeight: `${maxHeightPx}px`,
         contain: "layout style paint",
-        transition: "padding-top 0.35s ease",
       }
     : { contain: "layout style paint" };
 
@@ -243,7 +265,6 @@ export function AdBanner({
               onClick={() => handleAdClick(ad)}
               className={`
                 absolute inset-0
-                transition-opacity duration-700 ease-in-out
                 ${isClickable && ad.adLink && isValidUrl(ad.adLink) ? "cursor-pointer" : ""}
                 ${isCurrent ? "opacity-100 z-10" : "opacity-0 z-0"}
               `}
@@ -263,7 +284,9 @@ export function AdBanner({
                 priority={isCurrent && index === 0}
                 placeholder="blur"
                 blurDataURL={getBlurDataUrl("#f3f4f6")}
-                className="object-contain hover:opacity-90 transition-opacity duration-300"
+                className={`object-contain transition-opacity duration-500 ease-out hover:opacity-90 ${
+                  loadedIds.has(ad.id) ? "opacity-100" : "opacity-0"
+                }`}
                 onLoad={(e) => {
                   const img = e.currentTarget as HTMLImageElement;
                   if (img.naturalWidth && img.naturalHeight) {
@@ -275,6 +298,7 @@ export function AdBanner({
                       },
                     }));
                   }
+                  setLoadedIds((prev) => new Set(prev).add(ad.id));
                 }}
                 onError={() => {
                   console.error(`Failed to load image for ad ${ad.id}`, {
