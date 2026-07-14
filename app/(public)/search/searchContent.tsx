@@ -235,11 +235,7 @@ export function SearchPageContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-      <AdBanner
-        height="h-22 md:h-64"
-        className="mb-8"
-        placement="SEARCH_RESULTS"
-      />
+      <AdBanner className="mb-8" placement="SEARCH_RESULTS" />
 
       <Breadcrumb
         items={[{ label: "Beranda", href: "/" }]}
