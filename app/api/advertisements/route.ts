@@ -6,6 +6,40 @@ import { AdPlacement, AdTopic } from "@prisma/client";
 const validPlacements = Object.values(AdPlacement);
 const validTopics = Object.values(AdTopic);
 
+function normalizeDateInput(
+  value: string | Date | null | undefined,
+  mode: "start" | "end",
+) {
+  if (value === null || value === undefined) return null;
+
+  if (value instanceof Date) {
+    return value;
+  }
+
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const dateOnlyPattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (dateOnlyPattern.test(trimmed)) {
+    const [year, month, day] = trimmed.split("-").map(Number);
+
+    if (mode === "start") {
+      return new Date(year, month - 1, day, 0, 0, 0, 0);
+    }
+
+    return new Date(year, month - 1, day, 23, 59, 59, 999);
+  }
+
+  const parsedDate = new Date(trimmed);
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -106,8 +140,8 @@ export async function POST(request: NextRequest) {
         placement,
         topics: topics || [],
         isActive: isActive ?? true,
-        startDate: startDate ? new Date(startDate) : null,
-        endDate: endDate ? new Date(endDate) : null,
+        startDate: normalizeDateInput(startDate, "start"),
+        endDate: normalizeDateInput(endDate, "end"),
         priority: priority ? parseInt(priority, 10) : 0,
       },
     });

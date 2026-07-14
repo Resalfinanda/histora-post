@@ -9,6 +9,40 @@ interface RouteParams {
   }>;
 }
 
+function normalizeDateInput(
+  value: string | Date | null | undefined,
+  mode: "start" | "end",
+) {
+  if (value === null || value === undefined) return null;
+
+  if (value instanceof Date) {
+    return value;
+  }
+
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const dateOnlyPattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (dateOnlyPattern.test(trimmed)) {
+    const [year, month, day] = trimmed.split("-").map(Number);
+
+    if (mode === "start") {
+      return new Date(year, month - 1, day, 0, 0, 0, 0);
+    }
+
+    return new Date(year, month - 1, day, 23, 59, 59, 999);
+  }
+
+  const parsedDate = new Date(trimmed);
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
+
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
@@ -72,8 +106,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         ...(placement && { placement }),
         ...(topics && { topics }),
         ...(isActive !== undefined && { isActive }),
-        ...(startDate && { startDate: new Date(startDate) }),
-        ...(endDate && { endDate: new Date(endDate) }),
+        ...(startDate !== undefined && {
+          startDate: normalizeDateInput(startDate, "start"),
+        }),
+        ...(endDate !== undefined && {
+          endDate: normalizeDateInput(endDate, "end"),
+        }),
         ...(priority !== undefined && { priority: parseInt(priority, 10) }),
       },
     });
