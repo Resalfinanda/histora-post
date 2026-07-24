@@ -1,6 +1,6 @@
 // app/(dashboard)/dashboard/articles/create/page.tsx
 import Link from "next/link";
-import { ArrowLeft} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -67,6 +67,7 @@ export default async function CreateArticlePage() {
                 <option value="Sejarah">Sejarah</option>
                 <option value="Budaya">Budaya</option>
                 <option value="Politik">Politik</option>
+                <option value="OPINI">Opini</option>
                 <option value="Inspiratif">Inspiratif</option>
                 <option value="Arsip">Arsip</option>
 

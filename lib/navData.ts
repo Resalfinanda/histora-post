@@ -2,6 +2,7 @@ export const NAV_ITEMS = [
   { label: "Beranda", href: "/" },
   { label: "Nasional", href: "/?category=Nasional" },
   { label: "Politik", href: "/?category=Politik" },
+  { label: "Opini", href: "/?category=Opini" },
   { label: "Olahraga", href: "/?category=Olahraga" },
   { label: "UMKM", href: "/?category=UMKM" },
   { label: "Budaya", href: "/?category=Budaya" },
