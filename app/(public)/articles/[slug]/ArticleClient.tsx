@@ -21,6 +21,11 @@ import { AdBanner } from "@/components/ui/ad-banner";
 import StickyBox from "react-sticky-box";
 import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
 
+interface ImageDimensions {
+  width: number;
+  height: number;
+}
+
 interface Article {
   id: string;
   title: string;
@@ -48,8 +53,14 @@ interface Article {
 export default function ArticleClient({ slug }: { slug: string }) {
   const [article, setArticle] = useState<Article | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
+  const [articleImageDimensions, setArticleImageDimensions] =
+    useState<ImageDimensions | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setArticleImageDimensions(null);
+  }, [slug]);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -211,17 +222,42 @@ export default function ArticleClient({ slug }: { slug: string }) {
           />
 
           {article.imageUrl && (
-            <div className="relative w-full h-48 md:h-96 rounded-lg overflow-hidden mb-6 md:mb-8 bg-gray-200">
-              <Image
-                src={article.imageUrl}
-                alt={article.title}
-                fill
-                sizes={imageSizes.articleHeader}
-                className="object-contain"
-                priority
-                placeholder="blur"
-                blurDataURL={getBlurDataUrl()}
-              />
+            <div
+              className="relative w-full rounded-lg overflow-hidden mb-6 md:mb-8 bg-gray-200"
+              style={
+                articleImageDimensions
+                  ? {
+                      paddingTop: `${Math.min(
+                        (articleImageDimensions.height /
+                          articleImageDimensions.width) *
+                          100,
+                        100,
+                      )}%`,
+                    }
+                  : undefined
+              }
+            >
+              <div className="absolute inset-0">
+                <Image
+                  src={article.imageUrl}
+                  alt={article.title}
+                  fill
+                  sizes={imageSizes.articleHeader}
+                  className="object-contain"
+                  priority
+                  placeholder="blur"
+                  blurDataURL={getBlurDataUrl()}
+                  onLoad={(e) => {
+                    const img = e.currentTarget as HTMLImageElement;
+                    if (img.naturalWidth && img.naturalHeight) {
+                      setArticleImageDimensions({
+                        width: img.naturalWidth,
+                        height: img.naturalHeight,
+                      });
+                    }
+                  }}
+                />
+              </div>
             </div>
           )}
 

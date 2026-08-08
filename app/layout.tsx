@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Poppins } from "next/font/google";
 import { NextAuthProvider } from "@/components/provider/providers";
 import { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -58,6 +59,7 @@ export default function RootLayout({
         <NextAuthProvider>{children}</NextAuthProvider>
         <Toaster position="top-right" richColors />
       </body>
+      <GoogleAnalytics gaId="G-GZSBRWET9P" />
     </html>
   );
 }
