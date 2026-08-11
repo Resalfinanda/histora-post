@@ -343,6 +343,7 @@ export default function ArticleClient({ slug }: { slug: string }) {
             <TrendingSection />
             <AdBanner size="medium" placement="SIDEBAR_MIDDLE" />
             <NewsletterSection />
+            <AdBanner size="small" placement="SIDEBAR_BOTTOM" />
           </StickyBox>
         </aside>
       </div>
