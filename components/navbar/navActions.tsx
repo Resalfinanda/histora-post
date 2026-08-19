@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun, Menu } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 //import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -25,7 +25,9 @@ export function NavbarActions() {
         <Sun className="h-5 w-5 hidden dark:block text-white" />
         <Moon className="h-5 w-5 block dark:hidden text-white" />
         <p className="text-[10px] font-medium text-white dark:hidden">Gelap</p>
-        <p className="text-[10px] font-medium text-white hidden dark:block">Terang</p>
+        <p className="text-[10px] font-medium text-white hidden dark:block">
+          Terang
+        </p>
       </Button>
 
       {/* Hamburger Menu Mobile (Opsional, untuk menu ekstra jika diperlukan) */}

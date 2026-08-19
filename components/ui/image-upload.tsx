@@ -3,15 +3,18 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { UploadCloud, X } from "lucide-react";
-import { toast } from "sonner"; 
+import { toast } from "sonner";
+import { IMAGE_MIME_TYPES } from "@/lib/storage/constants";
 
 interface ImageUploadProps {
   name: string;
-  defaultValue?: string | null; 
+  defaultValue?: string | null;
 }
 
 export function ImageUpload({ name, defaultValue }: ImageUploadProps) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(defaultValue || null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    defaultValue || null,
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   // BATAST UKURAN: 1 MB (dalam bytes)
@@ -21,6 +24,16 @@ export function ImageUpload({ name, defaultValue }: ImageUploadProps) {
     const file = e.target.files?.[0];
 
     if (file) {
+      if (
+        !IMAGE_MIME_TYPES.includes(
+          file.type as (typeof IMAGE_MIME_TYPES)[number],
+        )
+      ) {
+        toast.error("Pilih file gambar JPG, PNG, GIF, atau WEBP");
+        if (inputRef.current) inputRef.current.value = "";
+        return;
+      }
+
       // Cek ukuran file
       if (file.size > MAX_FILE_SIZE) {
         toast.error("Ukuran gambar terlalu besar! Maksimal 1 MB.");
@@ -29,16 +42,18 @@ export function ImageUpload({ name, defaultValue }: ImageUploadProps) {
         if (inputRef.current) {
           inputRef.current.value = "";
         }
-        return; 
+        return;
       }
 
       // preview
       const url = URL.createObjectURL(file);
+      if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
       setPreviewUrl(url);
     }
   };
 
   const handleRemove = () => {
+    if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
     setPreviewUrl(null);
     if (inputRef.current) {
       inputRef.current.value = "";

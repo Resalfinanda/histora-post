@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/actions/auth";
-import { supabase } from "@/lib/supabase";
+import { STORAGE_BUCKETS } from "@/lib/storage/constants";
+import { deleteImage, getStoragePath } from "@/lib/storage/delete-image";
 
 interface RouteParams {
   params: Promise<{
@@ -95,6 +96,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       endDate,
       priority,
     } = body;
+    const previousAdvertisement = await prisma.advertisement.findUnique({
+      where: { id },
+      select: { imageUrl: true },
+    });
 
     const advertisement = await prisma.advertisement.update({
       where: { id },
@@ -115,6 +120,23 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         ...(priority !== undefined && { priority: parseInt(priority, 10) }),
       },
     });
+
+    if (
+      imageUrl &&
+      previousAdvertisement?.imageUrl &&
+      imageUrl !== previousAdvertisement.imageUrl
+    ) {
+      const oldImagePath = getStoragePath(
+        previousAdvertisement.imageUrl,
+        STORAGE_BUCKETS.advertisement,
+      );
+      if (oldImagePath) {
+        await deleteImage(STORAGE_BUCKETS.advertisement, oldImagePath).catch(
+          (storageError) =>
+            console.error("Gagal menghapus gambar iklan lama:", storageError),
+        );
+      }
+    }
 
     return NextResponse.json(advertisement);
   } catch (error) {
@@ -150,19 +172,15 @@ export async function DELETE(
     }
 
     if (ad.imageUrl) {
-      try {
-        const parts = ad.imageUrl.split("/");
-        const fileName = parts[parts.length - 1];
-
-        const { error: storageError } = await supabase.storage
-          .from("iklan")
-          .remove([fileName]);
-
-        if (storageError) {
-          console.error("Gagal menghapus file di Storage:", storageError);
-        }
-      } catch (err) {
-        console.error("Error parsing URL atau akses Storage:", err);
+      const imagePath = getStoragePath(
+        ad.imageUrl,
+        STORAGE_BUCKETS.advertisement,
+      );
+      if (imagePath) {
+        await deleteImage(STORAGE_BUCKETS.advertisement, imagePath).catch(
+          (storageError) =>
+            console.error("Gagal menghapus file di Storage:", storageError),
+        );
       }
     }
 

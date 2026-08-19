@@ -78,10 +78,6 @@ export function AdBanner({
   const currentAd = displayAds[currentIndex] ?? null;
   const currentDims = currentAd ? adDimensions[currentAd.id] : undefined;
 
-  const adaptivePaddingTop = currentDims
-    ? `${Math.min((currentDims.height / currentDims.width) * 100, (maxHeightPx / (typeof window !== "undefined" ? window.innerWidth : 1200)) * 100)}%`
-    : null;
-
   const aspectRatio = currentDims
     ? currentDims.width / currentDims.height
     : null;
@@ -200,8 +196,6 @@ export function AdBanner({
         contain: "layout style paint",
       }
     : { contain: "layout style paint" };
-
-  const innerPositionClass = hasAdaptiveDims ? "absolute inset-0" : "relative";
 
   if (isLoading && displayAds.length === 0) {
     return (

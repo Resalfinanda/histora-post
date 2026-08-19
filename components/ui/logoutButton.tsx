@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react"; 
+import { signOut } from "next-auth/react";
 import { LogOut, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-
 
 import {
   AlertDialog,
@@ -29,7 +28,6 @@ export function LogoutButton() {
     setIsLoading(true);
 
     try {
-
       await signOut({ redirect: false });
 
       toast.success("Berhasil logout. Sampai jumpa kembali!");
@@ -39,7 +37,7 @@ export function LogoutButton() {
       // Arahkan ke halaman login
       router.push("/login");
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Gagal melakukan logout. Silakan coba lagi.");
       setIsLoading(false);
     }

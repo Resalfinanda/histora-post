@@ -74,45 +74,45 @@ export default function AdvertisementForm({ id }: AdvertisementFormProps) {
   });
 
   useEffect(() => {
-    if (id) {
-      fetchAdvertisement();
-    }
-  }, [id]);
+    if (!id) return;
 
-  const fetchAdvertisement = async () => {
-    try {
-      const response = await fetch(`/api/advertisements/${id}`);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Gagal memuat data iklan");
+    const loadAdvertisement = async () => {
+      try {
+        const response = await fetch(`/api/advertisements/${id}`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Gagal memuat data iklan");
+        }
+        const data = await response.json();
+
+        setFormData({
+          title: data.title || "",
+          description: data.description || "",
+          imageUrl: data.imageUrl || "",
+          adLink: data.adLink || "",
+          placement: data.placement || "ARTICLE_HEADER",
+          topics: data.topics || [],
+          isActive: data.isActive ?? true,
+          startDate: data.startDate
+            ? new Date(data.startDate).toISOString().split("T")[0]
+            : "",
+          endDate: data.endDate
+            ? new Date(data.endDate).toISOString().split("T")[0]
+            : "",
+          priority: data.priority || 0,
+        });
+      } catch (error) {
+        console.error("Error fetching ad:", error);
+        const errorMessage =
+          error instanceof Error ? error.message : "Gagal memuat data iklan";
+        toast.error(errorMessage);
+      } finally {
+        setIsLoading(false);
       }
-      const data = await response.json();
+    };
 
-      setFormData({
-        title: data.title || "",
-        description: data.description || "",
-        imageUrl: data.imageUrl || "",
-        adLink: data.adLink || "",
-        placement: data.placement || "ARTICLE_HEADER",
-        topics: data.topics || [],
-        isActive: data.isActive ?? true,
-        startDate: data.startDate
-          ? new Date(data.startDate).toISOString().split("T")[0]
-          : "",
-        endDate: data.endDate
-          ? new Date(data.endDate).toISOString().split("T")[0]
-          : "",
-        priority: data.priority || 0,
-      });
-    } catch (error) {
-      console.error("Error fetching ad:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Gagal memuat data iklan";
-      toast.error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    loadAdvertisement();
+  }, [id]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -165,7 +165,7 @@ export default function AdvertisementForm({ id }: AdvertisementFormProps) {
         const uploadFormData = new FormData();
         uploadFormData.append("file", file);
 
-        const uploadResponse = await fetch("/api/upload", {
+        const uploadResponse = await fetch("/api/upload/advertisement", {
           method: "POST",
           body: uploadFormData,
         });

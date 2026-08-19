@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useSession } from "next-auth/react";
 import {
   User as UserIcon,
   UserPen,
@@ -22,28 +23,33 @@ import { UserProfile } from "@/types/user";
 export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { update: updateSession } = useSession();
 
-  const loadUserProfile = async () => {
+  const loadUserProfile = useCallback(async () => {
     setIsLoading(true);
     try {
       const result = await getUserProfile();
       if (result.success && result.data) {
         setUser(result.data);
+        await updateSession({
+          name: result.data.name,
+          profileImageUrl: result.data.profileImageUrl,
+        });
       } else {
         toast.error(result.message || "Gagal memuat profil");
         setUser(null);
       }
-    } catch (error) {
+    } catch {
       toast.error("Terjadi kesalahan saat memuat profil");
       setUser(null);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [updateSession]);
 
   useEffect(() => {
     loadUserProfile();
-  }, []);
+  }, [loadUserProfile]);
 
   if (isLoading) {
     return (

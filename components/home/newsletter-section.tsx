@@ -23,7 +23,7 @@ export function NewsletterSection() {
         description:
           "Saat ini fitur newsletter belum tersedia. Silakan coba lagi nanti.",
       });
-    } catch (error) {
+    } catch {
       toast.error("Terjadi kesalahan", {
         description: "Gagal memproses langganan.",
       });
@@ -54,11 +54,7 @@ export function NewsletterSection() {
               required
               className="flex-1 border-gray-400"
             />
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="bg-primary"
-            >
+            <Button type="submit" disabled={isLoading} className="bg-primary">
               {isLoading ? "Loading..." : "Langganan"}
             </Button>
           </form>
