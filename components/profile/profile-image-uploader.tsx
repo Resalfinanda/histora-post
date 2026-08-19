@@ -5,8 +5,7 @@ import Image from "next/image";
 import { Upload, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase";
-import { updateProfileImage } from "@/app/actions/user";
+import { removeProfileImage, updateProfileImage } from "@/app/actions/user";
 
 interface ProfileImageUploaderProps {
   currentImageUrl?: string | null;
@@ -23,6 +22,21 @@ export function ProfileImageUploader({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const handleRemove = async () => {
+    setIsUploading(true);
+    try {
+      const result = await removeProfileImage();
+      if (!result.success) throw new Error(result.message);
+      toast.success(result.message);
+      onUploadSuccess?.();
+    } catch (error) {
+      console.error("Remove profile image error:", error);
+      toast.error("Gagal menghapus foto profil");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -32,7 +46,6 @@ export function ProfileImageUploader({
       toast.error("Pilih file gambar yang valid");
       return;
     }
-
 
     if (file.size > 1 * 1024 * 1024) {
       toast.error("Ukuran gambar tidak boleh lebih dari 1MB");
@@ -48,25 +61,20 @@ export function ProfileImageUploader({
 
     setIsUploading(true);
     try {
-      // Upload ke Supabase
-      const fileName = `${Date.now()}_${file.name}`;
-      const { data, error } = await supabase.storage
-        .from("Image-profile")
-        .upload(fileName, file);
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch("/api/upload/profile", {
+        method: "POST",
+        body: formData,
+      });
+      const uploadResult = await response.json();
 
-      if (error) {
-        throw new Error(error.message);
+      if (!response.ok) {
+        throw new Error(uploadResult.error || "Gagal mengunggah foto profil");
       }
 
-      // Dapatkan public URL
-      const { data: publicUrlData } = supabase.storage
-        .from("Image-profile")
-        .getPublicUrl(fileName);
-
-      const imageUrl = publicUrlData.publicUrl;
-
       // Update di database
-      const result = await updateProfileImage(imageUrl);
+      const result = await updateProfileImage(uploadResult.url);
       if (result.success) {
         toast.success("Foto profil berhasil diperbarui!");
         setPreviewUrl(null);
@@ -136,6 +144,7 @@ export function ProfileImageUploader({
             variant="outline"
             size="icon"
             disabled={isUploading}
+            onClick={handleRemove}
             className="border-slate-200 hover:bg-red-50 hover:text-red-600"
           >
             <X size={16} />
@@ -143,9 +152,7 @@ export function ProfileImageUploader({
         )}
       </div>
 
-      <p className="text-xs text-slate-500">
-        Maksimal 1MB, format: JPG, PNG.
-      </p>
+      <p className="text-xs text-slate-500">Maksimal 1MB, format: JPG, PNG.</p>
     </div>
   );
 }

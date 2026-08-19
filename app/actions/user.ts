@@ -5,10 +5,9 @@ import bcrypt from "bcryptjs";
 import { auth } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
 import { Role } from "@prisma/client";
-import {
-  GetUserProfileResponse,
-  UpdateProfileResponse,
-} from "@/types/user";
+import { GetUserProfileResponse, UpdateProfileResponse } from "@/types/user";
+import { STORAGE_BUCKETS } from "@/lib/storage/constants";
+import { deleteImage, getStoragePath } from "@/lib/storage/delete-image";
 
 type ChangePasswordResponse = {
   success: boolean;
@@ -253,11 +252,31 @@ export async function updateProfileImage(
   if (!session?.user?.id)
     return { success: false, message: "Tidak terautentikasi" };
 
+  let oldProfileImageUrl: string | null = null;
   try {
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { profileImageUrl: true },
+    });
+    oldProfileImageUrl = currentUser?.profileImageUrl || null;
+
     await prisma.user.update({
       where: { id: session.user.id },
       data: { profileImageUrl },
     });
+
+    if (oldProfileImageUrl && oldProfileImageUrl !== profileImageUrl) {
+      const oldImagePath = getStoragePath(
+        oldProfileImageUrl,
+        STORAGE_BUCKETS.profile,
+      );
+      if (oldImagePath) {
+        await deleteImage(STORAGE_BUCKETS.profile, oldImagePath).catch(
+          (storageError) =>
+            console.error("Gagal menghapus foto profil lama:", storageError),
+        );
+      }
+    }
 
     const updatedUser = await prisma.user.findUnique({
       where: { id: session.user.id },
@@ -279,9 +298,63 @@ export async function updateProfileImage(
       data: updatedUser || undefined,
     };
   } catch (error) {
+    const newImagePath = getStoragePath(
+      profileImageUrl,
+      STORAGE_BUCKETS.profile,
+    );
+    if (newImagePath) {
+      await deleteImage(STORAGE_BUCKETS.profile, newImagePath).catch(
+        (cleanupError) =>
+          console.error("Gagal membersihkan foto profil baru:", cleanupError),
+      );
+    }
     return {
       success: false,
       message: "Gagal memperbarui foto profil",
+      error: (error as Error).message,
+    };
+  }
+}
+
+export async function removeProfileImage(): Promise<UpdateProfileResponse> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { success: false, message: "Tidak terautentikasi" };
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { profileImageUrl: true },
+    });
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { profileImageUrl: null },
+    });
+
+    if (user?.profileImageUrl) {
+      const imagePath = getStoragePath(
+        user.profileImageUrl,
+        STORAGE_BUCKETS.profile,
+      );
+      if (imagePath) {
+        await deleteImage(STORAGE_BUCKETS.profile, imagePath).catch(
+          (storageError) =>
+            console.error(
+              "Gagal menghapus foto profil dari storage:",
+              storageError,
+            ),
+        );
+      }
+    }
+
+    revalidatePath("/dashboard/settings");
+    return { success: true, message: "Foto profil berhasil dihapus" };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Gagal menghapus foto profil",
       error: (error as Error).message,
     };
   }
