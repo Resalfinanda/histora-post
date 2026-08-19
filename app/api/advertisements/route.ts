@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/actions/auth";
 import { AdPlacement, AdTopic } from "@prisma/client";
+import { STORAGE_BUCKETS } from "@/lib/storage/constants";
+import { deleteImage, getStoragePath } from "@/lib/storage/delete-image";
 
 const validPlacements = Object.values(AdPlacement);
 const validTopics = Object.values(AdTopic);
@@ -103,6 +105,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  let uploadedImagePath: string | null = null;
+
   try {
     const session = await auth();
 
@@ -131,6 +135,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    uploadedImagePath = getStoragePath(imageUrl, STORAGE_BUCKETS.advertisement);
+
     const advertisement = await prisma.advertisement.create({
       data: {
         title,
@@ -148,6 +154,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(advertisement, { status: 201 });
   } catch (error) {
+    if (uploadedImagePath) {
+      await deleteImage(STORAGE_BUCKETS.advertisement, uploadedImagePath).catch(
+        (cleanupError) =>
+          console.error("Gagal membersihkan gambar iklan:", cleanupError),
+      );
+    }
     console.error("Error creating advertisement:", error);
     return NextResponse.json(
       { error: "Failed to create advertisement" },
