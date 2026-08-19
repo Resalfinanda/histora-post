@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import {
   LayoutDashboard,
   FileText,
@@ -23,7 +24,9 @@ export default function DashboardClientLayout({
   session: Session;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const isAdmin = session.user.role === "ADMIN";
+  const { data: clientSession } = useSession();
+  const currentSession = clientSession ?? session;
+  const isAdmin = currentSession.user.role === "ADMIN";
 
   const closeSidebar = () => setIsSidebarOpen(false);
 
@@ -129,14 +132,16 @@ export default function DashboardClientLayout({
         <header className="hidden md:flex h-16 bg-white border-b items-center justify-end px-8">
           <div className="flex items-center gap-3">
             <div className="text-sm text-right">
-              <p className="font-semibold">{session.user.name}</p>
-              <p className="text-xs text-slate-500">{session.user.role}</p>
+              <p className="font-semibold">{currentSession.user.name}</p>
+              <p className="text-xs text-slate-500">
+                {currentSession.user.role}
+              </p>
             </div>
-            {session.user.profileImageUrl ? (
+            {currentSession.user.profileImageUrl ? (
               <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
                 <Image
-                  src={session.user.profileImageUrl}
-                  alt={session.user.name || "Profile"}
+                  src={currentSession.user.profileImageUrl}
+                  alt={currentSession.user.name || "Profile"}
                   width={40}
                   height={40}
                   className="w-full h-full object-cover"
@@ -144,7 +149,7 @@ export default function DashboardClientLayout({
               </div>
             ) : (
               <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-[#0f172a] shrink-0">
-                {session.user.name?.charAt(0).toUpperCase()}
+                {currentSession.user.name?.charAt(0).toUpperCase()}
               </div>
             )}
           </div>
