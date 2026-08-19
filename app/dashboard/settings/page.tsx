@@ -33,7 +33,7 @@ export default function ProfilePage() {
         toast.error(result.message || "Gagal memuat profil");
         setUser(null);
       }
-    } catch (error) {
+    } catch {
       toast.error("Terjadi kesalahan saat memuat profil");
       setUser(null);
     } finally {

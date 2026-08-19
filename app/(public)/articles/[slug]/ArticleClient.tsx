@@ -165,7 +165,7 @@ export default function ArticleClient({ slug }: { slug: string }) {
         {nodes}
       </div>
     );
-  }, [article?.content]);
+  }, [article?.category, article?.content]);
 
   if (isLoading) {
     return (
