@@ -3,8 +3,11 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { supabase } from "@/lib/supabase";
 import { auth } from "@/app/actions/auth";
+import { STORAGE_BUCKETS } from "@/lib/storage/constants";
+import { deleteImage, getStoragePath } from "@/lib/storage/delete-image";
+import { uploadImage } from "@/lib/storage/upload-image";
+import { validateImageFile } from "@/lib/storage/validate-image";
 
 function generateSlug(title: string) {
   return title
@@ -22,6 +25,8 @@ export async function createArticle(
   prevState: ActionResponse,
   formData: FormData,
 ): Promise<ActionResponse> {
+  let uploadedImagePath: string | null = null;
+
   try {
     const title = formData.get("title") as string;
     const category = formData.get("category") as string;
@@ -40,37 +45,15 @@ export async function createArticle(
     const imageFile = formData.get("image") as File;
     let imageUrl = null;
 
-    const MAX_FILE_SIZE = 1 * 1024 * 1024;
-
     if (imageFile && imageFile.size > 0) {
-      // Penjagaan Server-Side
-      if (imageFile.size > MAX_FILE_SIZE) {
-        throw new Error("Upload gagal: Ukuran gambar melebihi batas 1 MB.");
-      }
-      // Bersihkan nama file dan buat unik
-      const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.\-]/g, "");
-      const uniqueFilename = `${Date.now()}-${cleanFileName}`;
-
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      const { data, error } = await supabase.storage
-        .from("article-images")
-        .upload(`${uniqueFilename}`, buffer, {
-          contentType: imageFile.type,
-          upsert: false,
-        });
-
-      if (error) {
-        console.error("Supabase Upload Error:", error);
-        throw new Error(`Upload gagal: ${error.message}`);
+      const validationError = validateImageFile(imageFile);
+      if (validationError) {
+        throw new Error(validationError);
       }
 
-      const { data: publicUrlData } = supabase.storage
-        .from("article-images")
-        .getPublicUrl(`${uniqueFilename}`);
-
-      imageUrl = publicUrlData.publicUrl;
+      const uploaded = await uploadImage(imageFile, STORAGE_BUCKETS.article);
+      uploadedImagePath = uploaded.path;
+      imageUrl = uploaded.url;
     }
 
     const slug = `${generateSlug(title)}-${Math.random().toString(36).substring(2, 7)}`;
@@ -94,6 +77,12 @@ export async function createArticle(
       message: "Mantap! Artikel berhasil diterbitkan.",
     };
   } catch (error: unknown) {
+    if (uploadedImagePath) {
+      await deleteImage(STORAGE_BUCKETS.article, uploadedImagePath).catch(
+        (cleanupError) =>
+          console.error("Gagal membersihkan gambar:", cleanupError),
+      );
+    }
     console.error("Create Article Error:", error);
 
     return {
@@ -114,18 +103,19 @@ export async function deleteArticle(id: string) {
     });
 
     if (article?.imageUrl) {
-      const filePathParts = article.imageUrl.split("/article-images/");
+      const filePath = getStoragePath(
+        article.imageUrl,
+        STORAGE_BUCKETS.article,
+      );
 
-      if (filePathParts.length > 1) {
-        const filePath = filePathParts[1];
-
-        const { error: storageError } = await supabase.storage
-          .from("article-images")
-          .remove([filePath]);
-
-        if (storageError) {
-          console.error("Gagal menghapus gambar dari Supabase:", storageError);
-        }
+      if (filePath) {
+        await deleteImage(STORAGE_BUCKETS.article, filePath).catch(
+          (storageError) =>
+            console.error(
+              "Gagal menghapus gambar dari Supabase:",
+              storageError,
+            ),
+        );
       }
     }
 
@@ -148,6 +138,9 @@ export async function updateArticle(
   prevState: ActionResponse,
   formData: FormData,
 ): Promise<ActionResponse> {
+  let uploadedImagePath: string | null = null;
+  let oldImagePath: string | null = null;
+
   try {
     const id = formData.get("id") as string;
     const title = formData.get("title") as string;
@@ -170,9 +163,9 @@ export async function updateArticle(
     let newImageUrl: string | undefined = undefined; // Kita gunakan
 
     if (imageFile && imageFile.size > 0) {
-      const MAX_FILE_SIZE = 1 * 1024 * 1024;
-      if (imageFile.size > MAX_FILE_SIZE) {
-        throw new Error("Upload gagal: Ukuran gambar melebihi batas 1 MB.");
+      const validationError = validateImageFile(imageFile);
+      if (validationError) {
+        throw new Error(validationError);
       }
 
       const oldArticle = await prisma.article.findUnique({
@@ -181,34 +174,15 @@ export async function updateArticle(
       });
 
       if (oldArticle?.imageUrl) {
-        const filePathParts = oldArticle.imageUrl.split("/article-images/");
-        if (filePathParts.length > 1) {
-          await supabase.storage
-            .from("article-images")
-            .remove([filePathParts[1]]);
-        }
+        oldImagePath = getStoragePath(
+          oldArticle.imageUrl,
+          STORAGE_BUCKETS.article,
+        );
       }
 
-      const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.\-]/g, "");
-      const uniqueFilename = `${Date.now()}-${cleanFileName}`;
-
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      const { error } = await supabase.storage
-        .from("article-images")
-        .upload(`${uniqueFilename}`, buffer, {
-          contentType: imageFile.type,
-          upsert: false,
-        });
-
-      if (error) throw new Error(`Supabase Error: ${error.message}`);
-
-      const { data: publicUrlData } = supabase.storage
-        .from("article-images")
-        .getPublicUrl(`${uniqueFilename}`);
-
-      newImageUrl = publicUrlData.publicUrl;
+      const uploaded = await uploadImage(imageFile, STORAGE_BUCKETS.article);
+      uploadedImagePath = uploaded.path;
+      newImageUrl = uploaded.url;
     }
 
     const dataToUpdate: Prisma.ArticleUpdateInput = {
@@ -229,6 +203,13 @@ export async function updateArticle(
       data: dataToUpdate,
     });
 
+    if (oldImagePath) {
+      await deleteImage(STORAGE_BUCKETS.article, oldImagePath).catch(
+        (storageError) =>
+          console.error("Gagal menghapus gambar lama:", storageError),
+      );
+    }
+
     // revalidatePath("/dashboard/articles");
     // redirect("/dashboard/articles");
 
@@ -237,6 +218,12 @@ export async function updateArticle(
       message: "Perubahan artikel berhasil disimpan.",
     };
   } catch (error: unknown) {
+    if (uploadedImagePath) {
+      await deleteImage(STORAGE_BUCKETS.article, uploadedImagePath).catch(
+        (cleanupError) =>
+          console.error("Gagal membersihkan gambar:", cleanupError),
+      );
+    }
     console.error("Create Article Error:", error);
 
     return {
