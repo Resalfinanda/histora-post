@@ -104,6 +104,14 @@ export default async function EditArticlePage({
               </Label>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="publishedDate">Tanggal Publish</Label>
+              <DateTimePicker
+                name="publishedDate"
+                defaultValue={article.publishedDate}
+              />
+            </div>
+
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="image" className="font-semibold text-slate-700">
                 Gambar Sampul (Cover Image)
@@ -124,14 +132,6 @@ export default async function EditArticlePage({
                 defaultValue={article.excerpt || ""}
                 placeholder="Tulis ringkasan singkat yang akan muncul di halaman depan..."
                 rows={2}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="publishedDate">Tanggal Publish</Label>
-              <DateTimePicker
-                name="publishedDate"
-                defaultValue={article.publishedDate}
               />
             </div>
 

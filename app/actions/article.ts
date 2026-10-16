@@ -33,6 +33,19 @@ export async function createArticle(
     const excerpt = formData.get("excerpt") as string;
     const content = formData.get("content") as string;
     const isHeadline = formData.get("isHeadline") === "on";
+    const publishedDateRaw = formData.get("publishedDate");
+    let publishedDate = new Date();
+
+    if (publishedDateRaw !== null) {
+      if (typeof publishedDateRaw !== "string" || !publishedDateRaw) {
+        throw new Error("Tanggal publikasi tidak valid.");
+      }
+
+      publishedDate = new Date(publishedDateRaw);
+      if (Number.isNaN(publishedDate.getTime())) {
+        throw new Error("Tanggal publikasi tidak valid.");
+      }
+    }
 
     const session = await auth();
 
@@ -68,7 +81,7 @@ export async function createArticle(
         isHeadline,
         imageUrl,
         authorId: loggedInUserId,
-        publishedDate: new Date(),
+        publishedDate,
       },
     });
 

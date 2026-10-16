@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { EditorWrapper } from "@/components/editor/editorWrapper";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { CreateArticleForm } from "@/components/article/createArticleForm";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 // type CreateArticlePageProps = {
 //   category: string;
@@ -88,6 +89,11 @@ export default async function CreateArticlePage() {
                 />
                 Jadikan sebagai Headline Utama
               </Label>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="publishedDate">Tanggal Publikasi</Label>
+              <DateTimePicker name="publishedDate" defaultToNow />
             </div>
 
             <div className="space-y-2 md:col-span-2">

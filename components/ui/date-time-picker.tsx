@@ -18,9 +18,14 @@ import { Input } from "@/components/ui/input";
 interface DateTimePickerProps {
   name: string;
   defaultValue?: Date | null;
+  defaultToNow?: boolean;
 }
 
-export function DateTimePicker({ name, defaultValue }: DateTimePickerProps) {
+export function DateTimePicker({
+  name,
+  defaultValue,
+  defaultToNow = false,
+}: DateTimePickerProps) {
   const [date, setDate] = React.useState<Date | undefined>(
     defaultValue || undefined,
   );
@@ -28,6 +33,14 @@ export function DateTimePicker({ name, defaultValue }: DateTimePickerProps) {
   const [time, setTime] = React.useState<string>(
     defaultValue ? format(defaultValue, "HH:mm") : "12:00",
   );
+
+  React.useEffect(() => {
+    if (defaultToNow && !defaultValue) {
+      const now = new Date();
+      setDate(now);
+      setTime(format(now, "HH:mm"));
+    }
+  }, [defaultToNow, defaultValue]);
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     if (selectedDate) {
