@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   Image as ImageIcon,
+  MessageSquareText,
 } from "lucide-react";
 import { Session } from "next-auth";
 import { LogoutButton } from "@/components/ui/logoutButton";
@@ -86,6 +87,15 @@ export default function DashboardClientLayout({
           >
             <FileText size={20} />
             Artikel
+          </Link>
+
+          <Link
+            href="/dashboard/comments"
+            onClick={closeSidebar}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800"
+          >
+            <MessageSquareText size={20} />
+            Komentar
           </Link>
 
           {isAdmin && (

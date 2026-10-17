@@ -1,7 +1,15 @@
 import { auth } from "@/app/actions/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { FileText, TrendingUp, Users, Eye, Activity } from "lucide-react";
+import {
+  FileText,
+  TrendingUp,
+  Users,
+  Eye,
+  Activity,
+  MessageSquareText,
+  ArrowRight,
+} from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +39,7 @@ export default async function DashboardOverview() {
     categoryGrouping,
     activeWritersCount,
     recentArticles,
+    recentComments,
   ] = await Promise.all([
     // Total artikel yang dipublish oleh user (atau semua jika admin)
     prisma.article.count({ where: articleCondition }),
@@ -62,6 +71,16 @@ export default async function DashboardOverview() {
       take: 5,
       include: {
         author: { select: { name: true } },
+      },
+    }),
+
+    // 5 komentar terbaru pada artikel yang dapat dikelola user
+    prisma.comment.findMany({
+      where: isAdmin ? {} : { article: { authorId: user.id } },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: {
+        article: { select: { title: true } },
       },
     }),
   ]);
@@ -261,6 +280,93 @@ export default async function DashboardOverview() {
               <Link href="/dashboard/articles" className="w-full">
                 <Button variant="outline" size="sm" className="w-full">
                   Lihat Semua Artikel
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tabel 5 Komentar Terbaru */}
+      <div className="mt-6">
+        <Card className="border-slate-200 shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-[#0f172a] text-lg sm:text-xl">
+              Komentar Terbaru
+            </CardTitle>
+            <Link href="/dashboard/comments">
+              <Button variant="outline" size="sm" className="hidden sm:flex">
+                Kelola Komentar
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent className="p-0 sm:p-6 sm:pt-0">
+            <Table className="w-full min-w-[680px] table-auto">
+              <TableHeader className="bg-slate-50">
+                <TableRow>
+                  <TableHead className="w-[40%] pl-4 font-semibold text-slate-700">
+                    Isi Komentar
+                  </TableHead>
+                  <TableHead className="font-semibold text-slate-700">
+                    Email Pengirim
+                  </TableHead>
+                  <TableHead className="font-semibold text-slate-700">
+                    Tanggal & Waktu
+                  </TableHead>
+                  <TableHead className="pr-4 text-right font-semibold text-slate-700">
+                    Aksi
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentComments.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={4}
+                      className="h-24 text-center text-slate-500"
+                    >
+                      Belum ada komentar.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  recentComments.map((comment) => (
+                    <TableRow key={comment.id} className="hover:bg-slate-50/50">
+                      <TableCell className="max-w-[280px] whitespace-normal pl-4">
+                        <p className="line-clamp-2 font-medium text-[#0f172a]">
+                          {comment.content}
+                        </p>
+                        <p className="mt-1 truncate text-xs text-slate-500">
+                          Artikel: {comment.article.title}
+                        </p>
+                      </TableCell>
+                      <TableCell className="text-slate-600">
+                        {comment.email}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap text-sm text-slate-600">
+                        {comment.createdAt.toLocaleString("id-ID", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </TableCell>
+                      <TableCell className="pr-4 text-right">
+                        <Link
+                          href={`/dashboard/comments/${comment.id}`}
+                          className="inline-flex items-center gap-1 text-sm font-medium text-blue-700 hover:underline"
+                        >
+                          <MessageSquareText className="h-4 w-4" />
+                          Lihat
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+            <div className="border-t border-slate-100 p-4 sm:hidden">
+              <Link href="/dashboard/comments" className="w-full">
+                <Button variant="outline" size="sm" className="w-full">
+                  Kelola Semua Komentar
                 </Button>
               </Link>
             </div>
