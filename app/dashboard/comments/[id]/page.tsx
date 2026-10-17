@@ -59,7 +59,7 @@ export default async function CommentDetailsPage({
           <CardTitle className="text-lg">Isi Komentar</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="whitespace-pre-wrap break-words leading-relaxed text-slate-700">
+          <p className="whitespace-pre-wrap wrap-break-word leading-relaxed text-slate-700">
             {comment.content}
           </p>
         </CardContent>

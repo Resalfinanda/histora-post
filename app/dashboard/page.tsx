@@ -302,7 +302,7 @@ export default async function DashboardOverview() {
             </Link>
           </CardHeader>
           <CardContent className="p-0 sm:p-6 sm:pt-0">
-            <Table className="w-full min-w-[680px] table-auto">
+            <Table className="w-full min-w-170 table-auto">
               <TableHeader className="bg-slate-50">
                 <TableRow>
                   <TableHead className="w-[40%] pl-4 font-semibold text-slate-700">
@@ -332,7 +332,7 @@ export default async function DashboardOverview() {
                 ) : (
                   recentComments.map((comment) => (
                     <TableRow key={comment.id} className="hover:bg-slate-50/50">
-                      <TableCell className="max-w-[280px] whitespace-normal pl-4">
+                      <TableCell className="max-w-70 whitespace-normal pl-4">
                         <p className="line-clamp-2 font-medium text-[#0f172a]">
                           {comment.content}
                         </p>

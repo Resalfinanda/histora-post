@@ -152,7 +152,7 @@ export function ProfileImageUploader({
         )}
       </div>
 
-      <p className="text-xs text-slate-500">Maksimal 1MB, format: JPG, PNG.</p>
+      <p className="text-xs text-slate-500 mb-2.5">Maksimal 1MB, format: JPG, PNG.</p>
     </div>
   );
 }

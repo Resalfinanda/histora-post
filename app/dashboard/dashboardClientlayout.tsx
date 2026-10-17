@@ -7,12 +7,12 @@ import { useSession } from "next-auth/react";
 import {
   LayoutDashboard,
   FileText,
-  Settings,
   Users,
   Menu,
   X,
   Image as ImageIcon,
   MessageSquareText,
+  UserIcon,
 } from "lucide-react";
 import { Session } from "next-auth";
 import { LogoutButton } from "@/components/ui/logoutButton";
@@ -125,8 +125,8 @@ export default function DashboardClientLayout({
             onClick={closeSidebar}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800"
           >
-            <Settings size={20} />
-            Pengaturan
+            <UserIcon size={20} />
+            Profil
           </Link>
         </nav>
 

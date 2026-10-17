@@ -9,6 +9,7 @@ import {
   Phone,
   Building2,
   Loader2,
+  Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
@@ -17,13 +18,27 @@ import {
   ProfileImageUploader,
   ProfileForm,
 } from "@/components/profile";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { getUserProfile } from "@/app/actions/user";
 import { UserProfile } from "@/types/user";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { update: updateSession } = useSession();
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const {
+    data: session,
+    status: sessionStatus,
+    update: updateSession,
+  } = useSession();
+  const sessionUser = session?.user;
 
   const loadUserProfile = useCallback(async () => {
     setIsLoading(true);
@@ -31,10 +46,6 @@ export default function ProfilePage() {
       const result = await getUserProfile();
       if (result.success && result.data) {
         setUser(result.data);
-        await updateSession({
-          name: result.data.name,
-          profileImageUrl: result.data.profileImageUrl,
-        });
       } else {
         toast.error(result.message || "Gagal memuat profil");
         setUser(null);
@@ -45,11 +56,26 @@ export default function ProfilePage() {
     } finally {
       setIsLoading(false);
     }
-  }, [updateSession]);
+  }, []);
 
   useEffect(() => {
     loadUserProfile();
   }, [loadUserProfile]);
+
+  useEffect(() => {
+    if (!user || sessionStatus !== "authenticated" || !sessionUser) return;
+    if (
+      sessionUser.name === user.name &&
+      sessionUser.profileImageUrl === user.profileImageUrl
+    ) {
+      return;
+    }
+
+    void updateSession({
+      name: user.name,
+      profileImageUrl: user.profileImageUrl,
+    });
+  }, [sessionStatus, sessionUser, updateSession, user]);
 
   if (isLoading) {
     return (
@@ -72,15 +98,15 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 py-8">
+    <div className="max-w-4xl mx-auto space-y-1 py-2">
       {/* Header */}
       <div>
         <h2 className="text-3xl font-bold text-[#0f172a] flex items-center gap-2">
           <UserIcon size={32} className="text-slate-600" />
-          Profil Saya
+          Profil
         </h2>
-        <p className="text-slate-500 text-sm mt-1">
-          Kelola informasi akun dan pengaturan keamanan Anda
+        <p className="text-slate-500 text-sm my-2">
+          Kelola informasi akun dan password Anda
         </p>
       </div>
 
@@ -90,7 +116,7 @@ export default function ProfilePage() {
         <div className="md:col-span-1">
           <Card className="p-6 border border-slate-200 shadow-sm">
             <div className="space-y-4">
-              <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
                 <UserIcon size={18} className="text-slate-600" />
                 Foto Profil
               </h3>
@@ -104,7 +130,7 @@ export default function ProfilePage() {
 
           {/* Quick Info Card */}
           <Card className="mt-6 p-6 border border-slate-200 shadow-sm">
-            <h3 className="font-semibold text-slate-900 mb-4">
+            <h3 className=" text-lg font-semibold text-slate-900 mb-2">
               Informasi Cepat
             </h3>
             <div className="space-y-3 text-sm">
@@ -137,11 +163,22 @@ export default function ProfilePage() {
         <div className="md:col-span-2 space-y-6">
           {/* Informasi Profil */}
           <Card className="p-6 border border-slate-200 shadow-sm">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4 pb-4 border-b border-slate-100">
-              Informasi Profil
-            </h3>
+            <div className="flex items-center justify-between gap-4 mb-1 pb-1 border-b border-slate-100">
+              <h3 className="text-lg font-semibold text-slate-900">
+                Informasi Profil
+              </h3>
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-2 border-slate-200 hover:bg-slate-50"
+                onClick={() => setIsEditProfileOpen(true)}
+              >
+                <Pencil size={16} />
+                Edit Profil
+              </Button>
+            </div>
 
-            <div className="grid grid-cols-1 gap-4 mb-6">
+            <div className="grid grid-cols-1 gap-3 mb-1">
               {/* Nama */}
               <div>
                 <div className="flex items-center gap-2 mb-1">
@@ -174,14 +211,6 @@ export default function ProfilePage() {
                 </p>
               </div>
             </div>
-
-            {/* Edit Form */}
-            <div className="border-t border-slate-100 pt-6">
-              <h4 className="font-semibold text-slate-900 mb-4">
-                Edit Informasi
-              </h4>
-              <ProfileForm user={user} onUpdateSuccess={loadUserProfile} />
-            </div>
           </Card>
 
           <Card className="p-6 border border-slate-200 shadow-sm">
@@ -198,6 +227,24 @@ export default function ProfilePage() {
           </Card>
         </div>
       </div>
+
+      <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Edit Profil</DialogTitle>
+            <DialogDescription>
+              Perbarui informasi profil Anda. Email tidak dapat diubah.
+            </DialogDescription>
+          </DialogHeader>
+          <ProfileForm
+            user={user}
+            onUpdateSuccess={() => {
+              setIsEditProfileOpen(false);
+              void loadUserProfile();
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
