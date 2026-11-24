@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { FeaturedCarousel } from "./featured-carousel";
-import { TrendingSection } from "./trending-section";
 import { ArticleGrid } from "./article-grid";
-import { NewsletterSection } from "./newsletter-section";
-import { StorySection } from "./story-section";
 
 import { AdBanner } from "@/components/ui/ad-banner";
 import StickyBox from "react-sticky-box";
@@ -19,6 +17,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+
+const TrendingSection = dynamic(() =>
+  import("./trending-section").then((module) => module.TrendingSection),
+);
+const NewsletterSection = dynamic(() =>
+  import("./newsletter-section").then((module) => module.NewsletterSection),
+);
+const StorySection = dynamic(() =>
+  import("./story-section").then((module) => module.StorySection),
+);
 
 interface Article {
   id: string;

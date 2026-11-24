@@ -2,24 +2,52 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import {
   Breadcrumb,
   ArticleHeader,
   ArticleTracker,
-  ShareButtons,
-  RelatedArticles,
-  CommentForm,
-  CommentsList,
 } from "@/components/article";
-import {
-  TrendingSection,
-  NewsletterSection,
-  StorySection,
-} from "@/components/home";
 
 import { AdBanner } from "@/components/ui/ad-banner";
 import StickyBox from "react-sticky-box";
 import { imageSizes, getBlurDataUrl } from "@/lib/imageOptimization";
+
+const ShareButtons = dynamic(() =>
+  import("@/components/article/share-buttons").then(
+    (module) => module.ShareButtons,
+  ),
+);
+const RelatedArticles = dynamic(() =>
+  import("@/components/article/related-articles").then(
+    (module) => module.RelatedArticles,
+  ),
+);
+const CommentForm = dynamic(() =>
+  import("@/components/article/comment-form").then(
+    (module) => module.CommentForm,
+  ),
+);
+const CommentsList = dynamic(() =>
+  import("@/components/article/comments-list").then(
+    (module) => module.CommentsList,
+  ),
+);
+const TrendingSection = dynamic(() =>
+  import("@/components/home/trending-section").then(
+    (module) => module.TrendingSection,
+  ),
+);
+const NewsletterSection = dynamic(() =>
+  import("@/components/home/newsletter-section").then(
+    (module) => module.NewsletterSection,
+  ),
+);
+const StorySection = dynamic(() =>
+  import("@/components/home/story-section").then(
+    (module) => module.StorySection,
+  ),
+);
 
 interface ImageDimensions {
   width: number;

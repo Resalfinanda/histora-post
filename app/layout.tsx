@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Poppins } from "next/font/google";
 import { NextAuthProvider } from "@/components/provider/providers";
 import { Metadata } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -69,8 +69,22 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <NextAuthProvider>{children}</NextAuthProvider>
         <Toaster position="top-right" richColors />
+        <Script id="google-analytics" strategy="lazyOnload">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () {
+              window.dataLayer.push(arguments);
+            };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-GZSBRWET9P');
+
+            var gtagScript = document.createElement('script');
+            gtagScript.async = true;
+            gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-GZSBRWET9P';
+            document.head.appendChild(gtagScript);
+          `}
+        </Script>
       </body>
-      <GoogleAnalytics gaId="G-GZSBRWET9P" />
     </html>
   );
 }

@@ -34,7 +34,7 @@ export default function RootLayout({
           <Suspense fallback={<div className="h-20 bg-[#0f172a] w-full" />}>
             <Navbar />
           </Suspense>
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 min-h-screen">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>
