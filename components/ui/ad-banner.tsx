@@ -307,7 +307,7 @@ export function AdBanner({
         {/* Carousel dot indicators */}
         {displayAds.length > 1 && (
           <div
-            className="absolute bottom-2 left-0 right-0 z-20 flex justify-center space-x-1.5"
+            className="absolute bottom-2 left-0 right-0 z-20 flex justify-center gap-2"
             role="tablist"
             aria-label="Ad selection"
           >
@@ -326,15 +326,21 @@ export function AdBanner({
                   else if (e.key === "ArrowRight")
                     setCurrentIndex((prev) => (prev + 1) % displayAds.length);
                 }}
-                className={`w-1.5 h-1.5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white ${
-                  index === currentIndex
-                    ? "bg-white"
-                    : "bg-white/50 hover:bg-white/75"
-                }`}
+                className="group/dot flex h-6 w-6 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white"
                 aria-label={`Go to ad ${index + 1}`}
                 aria-selected={index === currentIndex}
                 role="tab"
-              />
+              >
+                <span
+                  aria-hidden="true"
+                  className={`block h-1.5 w-1.5 rounded-full transition-colors ${
+                    index === currentIndex
+                      ? "bg-white"
+                      : "bg-white/50 group-hover/dot:bg-white/75"
+                  }`}
+                  style={{ transform: "translateY(9px)" }}
+                />
+              </button>
             ))}
           </div>
         )}

@@ -126,18 +126,24 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
 
       {/* Dot indicators */}
       {articles.length > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2">
           {articles.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all ${
-                index === currentIndex
-                  ? "bg-foreground   w-6"
-                  : "bg-gray-300 hover:bg-gray-400"
-              }`}
+              className="group/dot flex h-6 w-6 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label={`Go to slide ${index + 1}`}
-            />
+            >
+              <span
+                aria-hidden="true"
+                className={`block h-2 rounded-full transition-all ${
+                  index === currentIndex
+                    ? "w-6 bg-foreground"
+                    : "w-2 bg-gray-300 group-hover/dot:bg-gray-400"
+                }`}
+                style={{ transform: "translateY(8px)" }}
+              />
+            </button>
           ))}
         </div>
       )}

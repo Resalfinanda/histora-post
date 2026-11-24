@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/button";
 
 interface SocialMediaLink {
   name: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{
+    className?: string;
+    "aria-hidden"?: boolean;
+  }>;
   url: string;
 }
 
@@ -15,7 +18,7 @@ export function SocialIcons() {
       url: "https://www.facebook.com/share/1C128XFDKS/?mibextid=wwXIfr",
     },
     {
-      name: "Tik Tok",
+      name: "TikTok",
       icon: Music2,
       url: "https://www.tiktok.com/@historapost?_r=1&_t=ZS-96K2uGxfrWO",
     },
@@ -31,20 +34,21 @@ export function SocialIcons() {
       {socialMediaLinks.map((social) => {
         const Icon = social.icon;
         return (
-          <a
+          <Button
             key={social.name}
-            href={social.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Kunjungi ${social.name}`}
+            asChild
+            variant="default"
+            size="icon"
+            aria-label={`Ikuti Histora Post di ${social.name}`}
+            className="bg-transparent hover:bg-white/10 transition-colors"
           >
-            <Button
-              size="icon"
-              className="bg-transparent hover:bg-white/10 transition-colors"
-            >
-              <Icon className="h-4 w-4 text-white hover:text-blue-400" />
-            </Button>
-          </a>
+            <a href={social.url} target="_blank" rel="noopener noreferrer">
+              <Icon
+                aria-hidden={true}
+                className="h-4 w-4 text-white hover:text-blue-400"
+              />
+            </a>
+          </Button>
         );
       })}
     </div>
