@@ -55,6 +55,17 @@ export default function RootLayout({
       className={`${poppins.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link
+          rel="preconnect"
+          href="https://uyqexwhnwognigyqfegc.supabase.co"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="dns-prefetch"
+          href="https://uyqexwhnwognigyqfegc.supabase.co"
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <NextAuthProvider>{children}</NextAuthProvider>
         <Toaster position="top-right" richColors />

@@ -110,8 +110,9 @@ export function StorySection() {
                           alt={article.title}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
-                          sizes="240px"
+                          sizes="(max-width: 640px) 168px, 192px"
                           loading="lazy"
+                          quality={75}
                         />
                       ) : (
                         <div className="w-full h-full bg-linear-to-br from-gray-300 to-gray-400" />

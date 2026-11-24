@@ -295,6 +295,7 @@ export function SearchPageContent() {
                             fill
                             sizes={imageSizes.articleCard}
                             loading="lazy"
+                            quality={75}
                             placeholder="blur"
                             blurDataURL={getBlurDataUrl()}
                             className="object-cover group-hover:scale-105 transition-transform duration-300"

@@ -36,6 +36,7 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
                     fill
                     sizes={imageSizes.relatedArticles}
                     loading="lazy"
+                    quality={75}
                     placeholder="blur"
                     blurDataURL={getBlurDataUrl()}
                     className="object-cover group-hover:scale-110 transition-transform duration-300"

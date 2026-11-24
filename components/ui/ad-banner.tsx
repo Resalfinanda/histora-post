@@ -274,8 +274,7 @@ export function AdBanner({
                 alt={altText}
                 fill
                 sizes={imageSizes.adBanner}
-                loading={isCurrent ? "eager" : "lazy"}
-                priority={isCurrent && index === 0}
+                loading="lazy"
                 placeholder="blur"
                 blurDataURL={getBlurDataUrl("#f3f4f6")}
                 className={`object-contain transition-opacity duration-500 ease-out hover:opacity-90 ${

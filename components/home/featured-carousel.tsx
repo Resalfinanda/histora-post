@@ -71,6 +71,8 @@ export function FeaturedCarousel({ articles }: FeaturedCarouselProps) {
               fill
               sizes={imageSizes.featuredCarousel}
               priority
+              fetchPriority="high"
+              quality={75}
               placeholder="blur"
               blurDataURL={getBlurDataUrl()}
               className="object-cover group-hover:scale-110 transition-transform duration-300"
